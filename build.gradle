@@ -44,18 +44,26 @@ flyway {
     password = 'xiny1118'
 }
 
+def env = System.getProperty("env") ?: "dev"
+sourceSets.main.java.srcDir "src/main/environment/dev"
 
+//与eclipse集成的相关配置
 eclipse {
+	//对应eclipse项目.project文件的配置
 	project {
 	}
+	//对应eclipse项目.classpath文件的配置
 	classpath {
 	}
+	//eclipse兼容性配置
 	jdt {
 		sourceCompatibility = 1.8
     	targetCompatibility = 1.8
 	}
+	//eclipse web项目配置
     wtp {
     	component {
+    		resource sourcePath: './src/main/environment/$env', deployPath:'/WEB-INF/classes'
     	}
         facet {
             facet name: 'jst.web', version: '3.0'
@@ -63,5 +71,4 @@ eclipse {
         }
     }
 }
-
 

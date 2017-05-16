@@ -2,6 +2,10 @@ package com.wzsport.model;
 
 import java.util.List;
 
+import graphql.Scalars;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
 /**
 * @ClassName: User
 * @Description: 用户
@@ -9,10 +13,40 @@ import java.util.List;
 * @date 2017年5月9日
 */
 public class User {
+	
 	private int id;
 	private String username;
 	private String password;
 	private List<Role> roles;
+	
+	/**
+	* @author x1ny
+	* @date 2017年5月15日
+	* @Description: 创建相应的GraphQL类型
+	* @return
+	* @throws
+	*/
+	public static GraphQLObjectType createGraphQLObjectType() {
+		return GraphQLObjectType.newObject()
+				.name("User")
+				.field(GraphQLFieldDefinition.newFieldDefinition()
+						.name("id")
+						.type(Scalars.GraphQLInt)
+						.build())
+				.field(GraphQLFieldDefinition.newFieldDefinition()
+						.name("username")
+						.type(Scalars.GraphQLString)
+						.build())
+				.field(GraphQLFieldDefinition.newFieldDefinition()
+						.name("roles")
+						.type(new GraphQLList(Role.createGraphQLObjectType()))
+						.dataFetcher(environment ->  {
+							User user = environment.getSource();
+							return user.roles;
+						} )
+						.build())
+				.build();
+	}
 
 	public int getId() {
 		return id;

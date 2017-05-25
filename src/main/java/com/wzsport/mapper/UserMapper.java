@@ -6,21 +6,12 @@ import org.apache.ibatis.annotations.Select;
 
 import com.wzsport.model.User;
 
-/**
-* @ClassName: UserMapper
-* @Description: User Mybatis Mapper
-* @author x1ny
-* @date 2017年5月9日
-*/
 public interface UserMapper {
 	
 	/**
-	* @author x1ny
-	* @date 2017年5月9日
-	* @Description: 根据id获取User
-	* @param id - 主键
-	* @return
-	* @throws
+	* 根据id获取user
+	* 
+	* @param id
 	*/
 	@Select("SELECT user.id as user_id,"
 			+ "user.username as user_username,"
@@ -35,12 +26,9 @@ public interface UserMapper {
 	User getUserById(@Param("id") int id);
 	
 	/**
-	* @author x1ny
-	* @date 2017年5月9日
-	* @Description: 根据usernma获取User
+	* 根据username获取user
+	* 
 	* @param username - 用户名
-	* @return
-	* @throws
 	*/
 	@Select("SELECT user.id as user_id,"
 			+ "user.username as user_username,"

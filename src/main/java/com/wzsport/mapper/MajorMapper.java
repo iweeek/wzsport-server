@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import com.wzsport.model.Major;
@@ -23,6 +24,7 @@ public interface MajorMapper {
 	*/
 	@Insert("INSERT INTO major (college_id, university_id, name, created_at)"
 			+ "VALUES (#{collegeId}, #{universityId}, #{name}, #{createdAt} )")
+	@Options(useGeneratedKeys=true)
 	int save(Major major);
 	
 	/**

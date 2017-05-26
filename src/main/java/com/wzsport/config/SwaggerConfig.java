@@ -19,8 +19,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	
-	private static final String TITLE = "温州体育活动项目服务端接口文档";
-	private static final String DESCRIPTION = "温州体育活动项目服务端Restful API 接口文档V1.0";
+	private static final String TITLE = "光氧运动服务端接口文档";
+	private static final String DESCRIPTION = "光氧运动服务端Restful API 接口文档V1.0";
 	
 	@Bean
 	public Docket buildDocket() {

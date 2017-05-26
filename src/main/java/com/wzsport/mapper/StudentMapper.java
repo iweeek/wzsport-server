@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -39,6 +40,7 @@ public interface StudentMapper {
 	*/
 	@Insert("INSERT INTO student (user_id, class_id, university_id, student_no, is_man, name, created_at)"
 			+ "VALUES (#{userId}, #{classId}, #{universityId}, #{studentNo}, #{man}, #{name}, #{createdAt} )")
+	@Options(useGeneratedKeys=true)
 	int save(Student student);
 	
 	/**

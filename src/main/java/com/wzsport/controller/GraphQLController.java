@@ -1,9 +1,12 @@
 package com.wzsport.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.service.GraphQLService;
@@ -32,8 +35,9 @@ public class GraphQLController {
 	* @throws
 	*/
 	@RequestMapping(method = RequestMethod.POST)
-	public ExecutionResult query(@RequestParam String queryString) {
-		ExecutionResult result = graphQLService.query(queryString);
+	@CrossOrigin
+	public ExecutionResult query(@RequestBody Map<String,Object> queryMap) {
+		ExecutionResult result = graphQLService.query((String)queryMap.get("query"));
 		return result;
 	}
 

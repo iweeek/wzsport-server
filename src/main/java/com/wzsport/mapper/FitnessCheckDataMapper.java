@@ -7,17 +7,17 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.wzsport.model.SportGrade;
+import com.wzsport.model.FitnessCheckData;
 
-public interface SportGradeMapper {
+public interface FitnessCheckDataMapper {
 	
 	/**
 	 * 根据id获取体侧成绩
 	 * @param id
 	 * @return
 	 */
-	@Select("SELECT * FROM sport_grades WHERE id = #{id}")
-	SportGrade getSportGradeById(Integer id);
+	@Select("SELECT * FROM fitness_check_data WHERE id = #{id}")
+	FitnessCheckData getFitnessCheckDataById(Integer id);
 	
 	//TODO:删除
 	
@@ -26,27 +26,27 @@ public interface SportGradeMapper {
 	 * @param stuId 学生Id
 	 * @return 学生体测成绩集合
 	 */
-	@Select("SELECT * FROM sport_grades WHERE student_id = #{stuId}")
-	List<SportGrade> listSportGradeByStuId(Integer stuId);
+	@Select("SELECT * FROM fitness_check_data WHERE student_id = #{studentId}")
+	List<FitnessCheckData> listFitnessCheckDataByStudentId(Integer studentId);
 	
 	
 	/**
 	 * 保存一条体测记录
-	 * @param sportGrade 体测成绩对象
+	 * @param fitnessCheckData 体测成绩对象
 	 * @return
 	 */
 	@Insert("INSERT INTO "
-			+ "sport_grades(student_id,height,weight,lung_capacity,BMI)"
+			+ "fitness_check_data(student_id,height,weight,lung_capacity,BMI)"
 			+ "VALUES(#{studentId},#{height},#{weight},#{lungCapacity},#{bmi})")
 	@Options(useGeneratedKeys=true)
-	int save(SportGrade sportGrade);
+	int save(FitnessCheckData fitnessCheckData);
 	
 	/**
 	 * 根据ID更新体测成绩
-	 * @param sportGrade
+	 * @param fitnessCheckData
 	 */
-	@Update("UPDATE sport_grades SET height = #{height}, weight = #{weight},"
+	@Update("UPDATE fitness_check_data SET height = #{height}, weight = #{weight},"
 			+ "lung_capacity = #{lungCapacity}, BMI = #{bmi} WHERE id = #{id}")
-	void updateSportGradeById(SportGrade sportGrade);
+	void updateFitnessCheckDataById(FitnessCheckData fitnessCheckData);
 	
 }

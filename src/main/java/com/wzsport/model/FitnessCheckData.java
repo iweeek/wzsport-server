@@ -7,7 +7,7 @@ import java.util.Date;
  * @author Watermelon_R(ljf)
  * 2017年5月26日
  */
-public class SportGrade {
+public class FitnessCheckData {
 	
 	private Integer id;
 	private Integer studentId;
@@ -17,6 +17,7 @@ public class SportGrade {
 	private Integer lungCapacity;           //肺活量
 	private Float   bmi;                     //需公式换算:质指数（BMI）=体重（kg）÷身高^2（m）
 	private Date createAt;
+	
 	public Integer getId() {
 		return id;
 	}

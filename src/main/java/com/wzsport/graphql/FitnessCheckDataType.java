@@ -7,8 +7,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wzsport.mapper.SportGradeMapper;
-import com.wzsport.model.SportGrade;
+import com.wzsport.mapper.FitnessCheckDataMapper;
+import com.wzsport.model.FitnessCheckData;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -17,19 +17,19 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 @Component
-public class SportGradeType {
+public class FitnessCheckDataType {
 	
 	private static SqlSessionFactory sqlSessionFactory;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
 	
-	public SportGradeType() {}
+	public FitnessCheckDataType() {}
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("SportGrade")
+					.name("FitnessCheckData")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
 							.type(Scalars.GraphQLInt)
@@ -64,14 +64,14 @@ public class SportGradeType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
-	                .name("sportgrade")
+	                .name("fitnessCheckData")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	int id = environment.getArgument("id");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	SportGrade sportGrade = sqlSession.getMapper(SportGradeMapper.class).getSportGradeById(id);
+	                	FitnessCheckData fitnessCheckData = sqlSession.getMapper(FitnessCheckDataMapper.class).getFitnessCheckDataById(id);
 	                	sqlSession.close();
-	                	return sportGrade;
+	                	return fitnessCheckData;
 	                } ).build();
 		}
         return singleQueryField;
@@ -81,12 +81,12 @@ public class SportGradeType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLInt).build())
-	                .name("listSportGrade")
+	                .name("listFitnessCheckData")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	int stuId = environment.getArgument("studentId");
+	                	int studentId = environment.getArgument("studentId");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<SportGrade> sportGradeList = sqlSession.getMapper(SportGradeMapper.class).listSportGradeByStuId(stuId);
+	                	List<FitnessCheckData> sportGradeList = sqlSession.getMapper(FitnessCheckDataMapper.class).listFitnessCheckDataByStudentId(studentId);
 	                	sqlSession.close();
 	                	return sportGradeList;
 	                } ).build();
@@ -100,6 +100,6 @@ public class SportGradeType {
 
 	@Autowired(required = true)
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		SportGradeType.sqlSessionFactory = sqlSessionFactory;
+		FitnessCheckDataType.sqlSessionFactory = sqlSessionFactory;
 	}
 }

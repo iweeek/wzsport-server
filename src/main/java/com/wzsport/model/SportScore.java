@@ -9,14 +9,14 @@ import java.util.Date;
 public class SportScore {
 	private Integer id;
 	private Integer studentId;
-	private Float meter50Sprint;
+	private Float meter50SprintTime;
 	private Integer meter50SprintScore;
-	private Integer standingJump;			    //立定跳远
-	private Integer standingJumpScore;		//立定跳远得分
-	private Integer meter1500Run;
+	private Integer standingJumpDistance;			    //立定跳远距离
+	private Integer standingJumpScore;					//立定跳远得分
+	private Integer meter1500RunTime;
 	private Integer meter1500RunScore;
-	private Integer abdominalCurl;			//仰卧起坐
-	private Integer abdominalCurlScore;		//仰卧起坐得分
+	private Integer abdominalCurlCount;					//仰卧起坐个数
+	private Integer abdominalCurlScore;					//仰卧起坐得分
 	private Date createdAt;
 	public Integer getId() {
 		return id;
@@ -30,11 +30,11 @@ public class SportScore {
 	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
 	}
-	public Float getMeter50Sprint() {
-		return meter50Sprint;
+	public Float getMeter50SprintTime() {
+		return meter50SprintTime;
 	}
-	public void setMeter50Sprint(Float meter50Sprint) {
-		this.meter50Sprint = meter50Sprint;
+	public void setMeter50SprintTime(Float meter50SprintTime) {
+		this.meter50SprintTime = meter50SprintTime;
 	}
 	public Integer getMeter50SprintScore() {
 		return meter50SprintScore;
@@ -42,11 +42,11 @@ public class SportScore {
 	public void setMeter50SprintScore(Integer meter50SprintScore) {
 		this.meter50SprintScore = meter50SprintScore;
 	}
-	public Integer getStandingJump() {
-		return standingJump;
+	public Integer getStandingJumpDistance() {
+		return standingJumpDistance;
 	}
-	public void setStandingJump(Integer standingJump) {
-		this.standingJump = standingJump;
+	public void setStandingJumpDistance(Integer standingJumpDistance) {
+		this.standingJumpDistance = standingJumpDistance;
 	}
 	public Integer getStandingJumpScore() {
 		return standingJumpScore;
@@ -54,11 +54,11 @@ public class SportScore {
 	public void setStandingJumpScore(Integer standingJumpScore) {
 		this.standingJumpScore = standingJumpScore;
 	}
-	public Integer getMeter1500Run() {
-		return meter1500Run;
+	public Integer getMeter1500RunTime() {
+		return meter1500RunTime;
 	}
-	public void setMeter1500Run(Integer meter1500Run) {
-		this.meter1500Run = meter1500Run;
+	public void setMeter1500RunTime(Integer meter1500RunTime) {
+		this.meter1500RunTime = meter1500RunTime;
 	}
 	public Integer getMeter1500RunScore() {
 		return meter1500RunScore;
@@ -66,11 +66,11 @@ public class SportScore {
 	public void setMeter1500RunScore(Integer meter1500RunScore) {
 		this.meter1500RunScore = meter1500RunScore;
 	}
-	public Integer getAbdominalCurl() {
-		return abdominalCurl;
+	public Integer getAbdominalCurlCount() {
+		return abdominalCurlCount;
 	}
-	public void setAbdominalCurl(Integer abdominalCurl) {
-		this.abdominalCurl = abdominalCurl;
+	public void setAbdominalCurlCount(Integer abdominalCurlCount) {
+		this.abdominalCurlCount = abdominalCurlCount;
 	}
 	public Integer getAbdominalCurlScore() {
 		return abdominalCurlScore;
@@ -84,6 +84,7 @@ public class SportScore {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+	
 	
 	
 	

@@ -23,7 +23,7 @@ import com.wzsport.service.SportScoreService;
  */
 
 @RestController
-@RequestMapping(value="/sportScores", produces="application/json;charset=UTF-8")
+@RequestMapping(value = "/sportScores", produces = "application/json;charset=UTF-8")
 public class SportScoreController {
 	
 	@Autowired
@@ -31,23 +31,23 @@ public class SportScoreController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<SportScore> save(@RequestParam int studentId,
-							 	 @RequestParam float meter50Sprint,
+							 	 @RequestParam float meter50SprintTime,
 							 	 @RequestParam int meter50SprintScore,
-							 	 @RequestParam int standingJump,
+							 	 @RequestParam int standingJumpDistance,
 							 	 @RequestParam int standingJumpScore,
-							 	 @RequestParam int meter1500Run,
+							 	 @RequestParam int meter1500RunTime,
 							 	 @RequestParam int meter1500RunScore,
-							 	 @RequestParam int abdominalCurl,
+							 	 @RequestParam int abdominalCurlCount,
 							 	 @RequestParam int abdominalCurlScore){
 		SportScore sportScore = new SportScore();
 		sportScore.setStudentId(studentId);
-		sportScore.setMeter50Sprint(meter50Sprint);
+		sportScore.setMeter50SprintTime(meter50SprintTime);
 		sportScore.setMeter50SprintScore(meter50SprintScore);
-		sportScore.setStandingJump(standingJump);
+		sportScore.setStandingJumpDistance(standingJumpDistance);
 		sportScore.setStandingJumpScore(standingJumpScore);
-		sportScore.setMeter1500Run(meter1500Run);
+		sportScore.setMeter1500RunTime(meter1500RunTime);
 		sportScore.setMeter1500RunScore(meter1500RunScore);
-		sportScore.setAbdominalCurl(abdominalCurl);
+		sportScore.setAbdominalCurlCount(abdominalCurlCount);
 		sportScore.setAbdominalCurlScore(abdominalCurlScore);
 	
 		sportScore.setCreatedAt(new Date());
@@ -59,26 +59,26 @@ public class SportScoreController {
 		
 	}
 	
-	@RequestMapping(value="/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<SportScore> update( 
 			 @PathVariable Integer id,
-			 @RequestParam(required=false) float meter50Sprint,
-		 	 @RequestParam(required=false) Integer meter50SprintScore,
-		 	 @RequestParam(required=false) Integer standingJump,
-		 	 @RequestParam(required=false) Integer standingJumpScore,
-		 	 @RequestParam(required=false) Integer meter1500Run,
-		 	 @RequestParam(required=false) Integer meter1500RunScore,
-		 	 @RequestParam(required=false) Integer abdominalCurl,
-		 	 @RequestParam(required=false) Integer abdominalCurlScore){
+			 @RequestParam(required = false) Float meter50SprintTime,
+		 	 @RequestParam(required = false) Integer meter50SprintScore,
+		 	 @RequestParam(required = false) Integer standingJumpDistance,
+		 	 @RequestParam(required = false) Integer standingJumpScore,
+		 	 @RequestParam(required = false) Integer meter1500RunTime,
+		 	 @RequestParam(required = false) Integer meter1500RunScore,
+		 	 @RequestParam(required = false) Integer abdominalCurlCount,
+		 	 @RequestParam(required = false) Integer abdominalCurlScore){
 		SportScore sportScore = new SportScore();
 		sportScore.setId(id);
-		sportScore.setMeter50Sprint(meter50Sprint);
+		sportScore.setMeter50SprintTime(meter50SprintTime);
 		sportScore.setMeter50SprintScore(meter50SprintScore);
-		sportScore.setStandingJump(standingJump);
+		sportScore.setStandingJumpDistance(standingJumpDistance);
 		sportScore.setStandingJumpScore(standingJumpScore);
-		sportScore.setMeter1500Run(meter1500Run);
+		sportScore.setMeter1500RunTime(meter1500RunTime);
 		sportScore.setMeter1500RunScore(meter1500RunScore);
-		sportScore.setAbdominalCurl(abdominalCurl);
+		sportScore.setAbdominalCurlCount(abdominalCurlCount);
 		sportScore.setAbdominalCurlScore(abdominalCurlScore);
 		
 		if(!sportScoreService.update(sportScore)) {

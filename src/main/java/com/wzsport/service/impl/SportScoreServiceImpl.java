@@ -20,10 +20,10 @@ public class SportScoreServiceImpl implements SportScoreService {
 		boolean result;
 		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
 			SportScoreMapper sportScoreMapper = sqlSession.getMapper(SportScoreMapper.class);
-			if(sportScoreMapper.save(sportScore)==0){
-				result=false;
+			if(sportScoreMapper.save(sportScore) == 0){
+				result = false;
 			}else{
-				result=true;
+				result = true;
 			}
 			
 		}
@@ -35,10 +35,10 @@ public class SportScoreServiceImpl implements SportScoreService {
 		boolean result;
 		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
 			SportScoreMapper sportScoreMapper = sqlSession.getMapper(SportScoreMapper.class);
-			if(sportScoreMapper.updateSportScoreById(sportScore)==0){
-				result=false;
+			if(sportScoreMapper.updateSportScoreById(sportScore) == 0){
+				result = false;
 			}else{
-				result=true;
+				result = true;
 			}
 		}
 		return result;

@@ -41,25 +41,19 @@ public interface SportScoreMapper {
 	 */
 	@Insert("INSERT INTO "
 			+ "sport_score("
-			+ "student_id,meter_50_sprint,meter_50_sprint_score,"
-			+ "standing_jump,standing_jump_score,meter_1500_run,meter_1500_run_score,"
-			+ "abdominal_curl,abdominal_curl_score)"
-			+ "VALUES(#{studentId},#{meter50Sprint},#{meter50SprintScore},"
-			+ "#{standingJump},#{standingJumpScore},#{meter1500Run},#{meter1500RunScore},"
-			+ "#{abdominalCurl},#{abdominalCurlScore})")
-	@Options(useGeneratedKeys=true)
+			+ "student_id,meter50_sprint_time,meter50_sprint_score,"
+			+ "standing_jump_distance,standing_jump_score,meter1500_run_time,meter1500_run_score,"
+			+ "abdominal_curl_count,abdominal_curl_score)"
+			+ "VALUES(#{studentId},#{meter50SprintTime},#{meter50SprintScore},"
+			+ "#{standingJumpDistance},#{standingJumpScore},#{meter1500RunTime},#{meter1500RunScore},"
+			+ "#{abdominalCurlCount},#{abdominalCurlScore})")
+	@Options(useGeneratedKeys = true)
 	int save(SportScore sportScore);
 	
 	/**
 	 * 根据ID更新体育成绩
 	 * @param sportScore
 	 */
-	/*@Update("UPDATE sport_score SET "
-			+ "meter_50_sprint = #{meter50Sprint}, meter_50_sprint_score = #{meter50SprintScore},"
-			+ "standing_jump = #{standingJump}, standing_jump_score = #{standingJumpScore}, "
-			+ "meter_1500_run = #{meter1500Run}, meter_1500_run_score = #{meter1500RunScore} ,"
-			+ "abdominal_curl = #{abdominalCurl}, abdominal_curl_score = #{abdominalCurlScore} "
-			+ "WHERE id = #{id}")*/
 	int updateSportScoreById(SportScore sportScore);
 	
 }

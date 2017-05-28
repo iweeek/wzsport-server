@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzsport.mapper.SportScoreMapper">
+<update id="updateSportScoreById"  parameterType="com.wzsport.model.SportScore">
+ UPDATE sport_score
+ <trim prefix="SET" suffixOverrides=",">
+  <if test="meter50Sprint != null"> meter_50_sprint= #{meter50Sprint},</if>
+  <if test="meter50SprintScore != null"> meter_50_sprint_score= #{meter50SprintScore},</if>
+  <if test="standingJump != null"> standing_jump= #{standingJump},</if>
+  <if test="standingJumpScore != null"> standing_jump_score= #{standingJumpScore},</if>
+  <if test="meter1500Run != null"> meter_1500_run= #{meter1500Run},</if>
+  <if test="meter1500RunScore != null"> meter_1500_run_score= #{meter1500RunScore},</if>
+  <if test="abdominalCurl != null"> abdominal_curl= #{abdominalCurl},</if>
+  <if test="abdominalCurlScore != null"> abdominal_curl_score= #{abdominalCurlScore},</if>
+ </trim>
+ WHERE id=#{id}
+</update>
+</mapper>

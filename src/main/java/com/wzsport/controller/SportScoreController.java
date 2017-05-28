@@ -61,19 +61,17 @@ public class SportScoreController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
 	public ResponseEntity<SportScore> update( 
-			 @PathVariable int id,
-			 @RequestParam int studentId,
-			 @RequestParam float meter50Sprint,
-		 	 @RequestParam int meter50SprintScore,
-		 	 @RequestParam int standingJump,
-		 	 @RequestParam int standingJumpScore,
-		 	 @RequestParam int meter1500Run,
-		 	 @RequestParam int meter1500RunScore,
-		 	 @RequestParam int abdominalCurl,
-		 	 @RequestParam int abdominalCurlScore){
+			 @PathVariable Integer id,
+			 @RequestParam(required=false) float meter50Sprint,
+		 	 @RequestParam(required=false) Integer meter50SprintScore,
+		 	 @RequestParam(required=false) Integer standingJump,
+		 	 @RequestParam(required=false) Integer standingJumpScore,
+		 	 @RequestParam(required=false) Integer meter1500Run,
+		 	 @RequestParam(required=false) Integer meter1500RunScore,
+		 	 @RequestParam(required=false) Integer abdominalCurl,
+		 	 @RequestParam(required=false) Integer abdominalCurlScore){
 		SportScore sportScore = new SportScore();
 		sportScore.setId(id);
-		sportScore.setStudentId(studentId);
 		sportScore.setMeter50Sprint(meter50Sprint);
 		sportScore.setMeter50SprintScore(meter50SprintScore);
 		sportScore.setStandingJump(standingJump);

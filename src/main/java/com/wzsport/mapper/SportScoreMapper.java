@@ -54,12 +54,12 @@ public interface SportScoreMapper {
 	 * 根据ID更新体育成绩
 	 * @param sportScore
 	 */
-	@Update("UPDATE sport_score SET "
+	/*@Update("UPDATE sport_score SET "
 			+ "meter_50_sprint = #{meter50Sprint}, meter_50_sprint_score = #{meter50SprintScore},"
 			+ "standing_jump = #{standingJump}, standing_jump_score = #{standingJumpScore}, "
 			+ "meter_1500_run = #{meter1500Run}, meter_1500_run_score = #{meter1500RunScore} ,"
 			+ "abdominal_curl = #{abdominalCurl}, abdominal_curl_score = #{abdominalCurlScore} "
-			+ "WHERE id = #{id}")
+			+ "WHERE id = #{id}")*/
 	int updateSportScoreById(SportScore sportScore);
 	
 }

@@ -4,10 +4,11 @@ import org.springframework.stereotype.Service;
 
 import com.wzsport.graphql.ClassType;
 import com.wzsport.graphql.CollegeType;
+import com.wzsport.graphql.FitnessCheckDataType;
 import com.wzsport.graphql.MajorType;
 import com.wzsport.graphql.RunningActivityType;
 import com.wzsport.graphql.RunningProjectType;
-import com.wzsport.graphql.FitnessCheckDataType;
+import com.wzsport.graphql.SportScoreType;
 import com.wzsport.graphql.StudentType;
 import com.wzsport.graphql.TeacherType;
 import com.wzsport.graphql.UniversityType;
@@ -52,6 +53,8 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(RunningActivityType.getListQueryField())
                 .field(FitnessCheckDataType.getListQueryField())
                 .field(FitnessCheckDataType.getSingleQueryField())
+                .field(SportScoreType.getListQueryField())
+                .field(SportScoreType.getSingleQueryField())
                 .build();
 		
 		GraphQLSchema schema = GraphQLSchema.newSchema()

@@ -3,10 +3,10 @@ package com.wzsport.model;
 import java.util.Date;
 
 /**
-* 学生模型类.
+* 瀛︾敓妯″瀷绫�.
 *
 * @author x1ny
-* @date 2017年5月22日
+* @date 2017骞�5鏈�22鏃�
 */
 public class Student {
 
@@ -22,7 +22,7 @@ public class Student {
 	private University university;
 	private Date createdAt;
 	
-	public Integer getId() {
+	public Integer getId() { 
 		return id;
 	}
 	public void setId(Integer id) {

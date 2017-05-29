@@ -20,7 +20,6 @@ import graphql.schema.GraphQLObjectType;
  * @author linhongyong
  * 2017年5月27日
  */
-
 @Component
 public class SportScoreType {
 	

@@ -35,7 +35,7 @@ public class SportScoreServiceImpl implements SportScoreService {
 		boolean result;
 		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
 			SportScoreMapper sportScoreMapper = sqlSession.getMapper(SportScoreMapper.class);
-			if(sportScoreMapper.updateSportScoreById(sportScore) == 0){
+			if(sportScoreMapper.update(sportScore) == 0){
 				result = false;
 			}else{
 				result = true;

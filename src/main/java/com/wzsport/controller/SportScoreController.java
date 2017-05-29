@@ -21,7 +21,6 @@ import com.wzsport.service.SportScoreService;
  * @author linhongyong
  * 2017年5月27日
  */
-
 @RestController
 @RequestMapping(value = "/sportScores", produces = "application/json;charset=UTF-8")
 public class SportScoreController {

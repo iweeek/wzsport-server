@@ -13,7 +13,6 @@ import com.wzsport.model.SportScore;
  * 
  * 2017年5月27日
  */
-
 public interface SportScoreMapper {
 	/**
 	 * 根据id获取体育成绩
@@ -54,6 +53,6 @@ public interface SportScoreMapper {
 	 * 根据ID更新体育成绩
 	 * @param sportScore
 	 */
-	int updateSportScoreById(SportScore sportScore);
+	int update(SportScore sportScore);
 	
 }

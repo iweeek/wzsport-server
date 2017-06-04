@@ -45,6 +45,7 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(ClassType.getListQueryField())
                 .field(StudentType.getSingleQueryField())
                 .field(StudentType.getListQueryField())
+                .field(StudentType.getListQueryByConditionsField())
                 .field(TeacherType.getSingleQueryField())
                 .field(TeacherType.getListQueryField())
                 .field(RunningProjectType.getSingleQueryField())
@@ -55,6 +56,9 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(FitnessCheckDataType.getSingleQueryField())
                 .field(SportScoreType.getListQueryField())
                 .field(SportScoreType.getSingleQueryField())
+                
+               
+               
                 .build();
 		
 		GraphQLSchema schema = GraphQLSchema.newSchema()

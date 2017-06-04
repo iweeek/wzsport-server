@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.CollegeMapper;
+import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
 import com.wzsport.model.College;
 import com.wzsport.model.University;
@@ -56,6 +57,39 @@ public class UniversityType {
 			                	return collegeList;
 							} )
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("countAllTeachers")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int allTeachersCount = sqlSession.getMapper(TeacherMapper.class).countAllTeachers(university.getId());
+			                	sqlSession.close();
+			                	return allTeachersCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("countMaleTeahcers")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int maleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(university.getId(),true);
+			                	sqlSession.close();
+			                	return maleTeachersCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("countFemaleTeachers")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int femaleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(university.getId(),false);
+			                	sqlSession.close();
+			                	return femaleTeachersCount;
+							} )
+							.build())
 					.build();
 		}
 		
@@ -78,6 +112,56 @@ public class UniversityType {
 		}
         return singleQueryField;
     }
+	
+	/*
+	*//**
+	 * 统计返回大学里的全部老师数量
+	 * 
+	 * @return
+	 *//*
+	
+	public static GraphQLFieldDefinition countAllTeachersByUniversityId() {
+		if(countAll == null) {
+			countAll = GraphQLFieldDefinition.newFieldDefinition()
+	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
+	                .name("countAllTeachers")
+	                .type(Scalars.GraphQLInt)
+	                .dataFetcher(environment ->  {
+	                	int universityId = environment.getArgument("universityId");
+	                	SqlSession sqlSession = sqlSessionFactory.openSession();
+	                	int allTeachersCount = sqlSession.getMapper(TeacherMapper.class).countAllTeachers(universityId);
+	                	sqlSession.close();
+	                	return allTeachersCount;
+	                } ).build();
+		}
+        return countAll;
+    }
+	
+	
+	*//**
+	 * 统计返回大学中男女老师数量
+	 * 
+	 * @return
+	 *//*
+	public static GraphQLFieldDefinition countTeachersByUniversityIdAndSex() {
+		if(countDiffSexTeacher == null) {
+			countDiffSexTeacher = GraphQLFieldDefinition.newFieldDefinition()
+	        		.argument(GraphQLArgument.newArgument().name("sex").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
+	                .name("countTeachersBySex")
+	                .type(Scalars.GraphQLInt)
+	                .dataFetcher(environment ->  {
+	                	int sex = environment.getArgument("sex");
+	                	int universityId = environment.getArgument("universityId");
+	                	SqlSession sqlSession = sqlSessionFactory.openSession();
+	                	int teacherCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(universityId,sex);
+	                	sqlSession.close();
+	                	return teacherCount;
+	                } ).build();
+		}
+        return countDiffSexTeacher;
+    }
+	*/
 	
 	public SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;

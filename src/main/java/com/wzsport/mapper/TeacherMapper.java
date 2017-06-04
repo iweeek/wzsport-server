@@ -8,8 +8,10 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
 import com.wzsport.model.Teacher;
+import com.wzsport.sqlproviders.TeacherDynaSqlProvider;
 
 public interface TeacherMapper {
 
@@ -49,6 +51,23 @@ public interface TeacherMapper {
 	List<Teacher> listAllTeacher();
 	
 	/**
+	 * 获取所有老师的数量
+	 * 
+	 * @return
+	 */
+	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universityId}")
+	int countAllTeachers(Integer universityId);
+	
+	/**
+	 * 
+	 */
+	@SelectProvider(type=TeacherDynaSqlProvider.class,method="getDifferentSexTeachersCount")
+	int countDifferentSexTeachers(Integer universutyId,Boolean sex);
+	
+	
+	@SelectProvider(type=TeacherDynaSqlProvider.class,method="listTeacherByIdAndNameAndSex")
+	List<Teacher> listTeacherByIdAndNameAndSex(String jobNo, String name, Boolean sex);
+	/**
 	* 根据classId获取所有相关联的teacher
 	* 
 	* @param classId
@@ -56,7 +75,7 @@ public interface TeacherMapper {
 	@Select("SELECT teacher.id AS id, "
 			+ "teacher.university_id AS university_id, "
 			+ "teacher.name AS name, "
-			+ "teacher.job_id AS job_id, "
+			+ "teacher.job_no AS job_no, "
 			+ "teacher.is_man AS man, "
 			+ "teacher.created_at AS created_at "
 			+ "FROM r_teacher_class "

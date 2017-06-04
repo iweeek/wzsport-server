@@ -105,12 +105,7 @@ public class UniversityType {
 	                .dataFetcher(environment ->  {
 	                	int id = environment.getArgument("id");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	University university = null;
-	                	try {
-	                		university = sqlSession.getMapper(UniversityMapper.class).getUniversityById(id);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+	                	University university = sqlSession.getMapper(UniversityMapper.class).getUniversityById(id);
 	                	sqlSession.close();
 	                	return university;
 	                } ).build();

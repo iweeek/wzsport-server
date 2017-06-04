@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
 
 import com.wzsport.model.Teacher;
 
@@ -41,7 +40,7 @@ public interface TeacherMapper {
 	* 
 	* @param id
 	*/
-	@Delete("DELETE FROM teacher WHERE id=#{id}")  
+	@Delete("DELETE FROM teacher WHERE id = #{id}")  
     public void delete(int id); 
 	
 	/**
@@ -51,11 +50,13 @@ public interface TeacherMapper {
 	List<Teacher> listAllTeacher();
 	
 	/**
-	 * 获取所有老师的数量
+	 * 获取某个大学全部老师的数量
 	 * 
+	 * @param jobNo
+	 * @param name
 	 * @return
 	 */
-	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universityId}")
+	@Select("SELECT count(id) FROM teacher WHERE university_id = #{universityId}")
 	int countAllTeachers(Integer universityId);
 	
 	/**
@@ -64,7 +65,7 @@ public interface TeacherMapper {
 	 * @param universutyId
 	 * @return
 	 */
-	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universutyId} And is_man=1")
+	@Select("SELECT count(id) FROM teacher WHERE university_id = #{universutyId} AND is_man=1")
 	int countMaleTeachers(Integer universutyId);
 	
 	/**
@@ -73,16 +74,16 @@ public interface TeacherMapper {
 	 * @param universutyId
 	 * @return
 	 */
-	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universutyId} And is_man=0")
+	@Select("SELECT count(id) FROM teacher WHERE university_id = #{universutyId} AND is_man=0")
 	int countFemaleTeachers(Integer universutyId);
 	/**
-	 * 获取某个大学全部老师的数量
+	 * 获取大学全部老师的数量
 	 * 
 	 * @param jobNo
 	 * @param name
 	 * @return
 	 */
-	List<Teacher> listTeachersByJobNoAndNameAndSex(@Param("jobNo") String jobNo, @Param("name") String name,@Param("sex") Boolean sex);
+	List<Teacher> searcherTeachers(@Param("jobNo") String jobNo, @Param("name") String name,@Param("sex") Boolean sex);
 	/**
 	* 根据classId获取所有相关联的teacher
 	* 

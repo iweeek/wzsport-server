@@ -5,8 +5,8 @@
 	<select id="listStudentByConditions" resultType="com.wzsport.model.Student">
 		select * from student
 		<where>
-			<if test="name != null">name like #{name}</if>
-			<if test="studentNo != null ">and student_no like #{studentNo}</if>
+			<if test="name != null">name like concat('%',#{name},'%')</if>
+			<if test="studentNo != null ">and student_no like concat('%',#{studentNo},'%') </if>
 			<if test="classId != null">and class_id = #{classId}</if>
 			<if test="man != null">and is_man = #{man}</if>
 		</where>

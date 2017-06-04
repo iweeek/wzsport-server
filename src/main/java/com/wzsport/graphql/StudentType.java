@@ -17,10 +17,10 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 /**
-* GraphQL学生类型的定义及查询字段定义
+* GraphQL瀛︾敓绫诲瀷鐨勫畾涔夊強鏌ヨ瀛楁瀹氫箟
 * 
 * @author x1ny
-* @date 2017年5月25日
+* @date 2017骞�5鏈�25鏃�
 */
 @Component
 public class StudentType {
@@ -129,12 +129,6 @@ public class StudentType {
 	                	String studentNo = environment.getArgument("studentNo");
 	                	Boolean man = environment.getArgument("man");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	if(name != null && name != ""){
-	                		name = "%"+name+"%";
-	                	}
-	                	if(studentNo != null && studentNo != ""){
-	                		studentNo = "%"+studentNo+"%";
-	                	}
 	                	List<Student> studentList = sqlSession.getMapper(StudentMapper.class).listStudentByConditions(classId, name, studentNo, man);
 	                	sqlSession.close();
 	                	return studentList;

@@ -5,13 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import com.wzsport.model.Teacher;
-import com.wzsport.sqlproviders.TeacherDynaSqlProvider;
 
 public interface TeacherMapper {
 
@@ -59,14 +59,30 @@ public interface TeacherMapper {
 	int countAllTeachers(Integer universityId);
 	
 	/**
+	 * 获取男老师的数量
 	 * 
+	 * @param universutyId
+	 * @return
 	 */
-	@SelectProvider(type=TeacherDynaSqlProvider.class,method="getDifferentSexTeachersCount")
-	int countDifferentSexTeachers(Integer universutyId,Boolean sex);
+	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universutyId} And is_man=1")
+	int countMaleTeachers(Integer universutyId);
 	
-	
-	@SelectProvider(type=TeacherDynaSqlProvider.class,method="listTeacherByIdAndNameAndSex")
-	List<Teacher> listTeacherByIdAndNameAndSex(String jobNo, String name, Boolean sex);
+	/**
+	 * 获取女老师的数量
+	 * 
+	 * @param universutyId
+	 * @return
+	 */
+	@Select("SELECT count(id) FROM teacher WHERE university_id=#{universutyId} And is_man=0")
+	int countFemaleTeachers(Integer universutyId);
+	/**
+	 * 获取某个大学全部老师的数量
+	 * 
+	 * @param jobNo
+	 * @param name
+	 * @return
+	 */
+	List<Teacher> listTeachersByJobNoAndNameAndSex(@Param("jobNo") String jobNo, @Param("name") String name,@Param("sex") Boolean sex);
 	/**
 	* 根据classId获取所有相关联的teacher
 	* 

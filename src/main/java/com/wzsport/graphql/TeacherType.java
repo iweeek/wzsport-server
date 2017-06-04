@@ -124,7 +124,7 @@ public class TeacherType {
 	                	String name = environment.getArgument("name");
 	                	Boolean isMan = environment.getArgument("man");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<Teacher> teacherList = sqlSession.getMapper(TeacherMapper.class).listTeacherByIdAndNameAndSex(jobNo,name,isMan);
+	                	List<Teacher> teacherList = sqlSession.getMapper(TeacherMapper.class).listTeachersByJobNoAndNameAndSex(jobNo,name,isMan);
 	                	sqlSession.close();
 	                	return teacherList;
 	                } ).build();

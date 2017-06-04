@@ -58,7 +58,7 @@ public class UniversityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("countAllTeachers")
+							.name("allTeachersCount")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
@@ -69,23 +69,23 @@ public class UniversityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("countMaleTeahcers")
+							.name("maleTeahcersCount")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
 			                	SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int maleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(university.getId(),true);
+			                	int maleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countMaleTeachers(university.getId());
 			                	sqlSession.close();
 			                	return maleTeachersCount;
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("countFemaleTeachers")
+							.name("femaleTeachersCount")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
 			                	SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int femaleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(university.getId(),false);
+			                	int femaleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countFemaleTeachers(university.getId());;
 			                	sqlSession.close();
 			                	return femaleTeachersCount;
 							} )
@@ -105,7 +105,12 @@ public class UniversityType {
 	                .dataFetcher(environment ->  {
 	                	int id = environment.getArgument("id");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	University university = sqlSession.getMapper(UniversityMapper.class).getUniversityById(id);
+	                	University university = null;
+	                	try {
+	                		university = sqlSession.getMapper(UniversityMapper.class).getUniversityById(id);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 	                	sqlSession.close();
 	                	return university;
 	                } ).build();
@@ -113,55 +118,6 @@ public class UniversityType {
         return singleQueryField;
     }
 	
-	/*
-	*//**
-	 * 统计返回大学里的全部老师数量
-	 * 
-	 * @return
-	 *//*
-	
-	public static GraphQLFieldDefinition countAllTeachersByUniversityId() {
-		if(countAll == null) {
-			countAll = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
-	                .name("countAllTeachers")
-	                .type(Scalars.GraphQLInt)
-	                .dataFetcher(environment ->  {
-	                	int universityId = environment.getArgument("universityId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	int allTeachersCount = sqlSession.getMapper(TeacherMapper.class).countAllTeachers(universityId);
-	                	sqlSession.close();
-	                	return allTeachersCount;
-	                } ).build();
-		}
-        return countAll;
-    }
-	
-	
-	*//**
-	 * 统计返回大学中男女老师数量
-	 * 
-	 * @return
-	 *//*
-	public static GraphQLFieldDefinition countTeachersByUniversityIdAndSex() {
-		if(countDiffSexTeacher == null) {
-			countDiffSexTeacher = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("sex").type(Scalars.GraphQLInt).build())
-	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
-	                .name("countTeachersBySex")
-	                .type(Scalars.GraphQLInt)
-	                .dataFetcher(environment ->  {
-	                	int sex = environment.getArgument("sex");
-	                	int universityId = environment.getArgument("universityId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	int teacherCount = sqlSession.getMapper(TeacherMapper.class).countDifferentSexTeachers(universityId,sex);
-	                	sqlSession.close();
-	                	return teacherCount;
-	                } ).build();
-		}
-        return countDiffSexTeacher;
-    }
-	*/
 	
 	public SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;

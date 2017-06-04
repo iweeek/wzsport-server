@@ -31,6 +31,7 @@ public class ClassType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
+	private static GraphQLFieldDefinition AmountField;
 
 	private ClassType() {}
 	
@@ -63,6 +64,39 @@ public class ClassType {
 			                	List<Student> studentList = sqlSession.getMapper(StudentMapper.class).listStudentByClassId(studentClass.getId());
 			                	sqlSession.close();
 			                	return studentList;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("studentCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								Class studentClass = environment.getSource();
+								SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int  studentCount = sqlSession.getMapper(StudentMapper.class).countStudentByClassId(studentClass.getId());
+			                	sqlSession.close();
+			                	return studentCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("maleStudentCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								Class studentClass = environment.getSource();
+								SqlSession sqlSession = sqlSessionFactory.openSession();
+								int maleStudentCount = sqlSession.getMapper(StudentMapper.class).countMaleStudentByClassId(studentClass.getId());
+			                	sqlSession.close();
+			                	return maleStudentCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("femaleStudentCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								Class studentClass = environment.getSource();
+								SqlSession sqlSession = sqlSessionFactory.openSession();
+								int femaleStudentCount = sqlSession.getMapper(StudentMapper.class).countFemaleStudentByClassId(studentClass.getId());
+			                	sqlSession.close();
+			                	return femaleStudentCount;
 							} )
 							.build())
 					.build();

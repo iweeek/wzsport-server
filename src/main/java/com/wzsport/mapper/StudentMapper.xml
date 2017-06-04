@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzsport.mapper.StudentMapper">
+	<select id="listStudentByConditions" resultType="com.wzsport.model.Student">
+		select * from student
+		<where>
+			<if test="name != null">name like #{name}</if>
+			<if test="studentNo != null ">and student_no like #{studentNo}</if>
+			<if test="classId != null">and class_id = #{classId}</if>
+			<if test="man != null">and is_man = #{man}</if>
+		</where>
+	</select>
+</mapper>

@@ -29,6 +29,7 @@ public class StudentType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
+	private static GraphQLFieldDefinition listQueryByConditionsField;
 
 	private StudentType() {}
 	
@@ -112,6 +113,37 @@ public class StudentType {
 		}
         return listQueryField;
     }
+	
+	public static GraphQLFieldDefinition getListQueryByConditionsField() {
+		if(listQueryByConditionsField == null) {
+			listQueryByConditionsField = GraphQLFieldDefinition.newFieldDefinition()
+	        		.argument(GraphQLArgument.newArgument().name("classId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("man").type(Scalars.GraphQLBoolean).build())
+	                .name("searchStudents")
+	                .type(new GraphQLList(getType()))
+	                .dataFetcher(environment -> {
+	                	Integer classId = environment.getArgument("classId");
+	                	String name = environment.getArgument("name");
+	                	String studentNo = environment.getArgument("studentNo");
+	                	Boolean man = environment.getArgument("man");
+	                	SqlSession sqlSession = sqlSessionFactory.openSession();
+	                	if(name != null && name != ""){
+	                		name = "%"+name+"%";
+	                	}
+	                	if(studentNo != null && studentNo != ""){
+	                		studentNo = "%"+studentNo+"%";
+	                	}
+	                	List<Student> studentList = sqlSession.getMapper(StudentMapper.class).listStudentByConditions(classId, name, studentNo, man);
+	                	sqlSession.close();
+	                	return studentList;
+	                } ).build();
+		}
+        return listQueryByConditionsField;
+    }
+
+
 	
 	public SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;

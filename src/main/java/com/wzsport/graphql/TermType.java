@@ -7,10 +7,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wzsport.mapper.ClassMapper;
-import com.wzsport.mapper.StudentMapper;
-import com.wzsport.model.Class;
-import com.wzsport.model.Student;
+import com.wzsport.mapper.TermMapper;
+import com.wzsport.mapper.TermSportsTaskMapper;
+import com.wzsport.model.Term;
+import com.wzsport.model.TermSportsTask;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -19,35 +19,27 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 /**
-* GraphQL班级类型的定义及查询字段定义
+* Term GraphQL Type.
 * 
 * @author x1ny
-* @date 2017年5月25日
+* @date 2017年5月28日
 */
 @Component
-public class ClassType {
-	
+public class TermType {
+
 	private static SqlSessionFactory sqlSessionFactory;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
 
-	private ClassType() {}
+	private TermType() {}
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("Class")
+					.name("Term")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("name")
-							.type(Scalars.GraphQLString)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("majorId")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -55,47 +47,34 @@ public class ClassType {
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("students")
-							.type(new GraphQLList(StudentType.getType()))
+							.name("name")
+							.type(Scalars.GraphQLString)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("startDate")
+							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
-								Class studentClass = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	List<Student> studentList = sqlSession.getMapper(StudentMapper.class).listStudentByClassId(studentClass.getId());
-			                	sqlSession.close();
-			                	return studentList;
+								Term term = environment.getSource();
+			                	return term.getStartDate().getTime();
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("studentCount")
-							.type(Scalars.GraphQLInt)
+							.name("endDate")
+							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
-								Class studentClass = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int  studentCount = sqlSession.getMapper(StudentMapper.class).countStudentByClassId(studentClass.getId());
-			                	sqlSession.close();
-			                	return studentCount;
+								Term term = environment.getSource();
+			                	return term.getEndDate().getTime();
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("maleStudentCount")
-							.type(Scalars.GraphQLInt)
+							.name("termSportsTask")
+							.type(TermSportsTaskType.getType())
 							.dataFetcher(environment ->  {
-								Class studentClass = environment.getSource();
+								Term term = environment.getSource();
 								SqlSession sqlSession = sqlSessionFactory.openSession();
-								int maleStudentCount = sqlSession.getMapper(StudentMapper.class).countMaleStudentByClassId(studentClass.getId());
+			                	TermSportsTask termSportsTask = sqlSession.getMapper(TermSportsTaskMapper.class).getTermSportsTaskByTermId(term.getId());
 			                	sqlSession.close();
-			                	return maleStudentCount;
-							} )
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("femaleStudentCount")
-							.type(Scalars.GraphQLInt)
-							.dataFetcher(environment ->  {
-								Class studentClass = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-								int femaleStudentCount = sqlSession.getMapper(StudentMapper.class).countFemaleStudentByClassId(studentClass.getId());
-			                	sqlSession.close();
-			                	return femaleStudentCount;
+			                	return termSportsTask;
 							} )
 							.build())
 					.build();
@@ -108,31 +87,33 @@ public class ClassType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
-	                .name("class")
+	                .name("term")
 	                .type(getType())
-	                .dataFetcher(environment ->  {
+	                .dataFetcher(environment -> {
 	                	int id = environment.getArgument("id");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	Class sudentClass = sqlSession.getMapper(ClassMapper.class).getClassById(id);
+	                	Term term = sqlSession.getMapper(TermMapper.class).getTermById(id);
 	                	sqlSession.close();
-	                	return sudentClass;
-	                } ).build();
+	                	return term;
+	                } )
+	                .build();
 		}
+		
         return singleQueryField;
     }
 	
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLInt).build())
-	                .name("classes")
+	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
+	                .name("terms")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	int majorId = environment.getArgument("majorId");
+	                	int universityId = environment.getArgument("universityId");
 	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<Class> classList = sqlSession.getMapper(ClassMapper.class).listClassByMajorId(majorId);
+	                	List<Term> termList = sqlSession.getMapper(TermMapper.class).listTermByUniversiyId(universityId);
 	                	sqlSession.close();
-	                	return classList;
+	                	return termList;
 	                } ).build();
 		}
         return listQueryField;
@@ -144,6 +125,6 @@ public class ClassType {
 
 	@Autowired(required = true)
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		ClassType.sqlSessionFactory = sqlSessionFactory;
+		TermType.sqlSessionFactory = sqlSessionFactory;
 	}
 }

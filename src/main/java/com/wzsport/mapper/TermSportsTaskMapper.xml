@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzsport.mapper.TermSportsTaskMapper">
+	<update id="update" parameterType="com.wzsport.model.TermSportsTask">
+		UPDATE term_sports_task
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="termId != null">term_id = #{termId},</if>
+			<if test="targetSportsTimes != null">target_sports_times = #{targetSportsTimes},</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+</mapper>

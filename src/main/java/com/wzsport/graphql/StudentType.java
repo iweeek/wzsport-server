@@ -17,10 +17,10 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 /**
-* GraphQL学生类型的定义及查询字段定义
+* GraphQL瀛︾敓绫诲瀷鐨勫畾涔夊強鏌ヨ瀛楁瀹氫箟
 * 
 * @author x1ny
-* @date 2017年5月25日
+* @date 2017骞�5鏈�25鏃�
 */
 @Component
 public class StudentType {
@@ -29,6 +29,7 @@ public class StudentType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
+	private static GraphQLFieldDefinition listQueryByConditionsField;
 
 	private StudentType() {}
 	
@@ -112,6 +113,31 @@ public class StudentType {
 		}
         return listQueryField;
     }
+	
+	public static GraphQLFieldDefinition getListQueryByConditionsField() {
+		if(listQueryByConditionsField == null) {
+			listQueryByConditionsField = GraphQLFieldDefinition.newFieldDefinition()
+	        		.argument(GraphQLArgument.newArgument().name("classId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("man").type(Scalars.GraphQLBoolean).build())
+	                .name("searchStudents")
+	                .type(new GraphQLList(getType()))
+	                .dataFetcher(environment -> {
+	                	Integer classId = environment.getArgument("classId");
+	                	String name = environment.getArgument("name");
+	                	String studentNo = environment.getArgument("studentNo");
+	                	Boolean man = environment.getArgument("man");
+	                	SqlSession sqlSession = sqlSessionFactory.openSession();
+	                	List<Student> studentList = sqlSession.getMapper(StudentMapper.class).listStudentByConditions(classId, name, studentNo, man);
+	                	sqlSession.close();
+	                	return studentList;
+	                } ).build();
+		}
+        return listQueryByConditionsField;
+    }
+
+
 	
 	public SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;

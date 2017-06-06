@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -64,4 +65,40 @@ public interface StudentMapper {
 	*/
 	@Select("SELECT * FROM student WHERE class_id = #{classId}")
 	List<Student> listStudentByClassId(int classId);
+	
+	/**
+	* 根据classId获取所有相关联的student的总数量
+	* 
+	* @param classId
+	*/
+	@Select("SELECT COUNT(id) as acount FROM student WHERE class_id = #{classId}")
+	int countStudentByClassId(int classId);
+	
+	/**
+	* 根据classId获取所有相关联的且性别为男的student的总数量
+	* 
+	* @param classId
+	*/
+	@Select("SELECT COUNT(id) FROM student WHERE class_id = #{classId} AND is_man = 1")
+	int countMaleStudentByClassId(int classId);
+	
+	/**
+	* 根据classId获取所有相关联的且性别为女的student的总数量
+	* 
+	* @param classId
+	*/
+	@Select("SELECT COUNT(id) FROM student WHERE class_id = #{classId} AND is_man = 0")
+	int countFemaleStudentByClassId(int classId);
+	
+	/**
+	* 根据classId,name,studentNo,isMan 搜索student
+	* 
+	* @param classId,name,studentNo,isMan
+	*/
+	List<Student> listStudentByConditions(@Param("classId") Integer classId, @Param("name") String name, @Param("studentNo") String studentNo, @Param("man") Boolean man);
+	
 }
+
+
+
+

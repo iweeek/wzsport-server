@@ -2,13 +2,12 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.SportScoreMapper;
 import com.wzsport.model.SportScore;
+import com.wzsport.model.SportScoreExample;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -23,7 +22,7 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class SportScoreType {
 	
-	private static SqlSessionFactory sqlSessionFactory;
+	private static SportScoreMapper sportScoreMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -36,11 +35,11 @@ public class SportScoreType {
 					.name("SportScore")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("studentId")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("meter50SprintTime")
@@ -83,14 +82,12 @@ public class SportScoreType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("sportScore")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	SportScore sportScore = sqlSession.getMapper(SportScoreMapper.class).getSportScoreById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	SportScore sportScore = sportScoreMapper.selectByPrimaryKey(id);
 	                	return sportScore;
 	                } ).build();
 		}
@@ -100,26 +97,22 @@ public class SportScoreType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLLong).build())
 	                .name("sportScores")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	int studentId = environment.getArgument("studentId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<SportScore> sportScoreList = sqlSession.getMapper(SportScoreMapper.class).listSportScoreByStudentId(studentId);
-	                	sqlSession.close();
+	                	long studentId = environment.getArgument("studentId");
+	                	SportScoreExample sportScoreExample = new SportScoreExample();
+	                	sportScoreExample.createCriteria().andStudentIdEqualTo(studentId);
+	                	List<SportScore> sportScoreList = sportScoreMapper.selectByExample(sportScoreExample);
 	                	return sportScoreList;
 	                } ).build();
 		}
         return listQueryField;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		SportScoreType.sqlSessionFactory = sqlSessionFactory;
+	public void setSportScoreMapper(SportScoreMapper sportScoreMapper) {
+		SportScoreType.sportScoreMapper = sportScoreMapper;
 	}
 }

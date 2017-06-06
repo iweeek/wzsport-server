@@ -2,13 +2,12 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.model.RunningActivity;
+import com.wzsport.model.RunningActivityExample;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -25,7 +24,7 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class RunningActivityType {
 	
-	private static SqlSessionFactory sqlSessionFactory;
+	private static RunningActivityMapper runningActivityMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -38,15 +37,15 @@ public class RunningActivityType {
 					.name("RunningActivity")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("projectId")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("studentId")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("distance")
@@ -84,14 +83,12 @@ public class RunningActivityType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("runningActivity")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	RunningActivity runningActivity = sqlSession.getMapper(RunningActivityMapper.class).getRunningActivityById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	RunningActivity runningActivity = runningActivityMapper.selectByPrimaryKey(id);
 	                	return runningActivity;
 	                } ).build();
 		}
@@ -101,26 +98,22 @@ public class RunningActivityType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLLong).build())
 	                .name("runningActivitys")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
-	                	int studentId = environment.getArgument("studentId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<RunningActivity> runningActivityList = sqlSession.getMapper(RunningActivityMapper.class).listRunningActivityByStudentId(studentId);
-	                	sqlSession.close();
+	                	long studentId = environment.getArgument("studentId");
+	                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+	                	runningActivityExample.createCriteria().andStudentIdEqualTo(studentId);
+	                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
 	                	return runningActivityList;
 	                } ).build();
 		}
         return listQueryField;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		RunningActivityType.sqlSessionFactory = sqlSessionFactory;
+	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
+		RunningActivityType.runningActivityMapper = runningActivityMapper;
 	}
 }

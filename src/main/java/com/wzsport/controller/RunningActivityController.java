@@ -28,12 +28,13 @@ public class RunningActivityController {
 	* 创建RunningActivity接口
 	*/
 	@RequestMapping(method = RequestMethod.POST)
-	public RunningActivity create(@RequestParam int projectId,
-								@RequestParam int studentId,
+	public RunningActivity create(@RequestParam long projectId,
+								@RequestParam long studentId,
 								@RequestParam int distance,
 								@RequestParam int costTime,
 								@RequestParam int targetTime,
 								@RequestParam Long startTime) {
+		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setProjectId(projectId);
 		runningActivity.setStudentId(studentId);
@@ -41,14 +42,7 @@ public class RunningActivityController {
 		runningActivity.setCostTime(costTime);
 		runningActivity.setTargetTime(targetTime);
 		runningActivity.setStartTime(new Date(startTime));
+		
 		return runningActivityService.create(runningActivity); 
-	}
-
-	public RunningActivityService getRunningActivityService() {
-		return runningActivityService;
-	}
-
-	public void setRunningActivityService(RunningActivityService runningActivityService) {
-		this.runningActivityService = runningActivityService;
 	}
 }

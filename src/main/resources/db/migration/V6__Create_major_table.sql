@@ -1,4 +1,4 @@
-CREATE TABLE `major` (
+CREATE TABLE `wzsport_major` (
 `id` bigint(11) NOT NULL AUTO_INCREMENT,
 `college_id` bigint(11) UNSIGNED NOT NULL,
 `university_id` bigint(11) UNSIGNED NOT NULL,

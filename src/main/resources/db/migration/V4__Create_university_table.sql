@@ -1,4 +1,4 @@
-CREATE TABLE `university` (
+CREATE TABLE `wzsport_university` (
 `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
 `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

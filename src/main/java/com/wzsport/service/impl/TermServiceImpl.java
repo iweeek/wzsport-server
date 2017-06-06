@@ -1,14 +1,16 @@
 package com.wzsport.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wzsport.mapper.TermMapper;
 import com.wzsport.mapper.TermSportsTaskMapper;
 import com.wzsport.model.Term;
+import com.wzsport.model.TermExample;
 import com.wzsport.model.TermSportsTask;
+import com.wzsport.model.TermSportsTaskExample;
 import com.wzsport.service.TermService;
 
 /**
@@ -21,73 +23,68 @@ import com.wzsport.service.TermService;
 public class TermServiceImpl implements TermService {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private TermMapper termMapper;
+	@Autowired
+	private TermSportsTaskMapper termSportsTaskMapper;
 	
 	/* (non-Javadoc)
-	 * @see com.wzsport.service.TermService#create(com.wzsport.model.Term)
+	 * @see com.wzsport.service.TermService#create(com.wzsport.generator.model.Term)
 	 */
 	@Override
+	@Transactional
 	public boolean create(Term term) {
-		try(SqlSession sqlSession = sqlSessionFactory.openSession(false)) {
-			TermMapper termMapper = sqlSession.getMapper(TermMapper.class);
-			int affectedCount = termMapper.save(term);
-			if(affectedCount == 0) {
-				return false;
-			}
-			
-			//创建关联的TermSportsTask
-			TermSportsTask termSportsTask =  new TermSportsTask();
-			termSportsTask.setTermId(term.getId());
-			termSportsTask.setTargetSportsTimes(0);
-			TermSportsTaskMapper termSportsTaskMapper = sqlSession.getMapper(TermSportsTaskMapper.class);
-			affectedCount = termSportsTaskMapper.save(termSportsTask);
-			if(affectedCount == 0) {
-				return false;
-			} else {
-				sqlSession.commit();
-				return true;
-			}
+		
+		int affectedCount = termMapper.insertSelective(term);
+		if(affectedCount == 0) {
+			throw new RuntimeException("数据库执行失败");
 		}
+		
+		//创建关联的TermSportsTask
+		TermSportsTask termSportsTask =  new TermSportsTask();
+		termSportsTask.setTermId(term.getId());
+		termSportsTask.setTargetSportsTimes(0);
+		affectedCount = termSportsTaskMapper.insertSelective(termSportsTask);
+		if(affectedCount == 0) {
+			throw new RuntimeException("数据库执行失败");
+		}
+		
+		return true;
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see com.wzsport.service.TermService#delete(int)
+	 * @see com.wzsport.service.TermService#delete(long)
 	 */
 	@Override
-	public boolean delete(int id) {
-		try(SqlSession sqlSession = sqlSessionFactory.openSession(false)) {
-			TermMapper termMapper = sqlSession.getMapper(TermMapper.class);
-			int affectedCount = termMapper.delete(id);
-			if(affectedCount == 0) {
-				return false;
-			}
-			TermSportsTaskMapper termSportsTaskMapper = sqlSession.getMapper(TermSportsTaskMapper.class);
-			termSportsTaskMapper.deleteByTermId(id);
-			sqlSession.commit();
-			return true;
+	@Transactional
+	public boolean delete(long id) {
+		int affectedCount = termMapper.deleteByPrimaryKey(id);
+		if(affectedCount == 0) {
+			throw new RuntimeException("数据库执行失败");
 		}
+		
+		TermSportsTaskExample termSportsTaskExample = new TermSportsTaskExample();
+		termSportsTaskExample.createCriteria().andTermIdEqualTo(id);
+		affectedCount = termSportsTaskMapper.deleteByExample(termSportsTaskExample);
+		if(affectedCount == 0) {
+			throw new RuntimeException("数据库执行失败");
+		}
+		
+		return true;
 	}
 
+	
 	/* (non-Javadoc)
-	 * @see com.wzsport.service.TermService#update(com.wzsport.model.Term)
+	 * @see com.wzsport.service.TermService#update(com.wzsport.generator.model.Term)
 	 */
 	@Override
 	public boolean update(Term term) {
-		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
-			TermMapper termMapper = sqlSession.getMapper(TermMapper.class);
-			int line = termMapper.update(term);
-			if(line >= 1) {
-				return true;
-			}
+		TermExample termExample = new TermExample();
+		termExample.createCriteria().andIdEqualTo(term.getId());
+		int affectedCount = termMapper.updateByPrimaryKeySelective(term);
+		if(affectedCount > 0) {
+			return true;
 		}
+		
 		return false;
-	}
-
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
-
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
 	}
 }

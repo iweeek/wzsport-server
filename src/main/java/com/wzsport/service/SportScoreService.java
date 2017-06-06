@@ -2,7 +2,6 @@ package com.wzsport.service;
 
 import com.wzsport.model.SportScore;
 
-
 /**
  * SportScore Service
  * @author linhongyong

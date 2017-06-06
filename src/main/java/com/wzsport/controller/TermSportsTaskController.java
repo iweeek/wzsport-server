@@ -30,7 +30,7 @@ public class TermSportsTaskController {
 	*/
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(@RequestParam int targetSportsTimes,
-									@PathVariable int id) {
+									@PathVariable long id) {
 		TermSportsTask termSportsTask = new TermSportsTask();
 		termSportsTask.setId(id);
 		termSportsTask.setTargetSportsTimes(targetSportsTimes);
@@ -39,13 +39,5 @@ public class TermSportsTaskController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return ResponseEntity.ok().build();
-	}
-
-	public TermSportsTaskService getTermSportsTaskService() {
-		return termSportsTaskService;
-	}
-
-	public void setTermSportsTaskService(TermSportsTaskService termSportsTaskService) {
-		this.termSportsTaskService = termSportsTaskService;
 	}
 }

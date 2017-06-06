@@ -2,13 +2,12 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.RunningProject;
+import com.wzsport.model.RunningProjectExample;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -25,7 +24,7 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class RunningProjectType {
 
-	private static SqlSessionFactory sqlSessionFactory;
+	private static RunningProjectMapper runningProjectMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -38,11 +37,11 @@ public class RunningProjectType {
 					.name("RunningProject")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
@@ -76,14 +75,12 @@ public class RunningProjectType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("runningProject")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	RunningProject runningProject = sqlSession.getMapper(RunningProjectMapper.class).getRunningProjectById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(id);
 	                	return runningProject;
 	                } ).build();
 		}
@@ -93,26 +90,22 @@ public class RunningProjectType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	                .name("runningProjects")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
-	                	int universityId = environment.getArgument("universityId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<RunningProject> runningProjectList = sqlSession.getMapper(RunningProjectMapper.class).listRunningProjectByUniversityId(universityId);
-	                	sqlSession.close();
+	                	long universityId = environment.getArgument("universityId");
+	                	RunningProjectExample runningProjectExample = new RunningProjectExample();
+	                	runningProjectExample.createCriteria().andUniversityIdEqualTo(universityId);
+	                	List<RunningProject> runningProjectList = runningProjectMapper.selectByExample(runningProjectExample);
 	                	return runningProjectList;
 	                } ).build();
 		}
         return listQueryField;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		RunningProjectType.sqlSessionFactory = sqlSessionFactory;
+	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
+		RunningProjectType.runningProjectMapper = runningProjectMapper;
 	}
 }

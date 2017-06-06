@@ -1,7 +1,5 @@
 package com.wzsport.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,29 +12,24 @@ import com.wzsport.util.BmiUtil;
 public class FitnessCheckDataServiceImpl implements FitnessCheckDataService {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private FitnessCheckDataMapper fitnessCheckDataMapper;
 	
 	@Override
 	public FitnessCheckData create(FitnessCheckData fitnessCheckData) {
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		FitnessCheckDataMapper fitnessCheckDataMapper = sqlSession.getMapper(FitnessCheckDataMapper.class);
 		//计算BMI
-		if(fitnessCheckData.getBmi()==null){
+		if(fitnessCheckData.getBmi() == null){
 			float bmi = BmiUtil.calculateBmi(fitnessCheckData.getWeight(), fitnessCheckData.getHeight());
-			fitnessCheckData.setBmi(bmi);
+			fitnessCheckData.setBmi((double)bmi);
 		}
-		fitnessCheckDataMapper.save(fitnessCheckData);
+		fitnessCheckDataMapper.insertSelective(fitnessCheckData);
 		return fitnessCheckData;
 	}
 
 	@Override
 	public FitnessCheckData update(FitnessCheckData fitnessCheckData) {
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		FitnessCheckDataMapper fitnessCheckDataMapper = sqlSession.getMapper(FitnessCheckDataMapper.class);
 		float bmi = BmiUtil.calculateBmi(fitnessCheckData.getWeight(), fitnessCheckData.getHeight());
-		fitnessCheckData.setBmi(bmi);
-		fitnessCheckDataMapper.updateFitnessCheckDataById(fitnessCheckData);
+		fitnessCheckData.setBmi((double)bmi);
+		fitnessCheckDataMapper.updateByPrimaryKeySelective(fitnessCheckData);
 		return fitnessCheckData;
 	}
-
 }

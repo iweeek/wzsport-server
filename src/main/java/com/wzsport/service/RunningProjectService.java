@@ -16,7 +16,7 @@ public interface RunningProjectService {
 	* @param qualifiedCostTime 合格时间
 	* @param minCostTime 最少耗时
 	*/
-	boolean updateIndex(int id, int qualifiedDistance, int qualifiedCostTime, int minCostTime);
+	boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime);
 	
 	/**
 	* 更改指定id的项目的启动状态
@@ -24,5 +24,5 @@ public interface RunningProjectService {
 	* @param id
 	* @param enabled
 	*/
-	boolean updateEnable(int id, boolean enabled);
+	boolean updateEnable(long id, boolean enabled);
 }

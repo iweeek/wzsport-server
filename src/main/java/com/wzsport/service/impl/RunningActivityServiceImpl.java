@@ -1,7 +1,6 @@
 package com.wzsport.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,42 +21,33 @@ import com.wzsport.util.CalorieUtil;
 public class RunningActivityServiceImpl implements RunningActivityService {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private RunningProjectMapper runningProjectMapper;
+	@Autowired
+	private RunningActivityMapper runningActivityMapper;
 	
 	/* (non-Javadoc)
 	 * @see com.wzsport.service.RunningActivityService#create(com.wzsport.model.RunningActivity)
 	 */
 	@Override
 	public RunningActivity create(RunningActivity runningActivity) {
-		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
-			RunningProjectMapper runningProjectMapper = sqlSession.getMapper(RunningProjectMapper.class);
-			RunningProject runningProject = runningProjectMapper.getRunningProjectById(runningActivity.getProjectId());
-			
-			//判断是否合格
-			if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
-					&& runningActivity.getTargetTime() != null
-					&& runningActivity.getTargetTime() <= runningProject.getQualifiedCostTime()){
-				runningActivity.setQualified(true);
-			} else {
-				runningActivity.setQualified(false);
-			}
-			
-			//计算卡路里消耗
-			int costCalorie = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
-					runningProject.getHourlyCalorieConsumption());
-			runningActivity.setCostCalorie(costCalorie);
-			
-			RunningActivityMapper runningActivityMapper = sqlSession.getMapper(RunningActivityMapper.class);
-			runningActivityMapper.save(runningActivity);
+		
+		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		//判断是否合格
+		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
+				&& runningActivity.getTargetTime() != null
+				&& runningActivity.getTargetTime() <= runningProject.getQualifiedCostTime()){
+			runningActivity.setQualified(true);
+		} else {
+			runningActivity.setQualified(false);
 		}
+		
+		//计算卡路里消耗
+		int costCalorie = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
+				runningProject.getHourlyCalorieConsumption());
+		runningActivity.setCostCalorie(costCalorie);
+		
+		runningActivityMapper.insertSelective(runningActivity);
+		
 		return runningActivity;
-	}
-
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
-
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
 	}
 }

@@ -1,4 +1,4 @@
-CREATE TABLE `running_activity` (
+CREATE TABLE `wzsport_running_activity` (
 `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `project_id` bigint(11) UNSIGNED NOT NULL,
 `student_id` bigint(11) UNSIGNED NOT NULL,

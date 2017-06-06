@@ -31,7 +31,7 @@ public class TeacherType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
-
+	private static GraphQLFieldDefinition listTeachers;
 	private TeacherType() {}
 	
 	public static GraphQLObjectType getType() {
@@ -43,11 +43,11 @@ public class TeacherType {
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("name")
+							.name("jobNo")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("jobNo")
+							.name("name")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -105,6 +105,31 @@ public class TeacherType {
 	                } ).build();
 		}
         return listQueryField;
+    }
+	
+	/**
+	 * 根据 工号+姓名+性别chaxun
+	 * @return
+	 */
+	public static GraphQLFieldDefinition getListTeacherByJobNoAndNameAndSex() {
+		if(listTeachers == null) {
+			listTeachers = GraphQLFieldDefinition.newFieldDefinition()
+					.name("searchTeachers")
+	        		.argument(GraphQLArgument.newArgument().name("jobNo").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("man").type(Scalars.GraphQLBoolean).build())
+	                .type(new GraphQLList(getType()))
+	                .dataFetcher(environment -> {
+	                	String jobNo = environment.getArgument("jobNo");
+	                	String name = environment.getArgument("name");
+	                	Boolean isMan = environment.getArgument("man");
+	                	SqlSession sqlSession = sqlSessionFactory.openSession();
+	                	List<Teacher> teacherList = sqlSession.getMapper(TeacherMapper.class).searcherTeachers(jobNo,name,isMan);
+	                	sqlSession.close();
+	                	return teacherList;
+	                } ).build();
+		}
+        return listTeachers;
     }
 	
 	public SqlSessionFactory getSqlSessionFactory() {

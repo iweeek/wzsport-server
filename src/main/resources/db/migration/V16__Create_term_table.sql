@@ -1,4 +1,4 @@
-CREATE TABLE `term` (
+CREATE TABLE `wzsport_term` (
 `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `university_id` bigint(11) UNSIGNED NOT NULL,
 `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,

@@ -34,7 +34,7 @@ public class RunningProjectController {
 	* @param minCostTime
 	*/
 	@RequestMapping(value="/{id}/updateIndex",method = RequestMethod.POST) 
-	public String updateIndex(@PathVariable("id") int id,
+	public String updateIndex(@PathVariable("id") long id,
 							@RequestParam int qualifiedDistance,
 							@RequestParam int qualifiedCostTime,
 							@RequestParam int minCostTime,
@@ -52,20 +52,12 @@ public class RunningProjectController {
 	* @param enabled
 	*/
 	@RequestMapping(value="/{id}/updateEnable",method = RequestMethod.POST) 
-	public String updateEnable(@PathVariable("id") int id,
+	public String updateEnable(@PathVariable("id") long id,
 							@RequestParam boolean enabled,
 							HttpServletResponse response) {
 		boolean isSuccess = runningProjectService.updateEnable(id, enabled);
 		if(!isSuccess)
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		return " ";
-	}
-	
-	public RunningProjectService getRunningProjectService() {
-		return runningProjectService;
-	}
-
-	public void setRunningProjectService(RunningProjectService runningProjectService) {
-		this.runningProjectService = runningProjectService;
 	}
 }

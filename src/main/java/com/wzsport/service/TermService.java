@@ -23,7 +23,7 @@ public interface TermService {
 	* 
 	* @param id
 	*/
-	boolean delete(int id);
+	boolean delete(long id);
 	
 	/**
 	* 更新

@@ -3,8 +3,6 @@ package com.wzsport.service.impl;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ public class TokenServiceImpl implements TokenService {
 	private final int DEFAULT_EXPIRED_HOUR = 1;
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private UserMapper userMapper;
 	
 	public TokenServiceImpl(@Value("${jwt.key}") String key) {		
 		KEY = key;
@@ -52,11 +50,7 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public TokenDTO create(String username, String password, int expiredHour) {
 		
-		//验证username和passwrod
-		User user = null;
-		try (SqlSession sqlSession = sqlSessionFactory.openSession()){
-			user = sqlSession.getMapper(UserMapper.class).getUserByUserName(username);
-		}
+		User user = userMapper.selectWithRolesByUsername(username);
 		
 		if(user == null) {
 			throw new UnknownAccountException();
@@ -67,7 +61,7 @@ public class TokenServiceImpl implements TokenService {
 		}
 		
 		//创建token
-		int userId = user.getId();
+		long userId = user.getId();
 		Date expiredDate = DateUtils.addHours(new Date(), expiredHour);
 		String[] roles = new String[user.getRoles().size()];
 		for(int i = 0; i < roles.length; i++) {
@@ -90,14 +84,5 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public TokenDTO create(String username, String password) {
 		return create(username, password, DEFAULT_EXPIRED_HOUR);
-	}
-	
-
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
-
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
 	}
 }

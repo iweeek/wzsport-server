@@ -2,7 +2,6 @@ package com.wzsport.service;
 
 import com.wzsport.model.FitnessCheckData;
 
-
 /**
  * 体测成绩Service Interface
  * @author Watermelon_R(ljf)

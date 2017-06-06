@@ -1,4 +1,4 @@
-CREATE TABLE `term_sports_task` (
+CREATE TABLE `wzsport_term_sports_task` (
 `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `term_id` bigint(11) UNSIGNED NOT NULL,
 `target_sports_times` tinyint(3) UNSIGNED NOT NULL,

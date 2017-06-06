@@ -2,8 +2,6 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +9,8 @@ import com.wzsport.mapper.CollegeMapper;
 import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
 import com.wzsport.model.College;
+import com.wzsport.model.CollegeExample;
+import com.wzsport.model.TeacherExample;
 import com.wzsport.model.University;
 
 import graphql.Scalars;
@@ -28,7 +28,9 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class UniversityType {
 
-	private static SqlSessionFactory sqlSessionFactory;
+	private static UniversityMapper universityMapper;
+	private static CollegeMapper collegeMapper;
+	private static TeacherMapper teacherMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 
@@ -40,7 +42,7 @@ public class UniversityType {
 					.name("University")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
@@ -51,21 +53,21 @@ public class UniversityType {
 							.type(new GraphQLList(CollegeType.getType()))
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	List<College> collegeList = sqlSession.getMapper(CollegeMapper.class).listCollegeByUniversityId(university.getId());
-			                	sqlSession.close();
+								CollegeExample collegeExample = new CollegeExample();
+								collegeExample.createCriteria().andUniversityIdEqualTo(university.getId());
+			                	List<College> collegeList = collegeMapper.selectByExample(collegeExample);
 			                	return collegeList;
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("allTeachersCount")
+							.name("teachersCount")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-			                	SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int allTeachersCount = sqlSession.getMapper(TeacherMapper.class).countAllTeachers(university.getId());
-			                	sqlSession.close();
-			                	return allTeachersCount;
+								TeacherExample teacherExample = new TeacherExample();
+								teacherExample.createCriteria().andUniversityIdEqualTo(university.getId());
+			                	int teachersCount = (int) teacherMapper.countByExample(teacherExample);
+			                	return teachersCount;
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -73,9 +75,10 @@ public class UniversityType {
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-			                	SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int maleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countMaleTeachers(university.getId());
-			                	sqlSession.close();
+
+								TeacherExample teacherExample = new TeacherExample();
+								teacherExample.createCriteria().andUniversityIdEqualTo(university.getId()).andManEqualTo(true);
+			                	int maleTeachersCount = (int) teacherMapper.countByExample(teacherExample);
 			                	return maleTeachersCount;
 							} )
 							.build())
@@ -84,9 +87,9 @@ public class UniversityType {
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-			                	SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	int femaleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countFemaleTeachers(university.getId());;
-			                	sqlSession.close();
+								TeacherExample teacherExample = new TeacherExample();
+								teacherExample.createCriteria().andUniversityIdEqualTo(university.getId()).andManEqualTo(false);
+			                	int femaleTeachersCount = (int) teacherMapper.countByExample(teacherExample);
 			                	return femaleTeachersCount;
 							} )
 							.build())
@@ -99,27 +102,30 @@ public class UniversityType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("university")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	University university = sqlSession.getMapper(UniversityMapper.class).getUniversityById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	University university = universityMapper.selectByPrimaryKey(id);
 	                	return university;
 	                } ).build();
 		}
         return singleQueryField;
     }
-	
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		UniversityType.sqlSessionFactory = sqlSessionFactory;
+	public void setCollegeMapper(CollegeMapper collegeMapper) {
+		UniversityType.collegeMapper = collegeMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setTeacherMapper(TeacherMapper teacherMapper) {
+		UniversityType.teacherMapper = teacherMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setUniversityMapper(UniversityMapper universityMapper) {
+		UniversityType.universityMapper = universityMapper;
 	}
 }

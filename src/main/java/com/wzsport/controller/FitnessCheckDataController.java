@@ -1,8 +1,6 @@
 package com.wzsport.controller;
 
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +18,14 @@ import com.wzsport.service.FitnessCheckDataService;
  * 2017年5月27日
  */
 @RestController
-@RequestMapping(value="/fitnessCheckData", produces="application/json;charset=UTF-8")
+@RequestMapping(value="/fitnessCheckDatas", produces="application/json;charset=UTF-8")
 public class FitnessCheckDataController {
 	
 	@Autowired
 	private FitnessCheckDataService fitnessCheckDataService;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public FitnessCheckData save(@RequestParam int studentId,
+	public FitnessCheckData save(@RequestParam long studentId,
 							 	 @RequestParam int height,
 							     @RequestParam int weight,
 							     @RequestParam int lungCapacity){
@@ -36,23 +34,19 @@ public class FitnessCheckDataController {
 		fitnessCheckData.setHeight(height);
 		fitnessCheckData.setWeight(weight);
 		fitnessCheckData.setLungCapacity(lungCapacity);
-		fitnessCheckData.setCreateAt(new Date());
 		return fitnessCheckDataService.create(fitnessCheckData);
 	}
 	
-	@RequestMapping(value="/{id}", method = RequestMethod.POST)
-	public FitnessCheckData update( @PathVariable int id,
-							 @RequestParam int studentId,
+	@RequestMapping(value="/fitnessCheckDatas/{id}", method = RequestMethod.POST)
+	public FitnessCheckData update( @PathVariable long id,
 							 @RequestParam int height,
 							 @RequestParam int weight,
 							 @RequestParam int lungCapacity){
 		FitnessCheckData fitnessCheckData = new FitnessCheckData();
 		fitnessCheckData.setId(id);
-		fitnessCheckData.setStudentId(studentId);
 		fitnessCheckData.setHeight(height);
 		fitnessCheckData.setWeight(weight);
 		fitnessCheckData.setLungCapacity(lungCapacity);
 		return fitnessCheckDataService.update(fitnessCheckData);
 	}
-
 }

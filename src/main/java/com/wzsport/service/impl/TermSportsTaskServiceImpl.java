@@ -1,7 +1,5 @@
 package com.wzsport.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,7 @@ import com.wzsport.service.TermSportsTaskService;
 public class TermSportsTaskServiceImpl implements TermSportsTaskService {
 
 	@Autowired
-	private SqlSessionFactory sqlSessionFactory;
+	private TermSportsTaskMapper termSportsTaskMapper;
 	
 
 	/* (non-Javadoc)
@@ -27,21 +25,11 @@ public class TermSportsTaskServiceImpl implements TermSportsTaskService {
 	 */
 	@Override
 	public boolean update(TermSportsTask termSportsTask) {
-		try(SqlSession sqlSession = sqlSessionFactory.openSession()) {
-			TermSportsTaskMapper termSportsTaskMapper = sqlSession.getMapper(TermSportsTaskMapper.class);
-			int line = termSportsTaskMapper.update(termSportsTask);
-			if(line > 0) {
-				return true;
-			}
+		int affectedCount = termSportsTaskMapper.updateByPrimaryKeySelective(termSportsTask);
+		if(affectedCount > 0) {
+			return true;
 		}
+		
 		return false;
-	}
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
-
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
 	}
 }

@@ -32,7 +32,7 @@ public class TermController {
 	*/
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestParam String name,
-									@RequestParam int universityId,
+									@RequestParam long universityId,
 									@RequestParam long startDate,
 									@RequestParam long endDate) {
 		Term term = new Term();
@@ -53,7 +53,7 @@ public class TermController {
 	public ResponseEntity<?> update(@RequestParam String name,
 									@RequestParam long startDate,
 									@RequestParam long endDate,
-									@PathVariable int id) {
+									@PathVariable long id) {
 		Term term = new Term();
 		term.setId(id);
 		term.setName(name);
@@ -74,13 +74,5 @@ public class TermController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 		return ResponseEntity.ok().build();
-	}
-
-	public void setTermService(TermService termService) {
-		this.termService = termService;
-	}
-
-	public TermService getTermService() {
-		return termService;
 	}
 }

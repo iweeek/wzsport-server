@@ -10,7 +10,7 @@ import java.util.Date;
 */
 public class TokenDTO {
 
-	private Integer userId;
+	private Long userId;
 	private String[] roles;
 	private Date expiredDate;
 	private String token;
@@ -19,7 +19,7 @@ public class TokenDTO {
 		
 	}
 	
-	public TokenDTO(Integer userId, String[] roles, String token, Date expiredDate) {
+	public TokenDTO(Long userId, String[] roles, String token, Date expiredDate) {
 		super();
 		this.userId = userId;
 		this.roles = roles;
@@ -27,11 +27,11 @@ public class TokenDTO {
 		this.expiredDate = expiredDate;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

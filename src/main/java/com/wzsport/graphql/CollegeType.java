@@ -2,15 +2,15 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.CollegeMapper;
 import com.wzsport.mapper.MajorMapper;
 import com.wzsport.model.College;
+import com.wzsport.model.CollegeExample;
 import com.wzsport.model.Major;
+import com.wzsport.model.MajorExample;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -27,7 +27,8 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class CollegeType {
 
-	private static SqlSessionFactory sqlSessionFactory;
+	private static MajorMapper majorMapper;
+	private static CollegeMapper collegeMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -40,7 +41,7 @@ public class CollegeType {
 					.name("College")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
@@ -48,16 +49,16 @@ public class CollegeType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("majors")
 							.type(new GraphQLList(MajorType.getType()))
 							.dataFetcher(environment ->  {
 								College college = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	List<Major> majorList = sqlSession.getMapper(MajorMapper.class).listMajorByCollegeId(college.getId());
-			                	sqlSession.close();
+								MajorExample majorExample = new MajorExample();
+								majorExample.createCriteria().andCollegeIdEqualTo(college.getId());
+			                	List<Major> majorList = majorMapper.selectByExample(majorExample);
 			                	return majorList;
 							} )
 							.build())
@@ -70,14 +71,12 @@ public class CollegeType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("college")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	College college = sqlSession.getMapper(CollegeMapper.class).getCollegeById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	College college = collegeMapper.selectByPrimaryKey(id);
 	                	return college;
 	                } ).build();
 		}
@@ -87,26 +86,27 @@ public class CollegeType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	                .name("colleges")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
-	                	int universityId = environment.getArgument("universityId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<College> collegeList = sqlSession.getMapper(CollegeMapper.class).listCollegeByUniversityId(universityId);
-	                	sqlSession.close();
+	                	long universityId = environment.getArgument("universityId");
+	                	CollegeExample collegeExample = new CollegeExample();
+	                	collegeExample.createCriteria().andUniversityIdEqualTo(universityId);
+	                	List<College> collegeList = collegeMapper.selectByExample(collegeExample);
 	                	return collegeList;
 	                } ).build();
 		}
         return listQueryField;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
+
+	@Autowired(required = true)
+	public void setMajorMapper(MajorMapper majorMapper) {
+		CollegeType.majorMapper = majorMapper;
 	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		CollegeType.sqlSessionFactory = sqlSessionFactory;
+	public void setCollegeMapper(CollegeMapper collegeMapper) {
+		CollegeType.collegeMapper = collegeMapper;
 	}
 }

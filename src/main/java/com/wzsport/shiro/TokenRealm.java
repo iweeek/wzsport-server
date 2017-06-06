@@ -77,5 +77,4 @@ public class TokenRealm extends AuthorizingRealm{
 	public String getName() {
 		return "TokenRealm";
 	}
-
 }

@@ -1,7 +1,5 @@
 package com.wzsport.graphql;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +20,7 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class TermSportsTaskType {
 
-	private static SqlSessionFactory sqlSessionFactory;
+	private static TermSportsTaskMapper termSportsTaskMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 
@@ -34,7 +32,7 @@ public class TermSportsTaskType {
 					.name("TermSportsTask")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
@@ -57,14 +55,12 @@ public class TermSportsTaskType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("termSportsTask")
 	                .type(getType())
 	                .dataFetcher(environment -> {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	TermSportsTask termSportsTask = sqlSession.getMapper(TermSportsTaskMapper.class).getTermSportsTaskById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	TermSportsTask termSportsTask = termSportsTaskMapper.selectByPrimaryKey(id);
 	                	return termSportsTask;
 	                } )
 	                .build();
@@ -72,13 +68,9 @@ public class TermSportsTaskType {
 		
         return singleQueryField;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		TermSportsTaskType.sqlSessionFactory = sqlSessionFactory;
+	public void setTermSportsTaskMapper(TermSportsTaskMapper termSportsTaskMapper) {
+		TermSportsTaskType.termSportsTaskMapper = termSportsTaskMapper;
 	}
 }

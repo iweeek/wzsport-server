@@ -2,8 +2,6 @@ package com.wzsport.graphql;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +9,8 @@ import com.wzsport.mapper.ClassMapper;
 import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.model.Class;
 import com.wzsport.model.Teacher;
+import com.wzsport.model.TeacherExample;
+import com.wzsport.model.TeacherExample.Criteria;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -27,7 +27,8 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class TeacherType {
 	
-	private static SqlSessionFactory sqlSessionFactory;
+	private static TeacherMapper teacherMapper;
+	private static ClassMapper classMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -40,7 +41,7 @@ public class TeacherType {
 					.name("Teacher")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLInt)
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("jobNo")
@@ -59,9 +60,7 @@ public class TeacherType {
 							.type(new GraphQLList(ClassType.getType()))
 							.dataFetcher(environment ->  {
 								Teacher teacher = environment.getSource();
-								SqlSession sqlSession = sqlSessionFactory.openSession();
-			                	List<Class> classList = sqlSession.getMapper(ClassMapper.class).listClassByTeacherId(teacher.getId());
-			                	sqlSession.close();
+			                	List<Class> classList = classMapper.listClassByTeacherId(teacher.getId());
 			                	return classList;
 							} )
 							.build())
@@ -74,14 +73,12 @@ public class TeacherType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("teacher")
 	                .type(getType())
 	                .dataFetcher(environment -> {
-	                	int id = environment.getArgument("id");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	Teacher teacher = sqlSession.getMapper(TeacherMapper.class).getTeacherById(id);
-	                	sqlSession.close();
+	                	long id = environment.getArgument("id");
+	                	Teacher teacher = teacherMapper.selectByPrimaryKey(id);
 	                	return teacher;
 	                } )
 	                .build();
@@ -93,51 +90,64 @@ public class TeacherType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("classId").type(Scalars.GraphQLInt).build())
+	        		.argument(GraphQLArgument.newArgument().name("classId").type(Scalars.GraphQLLong).build())
 	                .name("teachers")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	int classId = environment.getArgument("classId");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<Teacher> teacherList = sqlSession.getMapper(TeacherMapper.class).listTeacherByClassId(classId);
-	                	sqlSession.close();
+	                	long classId = environment.getArgument("classId");
+	                	List<Teacher> teacherList = teacherMapper.listTeacherByClassId(classId);
 	                	return teacherList;
 	                } ).build();
 		}
+		
         return listQueryField;
     }
 	
-	/**
-	 * 根据 工号+姓名+性别chaxun
-	 * @return
-	 */
 	public static GraphQLFieldDefinition getListTeacherByJobNoAndNameAndSex() {
 		if(listTeachers == null) {
 			listTeachers = GraphQLFieldDefinition.newFieldDefinition()
 					.name("searchTeachers")
+					.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("jobNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
-	        		.argument(GraphQLArgument.newArgument().name("man").type(Scalars.GraphQLBoolean).build())
+	        		.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
+	                	Long universityId = environment.getArgument("universityId");
 	                	String jobNo = environment.getArgument("jobNo");
 	                	String name = environment.getArgument("name");
-	                	Boolean isMan = environment.getArgument("man");
-	                	SqlSession sqlSession = sqlSessionFactory.openSession();
-	                	List<Teacher> teacherList = sqlSession.getMapper(TeacherMapper.class).searcherTeachers(jobNo,name,isMan);
-	                	sqlSession.close();
+	                	Boolean isMan = environment.getArgument("isMan");
+	                	
+	                	TeacherExample teacherExample = new TeacherExample();
+	                	Criteria teacherExampleCriteria = teacherExample.createCriteria();
+	                	if(universityId != null) {
+	                		teacherExampleCriteria.andUniversityIdEqualTo(universityId);
+	                	}
+	                	if(name != null) {
+	                		teacherExampleCriteria.andNameLike(name);
+	                	}
+	                	if(jobNo != null) {
+	                		teacherExampleCriteria.andJobNoLike(jobNo);
+	                	}
+	                	if(isMan != null) {
+	                		teacherExampleCriteria.andManEqualTo(isMan);
+	                	}
+	                	
+	                	List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
+	                	
 	                	return teacherList;
 	                } ).build();
 		}
         return listTeachers;
     }
-	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
-	}
 
 	@Autowired(required = true)
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		TeacherType.sqlSessionFactory = sqlSessionFactory;
+	public void setTeacherMapper(TeacherMapper teacherMapper) {
+		TeacherType.teacherMapper = teacherMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setClassMapper(ClassMapper classMapper) {
+		TeacherType.classMapper = classMapper;
 	}
 }

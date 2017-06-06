@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  
+  <!-- 根据本地环境填写JDBC驱动包的路径 -->
+  <classPathEntry location="/Users/x1ny/Downloads/mysql-connector-java-5.1.42.jar" />
+
+  <context id="wzsport" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://localhost:3306/wzsport"
+        userId="root"
+        password="xiny1118">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.wzsport.generator.model" targetProject="wzsport-server">
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="com.wzsport.generator.mapper"  targetProject="wzsport-server">
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.wzsport.generator.mapper"  targetProject="wzsport-server">
+    </javaClientGenerator>
+    
+    <table schema="wzpsort" tableName="wzsport_user" domainObjectName ="User" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_role" domainObjectName ="Role" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+	<table schema="wzpsort" tableName="wzsport_university" domainObjectName ="University" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_college" domainObjectName ="College" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_major" domainObjectName ="Major" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_class" domainObjectName ="Class" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_student" domainObjectName ="Student" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="is_man" property="man" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_teacher" domainObjectName ="Teacher" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="is_man" property="man" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_term" domainObjectName ="Term" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_term_sports_task" domainObjectName ="TermSportsTask" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="target_sports_times" javaType="java.lang.Integer"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_running_activity" domainObjectName ="RunningActivity" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_running_project" domainObjectName ="RunningProject" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="enabled" property="enabled" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_sport_score" domainObjectName ="SportScore" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="meter50_sprint_time" javaType="java.lang.Double"/>
+      <columnOverride column="meter50_sprint_score" javaType="java.lang.Integer"/>
+      <columnOverride column="standing_jump_distance" javaType="java.lang.Integer"/>
+      <columnOverride column="standing_jump_score" javaType="java.lang.Integer"/>
+      <columnOverride column="meter1500_run_time" javaType="java.lang.Integer"/>
+      <columnOverride column="meter1500_run_score" javaType="java.lang.Integer"/>
+      <columnOverride column="abdominal_curl_count" javaType="java.lang.Integer"/>
+      <columnOverride column="abdominal_curl_score" javaType="java.lang.Integer"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_fitness_check_data" domainObjectName ="FitnessCheckData" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="bmi" property="bmi" javaType="java.lang.Double"/>
+    </table>
+  </context>
+</generatorConfiguration>

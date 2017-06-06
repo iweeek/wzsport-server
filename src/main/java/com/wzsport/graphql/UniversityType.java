@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.CollegeMapper;
+import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
 import com.wzsport.model.College;
 import com.wzsport.model.University;
@@ -56,6 +57,39 @@ public class UniversityType {
 			                	return collegeList;
 							} )
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("allTeachersCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int allTeachersCount = sqlSession.getMapper(TeacherMapper.class).countAllTeachers(university.getId());
+			                	sqlSession.close();
+			                	return allTeachersCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("maleTeahcersCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int maleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countMaleTeachers(university.getId());
+			                	sqlSession.close();
+			                	return maleTeachersCount;
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("femaleTeachersCount")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	SqlSession sqlSession = sqlSessionFactory.openSession();
+			                	int femaleTeachersCount = sqlSession.getMapper(TeacherMapper.class).countFemaleTeachers(university.getId());;
+			                	sqlSession.close();
+			                	return femaleTeachersCount;
+							} )
+							.build())
 					.build();
 		}
 		
@@ -78,6 +112,7 @@ public class UniversityType {
 		}
         return singleQueryField;
     }
+	
 	
 	public SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;

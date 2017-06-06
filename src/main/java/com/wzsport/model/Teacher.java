@@ -11,9 +11,9 @@ import java.util.Date;
 public class Teacher {
 
 	private Integer id;
-	private String jobId;
+	private String jobNo;
 	private String name;
-	private boolean man;
+	private Boolean man;
 	private Integer userId;
 	private User user;
 	private Integer universityId;
@@ -26,11 +26,11 @@ public class Teacher {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getJobId() {
-		return jobId;
+	public String getJobNo() {
+		return jobNo;
 	}
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setJobNo(String jobNo) {
+		this.jobNo = jobNo;
 	}
 	public String getName() {
 		return name;
@@ -38,10 +38,10 @@ public class Teacher {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public boolean isMan() {
+	public Boolean isMan() {
 		return man;
 	}
-	public void setMan(boolean man) {
+	public void setMan(Boolean man) {
 		this.man = man;
 	}
 	public Integer getUserId() {

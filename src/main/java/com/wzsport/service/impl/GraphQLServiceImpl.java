@@ -35,7 +35,6 @@ public class GraphQLServiceImpl implements GraphQLService {
 		//创建GraphQL实例
 		GraphQLObjectType queryType = GraphQLObjectType.newObject()
                 .name("root")
-//                .field(createUserField())
                 .field(UniversityType.getSingleQueryField())
                 .field(CollegeType.getSingleQueryField())
                 .field(CollegeType.getListQueryField())
@@ -47,6 +46,7 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(StudentType.getListQueryField())
                 .field(StudentType.getListQueryByConditionsField())
                 .field(TeacherType.getSingleQueryField())
+                .field(TeacherType.getListTeacherByJobNoAndNameAndSex())
                 .field(TeacherType.getListQueryField())
                 .field(RunningProjectType.getSingleQueryField())
                 .field(RunningProjectType.getListQueryField())

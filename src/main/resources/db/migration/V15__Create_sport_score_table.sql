@@ -2,6 +2,7 @@ CREATE TABLE `wzsport_sport_score` (
 `id` bigint(11) NOT NULL AUTO_INCREMENT,
 
 `student_id` bigint(11) UNSIGNED NOT NULL,
+`term_id` bigint(11) UNSIGNED NOT NULL,
 
 `meter50_sprint_time` decimal(5,2) NOT NULL,
 `meter50_sprint_score` tinyint(3) UNSIGNED NOT NULL,

@@ -44,6 +44,10 @@ public class TeacherType {
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("universityId")
+							.type(Scalars.GraphQLLong)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("jobNo")
 							.type(Scalars.GraphQLString)
 							.build())
@@ -52,8 +56,12 @@ public class TeacherType {
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("man")
+							.name("isMan")
 							.type(Scalars.GraphQLBoolean)
+							.dataFetcher(environment ->  {
+								Teacher teacher = environment.getSource();
+			                	return teacher.getMan();
+							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("classes")
@@ -124,10 +132,10 @@ public class TeacherType {
 	                		teacherExampleCriteria.andUniversityIdEqualTo(universityId);
 	                	}
 	                	if(name != null) {
-	                		teacherExampleCriteria.andNameLike(name);
+	                		teacherExampleCriteria.andNameLike("%" + name + "%");
 	                	}
 	                	if(jobNo != null) {
-	                		teacherExampleCriteria.andJobNoLike(jobNo);
+	                		teacherExampleCriteria.andJobNoLike("%" + jobNo + "%");
 	                	}
 	                	if(isMan != null) {
 	                		teacherExampleCriteria.andManEqualTo(isMan);

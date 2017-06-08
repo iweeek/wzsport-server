@@ -29,7 +29,7 @@ public class SportScoreController {
 	private SportScoreService sportScoreService;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<SportScore> save(@RequestParam long studentId,
+	public ResponseEntity<?> save(@RequestParam long studentId,
 							 	 @RequestParam double meter50SprintTime,
 							 	 @RequestParam int meter50SprintScore,
 							 	 @RequestParam int standingJumpDistance,
@@ -59,7 +59,7 @@ public class SportScoreController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public ResponseEntity<SportScore> update( 
+	public ResponseEntity<?> update( 
 			 @PathVariable long id,
 			 @RequestParam(required = false) Double meter50SprintTime,
 		 	 @RequestParam(required = false) Integer meter50SprintScore,

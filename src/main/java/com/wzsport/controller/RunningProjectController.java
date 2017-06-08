@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,15 +35,17 @@ public class RunningProjectController {
 	* @param minCostTime
 	*/
 	@RequestMapping(value="/{id}/updateIndex",method = RequestMethod.POST) 
-	public String updateIndex(@PathVariable("id") long id,
+	public ResponseEntity<?> updateIndex(@PathVariable("id") long id,
 							@RequestParam int qualifiedDistance,
 							@RequestParam int qualifiedCostTime,
 							@RequestParam int minCostTime,
 							HttpServletResponse response) {
 		boolean isSuccess = runningProjectService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime);
-		if(!isSuccess)
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		return " ";
+		if(isSuccess) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 	/**
@@ -52,12 +55,14 @@ public class RunningProjectController {
 	* @param enabled
 	*/
 	@RequestMapping(value="/{id}/updateEnable",method = RequestMethod.POST) 
-	public String updateEnable(@PathVariable("id") long id,
+	public ResponseEntity<?> updateEnable(@PathVariable("id") long id,
 							@RequestParam boolean enabled,
 							HttpServletResponse response) {
 		boolean isSuccess = runningProjectService.updateEnable(id, enabled);
-		if(!isSuccess)
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		return " ";
+		if(isSuccess) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

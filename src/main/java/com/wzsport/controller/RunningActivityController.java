@@ -3,6 +3,7 @@ package com.wzsport.controller;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ public class RunningActivityController {
 	* 创建RunningActivity接口
 	*/
 	@RequestMapping(method = RequestMethod.POST)
-	public RunningActivity create(@RequestParam long projectId,
+	public ResponseEntity<RunningActivity> create(@RequestParam long projectId,
 								@RequestParam long studentId,
 								@RequestParam int distance,
 								@RequestParam int costTime,
@@ -43,6 +44,7 @@ public class RunningActivityController {
 		runningActivity.setTargetTime(targetTime);
 		runningActivity.setStartTime(new Date(startTime));
 		
-		return runningActivityService.create(runningActivity); 
+		runningActivity = runningActivityService.create(runningActivity);
+		return ResponseEntity.ok().body(runningActivity); 
 	}
 }

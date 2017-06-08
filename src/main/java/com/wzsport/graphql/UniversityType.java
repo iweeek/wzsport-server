@@ -71,11 +71,10 @@ public class UniversityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("maleTeahcersCount")
+							.name("maleTeachersCount")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-
 								TeacherExample teacherExample = new TeacherExample();
 								teacherExample.createCriteria().andUniversityIdEqualTo(university.getId()).andManEqualTo(true);
 			                	int maleTeachersCount = (int) teacherMapper.countByExample(teacherExample);

@@ -50,8 +50,12 @@ public class StudentType {
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("man")
+							.name("isMan")
 							.type(Scalars.GraphQLBoolean)
+							.dataFetcher(environment ->  {
+								Student student = environment.getSource();
+			                	return student.getMan();
+							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
@@ -80,8 +84,8 @@ public class StudentType {
 	                .type(getType())
 	                .dataFetcher(environment -> {
 	                	Student student = null;
-	                	if(environment.containsArgument("id")){
-	                		long id = environment.getArgument("id");
+	                	Long id = environment.getArgument("id");
+	                	if(id != null){
 		                	student = studentMapper.selectByPrimaryKey(id);
 	                	} else if (environment.containsArgument("userId")) {
 	                		long userId = environment.getArgument("userId");
@@ -136,10 +140,10 @@ public class StudentType {
 	                		studentExamplesCriteria.andClassIdEqualTo(classId);
 	                	}
 	                	if(name != null) {
-	                		studentExamplesCriteria.andNameLike(name);
+	                		studentExamplesCriteria.andNameLike("%" + name +"%");
 	                	}
 	                	if(studentNo != null) {
-	                		studentExamplesCriteria.andStudentNoLike(studentNo);
+	                		studentExamplesCriteria.andStudentNoLike("%" + studentNo +"%");
 	                	}
 	                	if(isMan != null) {
 	                		studentExamplesCriteria.andManEqualTo(isMan);

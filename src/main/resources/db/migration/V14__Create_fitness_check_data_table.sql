@@ -1,6 +1,7 @@
 CREATE TABLE `wzsport_fitness_check_data` (
 `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `student_id` bigint(11) UNSIGNED NOT NULL,
+`term_id` bigint(11) UNSIGNED NOT NULL,
 `height` int(10) UNSIGNED NOT NULL,
 `weight` int(10) UNSIGNED NOT NULL,
 `lung_capacity` int(11) UNSIGNED NOT NULL,

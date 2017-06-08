@@ -1,6 +1,8 @@
 package com.wzsport.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,20 +32,22 @@ public class TokenController {
 	* @param expiredHour 过期时间(小时)
 	*/
 	@RequestMapping(method = RequestMethod.POST)
-	public TokenDTO create(@RequestParam String username,
+	public ResponseEntity<TokenDTO> create(@RequestParam String username,
 							@RequestParam String password,
 							@RequestParam(required=false) Integer expiredHour
 							) {
-		if(expiredHour == null)
-			return tokenService.create(username, password);
-		return tokenService.create(username, password, expiredHour);
-	}
-	
-	public TokenService getTokenService() {
-		return tokenService;
-	}
-
-	public void setTokenService(TokenService tokenService) {
-		this.tokenService = tokenService;
+		TokenDTO token = null;
+		if(expiredHour == null) {
+			token =  tokenService.create(username, password);
+		} else {
+			token =  tokenService.create(username, password, expiredHour);
+		}
+		
+		if(token != null) {
+			return ResponseEntity.ok().body(token);
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
 	}
 }

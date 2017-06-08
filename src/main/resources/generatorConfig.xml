@@ -19,13 +19,13 @@
       <property name="forceBigDecimals" value="false" />
     </javaTypeResolver>
 
-    <javaModelGenerator targetPackage="com.wzsport.generator.model" targetProject="wzsport-server">
+    <javaModelGenerator targetPackage="com.wzsport.model" targetProject="wzsport-server">
     </javaModelGenerator>
 
-    <sqlMapGenerator targetPackage="com.wzsport.generator.mapper"  targetProject="wzsport-server">
+    <sqlMapGenerator targetPackage="com.wzsport.mapper"  targetProject="wzsport-server">
     </sqlMapGenerator>
 
-    <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.wzsport.generator.mapper"  targetProject="wzsport-server">
+    <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.wzsport.mapper"  targetProject="wzsport-server">
     </javaClientGenerator>
     
     <table schema="wzpsort" tableName="wzsport_user" domainObjectName ="User" >
@@ -50,6 +50,7 @@
     
     <table schema="wzpsort" tableName="wzsport_class" domainObjectName ="Class" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="gradle" javaType="java.lang.Integer"/>
     </table>
     
     <table schema="wzpsort" tableName="wzsport_student" domainObjectName ="Student" >

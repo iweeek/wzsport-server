@@ -1,7 +1,5 @@
 package com.wzsport.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.service.RunningProjectService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
 * RunningProject Controller.
 * 
 * @author x1ny
 * @date 2017年5月25日
 */
+@Api(tags = "RunningProject相关接口")
 @RestController
 @RequestMapping(value="/runningProjects",produces="application/json;charset=UTF-8")
 public class RunningProjectController {
@@ -34,12 +37,18 @@ public class RunningProjectController {
 	* @param qualifiedCostTime
 	* @param minCostTime
 	*/
+	@ApiOperation(value = "更新项目指标", notes = "更改指定id的项目的运动指标:达标距离、达标时间和最少耗时")
 	@RequestMapping(value="/{id}/updateIndex",method = RequestMethod.POST) 
-	public ResponseEntity<?> updateIndex(@PathVariable("id") long id,
+	public ResponseEntity<?> updateIndex(
+							@ApiParam("唯一主键id")
+							@PathVariable("id") long id,
+							@ApiParam("该项目达标的行动距离(单位：米)")
 							@RequestParam int qualifiedDistance,
+							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
-							@RequestParam int minCostTime,
-							HttpServletResponse response) {
+							@ApiParam("该项目的最少耗时(单位：秒)")
+							@RequestParam int minCostTime
+							) {
 		boolean isSuccess = runningProjectService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();
@@ -54,10 +63,13 @@ public class RunningProjectController {
 	* @param id
 	* @param enabled
 	*/
+	@ApiOperation(value = "更新项目启用状态", notes = "更改指定id的项目的启动状态，开启或者关闭")
 	@RequestMapping(value="/{id}/updateEnable",method = RequestMethod.POST) 
-	public ResponseEntity<?> updateEnable(@PathVariable("id") long id,
-							@RequestParam boolean enabled,
-							HttpServletResponse response) {
+	public ResponseEntity<?> updateEnable(
+							@ApiParam("唯一主键id")
+							@PathVariable("id") long id,
+							@ApiParam("该项目的启用状态,true或者false")
+							@RequestParam boolean enabled) {
 		boolean isSuccess = runningProjectService.updateEnable(id, enabled);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();

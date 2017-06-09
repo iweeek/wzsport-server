@@ -92,7 +92,24 @@ public class UniversityType {
 			                	return femaleTeachersCount;
 							} )
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("caloriesConsumptionRanking")
+							.type(new GraphQLList(StudentCaloriesConsumptionType.getType()))
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	return universityMapper.getCalorieCostedRanking(university.getId(), 10);
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("timeCostedRanking")
+							.type(new GraphQLList(StudentTimeCostedType.getType()))
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+			                	return universityMapper.getTimeCostedRanking(university.getId(), 10);
+							} )
+							.build())
 					.build();
+			
 		}
 		
 		return type;

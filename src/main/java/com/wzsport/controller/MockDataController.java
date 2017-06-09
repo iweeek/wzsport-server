@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.service.MockDataService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "模拟数据生成接口")
 @RestController
 @RequestMapping(value="/mockData",produces="application/json;charset=UTF-8")
 public class MockDataController {

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wzsport.service.GraphQLService;
 
 import graphql.ExecutionResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
 * GraphQL查询 控制器.
@@ -19,6 +21,7 @@ import graphql.ExecutionResult;
 * @author x1ny
 * @date 2017年5月15日
 */
+@Api(tags = "GraphQL查询接口")
 @RestController
 @RequestMapping(value="/graphql",produces="application/json;charset=UTF-8")
 public class GraphQLController {
@@ -34,6 +37,7 @@ public class GraphQLController {
 	* @return
 	* @throws
 	*/
+	@ApiOperation(value = "GraphQL查询入口", notes = "具体使用请参考本项目提供的GraphQL调试器，此处不再介绍")
 	@RequestMapping(method = RequestMethod.POST)
 	@CrossOrigin
 	public ExecutionResult query(@RequestBody Map<String,Object> queryMap) {

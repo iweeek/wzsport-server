@@ -7,6 +7,7 @@ buildscript {
   dependencies {
     classpath "gradle.plugin.com.boxfuse.client:flyway-release:4.2.0"
     classpath group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+    classpath "org.hidetake:gradle-ssh-plugin:2.9.0"
   }
 }
 
@@ -15,6 +16,7 @@ plugins {
     id 'war'
     id 'eclipse-wtp'
     id 'org.flywaydb.flyway' version '4.2.0'
+    id "org.hidetake.ssh" 	 version "2.9.0"
 }
 
 repositories {
@@ -76,6 +78,45 @@ processResources {
 	from('src/main/resources') {
 		include "src/main/environment/$env"
 	}
+}
+
+remotes {
+
+  testServer {
+    host = '120.77.72.16'
+    user = 'root'
+    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
+  }
+  
+  proderver {
+    host = '暂无'
+    user = '暂无'
+    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
+  }
+}
+
+task deploy(dependsOn: [war, flywayMigrate]) {
+  doLast {
+    def server
+  	switch (env) {
+  	  case 'test':
+  	    println 'start deploy to ' + env
+	    ssh.run {
+	      session(testServer) {
+	      	remove '/usr/local/webserver/tomcat/webapps/wzsport-server.war'
+	        put from: buildDir.toString() + '/libs/wzsport-server.war', into: '/usr/local/webserver/tomcat/webapps/'
+	        execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/shutdown.sh'
+	        execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/startup.sh'
+	      }
+	    }
+  	    break
+  	  case 'pord':
+  	    server = remotes.prodServer
+  	    break
+  	  default:
+  	    throw new RuntimeException("环境变量应该设置为test或者prod")
+  	}
+  }
 }
 
 //与eclipse集成的相关配置

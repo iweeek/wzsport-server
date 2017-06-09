@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wzsport.model.FitnessCheckData;
 import com.wzsport.service.FitnessCheckDataService;
 
+import io.swagger.annotations.Api;
+
 /**
  * FitnessCheckData Controller
  * 
  * @author Watermelon_R(ljf)
  * 2017年5月27日
  */
+@Api(tags = "体测数据接口，暂不需要对接")
 @RestController
 @RequestMapping(value="/fitnessCheckDatas", produces="application/json;charset=UTF-8")
 public class FitnessCheckDataController {

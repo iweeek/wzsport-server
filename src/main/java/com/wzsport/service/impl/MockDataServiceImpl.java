@@ -24,6 +24,7 @@ import com.wzsport.model.Class;
 import com.wzsport.model.College;
 import com.wzsport.model.FitnessCheckData;
 import com.wzsport.model.Major;
+import com.wzsport.model.RunningActivity;
 import com.wzsport.model.SportScore;
 import com.wzsport.model.Student;
 import com.wzsport.model.Teacher;
@@ -32,6 +33,7 @@ import com.wzsport.model.TermSportsTask;
 import com.wzsport.model.University;
 import com.wzsport.model.User;
 import com.wzsport.service.MockDataService;
+import com.wzsport.service.RunningActivityService;
 
 @Service
 public class MockDataServiceImpl implements MockDataService {
@@ -58,6 +60,8 @@ public class MockDataServiceImpl implements MockDataService {
 	private SportScoreMapper sportScoreMapper;
 	@Autowired
 	private TeacherMapper teacherMapper;
+	@Autowired
+	private RunningActivityService runningActivityService;
 	
 	@Override
 	@Transactional
@@ -147,6 +151,15 @@ public class MockDataServiceImpl implements MockDataService {
 						sportScore.setStudentId(student.getId());
 						sportScore.setTermId(termId);
 						sportScoreMapper.insertSelective(sportScore);
+						
+						RunningActivity runningActivity = new RunningActivity();
+						runningActivity.setProjectId(2l);
+						runningActivity.setStudentId(student.getId());
+						runningActivity.setDistance(1000);
+						runningActivity.setCostTime(300);
+						runningActivity.setTargetTime(250);
+						runningActivity.setStartTime(new Date());
+						runningActivity = runningActivityService.create(runningActivity);
 					}
 				}
 			}

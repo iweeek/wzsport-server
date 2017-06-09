@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wzsport.model.TermSportsTask;
 import com.wzsport.service.TermSportsTaskService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
 * TermSportsTask Controller
 * 
 * @author x1ny
 * @date 2017年5月28日
 */
+@Api(tags = "TermSportsTask(学期运动任务)相关接口")
 @RestController
 @RequestMapping(value="/termSportsTasks",produces="application/json;charset=UTF-8")
 public class TermSportsTaskController {
@@ -28,9 +33,14 @@ public class TermSportsTaskController {
 	/**
 	* 更新TermSportsTask接口
 	*/
+	@ApiOperation(value = "更新TermSportsTask", notes = "更新学期运动任务数据")
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
-	public ResponseEntity<?> update(@RequestParam int targetSportsTimes,
-									@PathVariable long id) {
+	public ResponseEntity<?> update(
+									@ApiParam("学期目标运动次数")
+									@RequestParam int targetSportsTimes,
+									@ApiParam("唯一主键id")
+									@PathVariable long id
+									) {
 		TermSportsTask termSportsTask = new TermSportsTask();
 		termSportsTask.setId(id);
 		termSportsTask.setTargetSportsTimes(targetSportsTimes);

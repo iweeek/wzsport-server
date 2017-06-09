@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wzsport.dto.TokenDTO;
 import com.wzsport.service.TokenService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
 * token资源的restful控制器
 * 
 * @author x1ny
 * @date 2017年5月22日
 */
+@Api(tags = "Token相关接口")
 @RestController
 @RequestMapping(value="/tokens",produces="application/json;charset=UTF-8")
 public class TokenController {
@@ -31,11 +36,16 @@ public class TokenController {
 	* @param password 密码
 	* @param expiredHour 过期时间(小时)
 	*/
+	@ApiOperation(value = "创建token", notes = "验证用户名与密码，为用户创建一个用于鉴权的Token")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<TokenDTO> create(@RequestParam String username,
-							@RequestParam String password,
-							@RequestParam(required=false) Integer expiredHour
-							) {
+	public ResponseEntity<TokenDTO> create(
+								@ApiParam("用户名")
+								@RequestParam String username,
+								@ApiParam("密码")
+								@RequestParam String password,
+								@ApiParam("有效时间(单位:小时),不填则默认为1")
+								@RequestParam(required=false) Integer expiredHour
+								) {
 		TokenDTO token = null;
 		if(expiredHour == null) {
 			token =  tokenService.create(username, password);

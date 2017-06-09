@@ -42,9 +42,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 		
 		//计算卡路里消耗
-		int costCalorie = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
+		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
 				runningProject.getHourlyCalorieConsumption());
-		runningActivity.setCostCalorie(costCalorie);
+		runningActivity.setCaloriesConsumed(caloriesConsumed);
 		
 		runningActivityMapper.insertSelective(runningActivity);
 		

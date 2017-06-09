@@ -6,7 +6,7 @@ CREATE TABLE `wzsport_running_activity` (
 `cost_time` int(11) NOT NULL,
 `target_time` int(11) NULL DEFAULT NULL,
 `start_time` datetime NOT NULL,
-`cost_calorie` int(11) NULL DEFAULT NULL,
+`calories_consumed` int(11) NULL DEFAULT NULL,
 `qualified` tinyint(1) UNSIGNED NOT NULL,
 `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 `updated_at` datetime ON UPDATE CURRENT_TIMESTAMP,

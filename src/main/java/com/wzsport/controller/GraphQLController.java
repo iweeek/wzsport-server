@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.service.GraphQLService;
@@ -31,7 +32,7 @@ public class GraphQLController {
 	
 	
 	/**
-	* GraphQL查询接口
+	* GraphQL查询接口 json格式提交
 	* 
 	* @param queryString GraphQL查询字符串
 	* @return
@@ -42,6 +43,20 @@ public class GraphQLController {
 	@CrossOrigin
 	public ExecutionResult query(@RequestBody Map<String,Object> queryMap) {
 		ExecutionResult result = graphQLService.query((String)queryMap.get("query"));
+		return result;
+	}
+	
+	/**
+	* GraphQL查询接口 键值对方式提交
+	* 
+	* @param queryString GraphQL查询字符串
+	* @return
+	* @throws
+	*/
+	@ApiOperation(value = "GraphQL查询入口", notes = "具体使用请参考本项目提供的GraphQL调试器，此处不再介绍")
+	@RequestMapping(value="/query", method = RequestMethod.POST)
+	public ExecutionResult query(@RequestParam String query) {
+		ExecutionResult result = graphQLService.query(query);
 		return result;
 	}
 

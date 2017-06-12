@@ -40,16 +40,20 @@ public class UniversityType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("University")
+					.description("大学类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
+							.description("唯一主键")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("大学名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("colleges")
+							.description("该大学中的所有学院")
 							.type(new GraphQLList(CollegeType.getType()))
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
@@ -61,6 +65,7 @@ public class UniversityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("teachersCount")
+							.description("该大学中的教师总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
@@ -72,6 +77,7 @@ public class UniversityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("maleTeachersCount")
+							.description("该大学中的男性教师总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
@@ -83,6 +89,7 @@ public class UniversityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("femaleTeachersCount")
+							.description("该大学中的女性教师总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
@@ -92,22 +99,22 @@ public class UniversityType {
 			                	return femaleTeachersCount;
 							} )
 							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("caloriesConsumptionRanking")
-							.type(new GraphQLList(StudentCaloriesConsumptionType.getType()))
-							.dataFetcher(environment ->  {
-								University university = environment.getSource();
-			                	return universityMapper.getCalorieCostedRanking(university.getId(), 10);
-							} )
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("timeCostedRanking")
-							.type(new GraphQLList(StudentTimeCostedType.getType()))
-							.dataFetcher(environment ->  {
-								University university = environment.getSource();
-			                	return universityMapper.getTimeCostedRanking(university.getId(), 10);
-							} )
-							.build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("caloriesConsumptionRanking")
+//							.type(new GraphQLList(StudentCaloriesConsumptionType.getType()))
+//							.dataFetcher(environment ->  {
+//								University university = environment.getSource();
+//			                	return universityMapper.getCalorieCostedRanking(university.getId(), 10);
+//							} )
+//							.build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("timeCostedRanking")
+//							.type(new GraphQLList(StudentTimeCostedType.getType()))
+//							.dataFetcher(environment ->  {
+//								University university = environment.getSource();
+//			                	return universityMapper.getTimeCostedRanking(university.getId(), 10);
+//							} )
+//							.build())
 					.build();
 			
 		}
@@ -120,6 +127,7 @@ public class UniversityType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("university")
+	                .description("根据ID获取大学")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");

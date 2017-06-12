@@ -39,24 +39,30 @@ public class MajorType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("Major")
+					.description("专业类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
+							.description("唯一主键")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("专业名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
+							.description("所属大学的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("collegeId")
+							.description("所属学院的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("classes")
+							.description("该专业下的所有班级")
 							.type(new GraphQLList(ClassType.getType()))
 							.dataFetcher(environment ->  {
 								Major major = environment.getSource();
@@ -76,6 +82,7 @@ public class MajorType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("major")
+	                .description("根据ID获取专业")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
@@ -91,6 +98,7 @@ public class MajorType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
 	                .name("majors")
+	                .description("根据学院ID获取相关联的所有专业")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long collegeId = environment.getArgument("collegeId");

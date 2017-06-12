@@ -39,20 +39,25 @@ public class TermType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("Term")
+					.description("学期类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
+							.description("唯一主键")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
+							.description("所属大学的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("学期名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("startDate")
+							.description("开始日期,时间戳(毫秒)")
 							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
 								Term term = environment.getSource();
@@ -61,6 +66,7 @@ public class TermType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("endDate")
+							.description("结束日期,时间戳(毫秒)")
 							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
 								Term term = environment.getSource();
@@ -69,6 +75,7 @@ public class TermType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("termSportsTask")
+							.description("关联的学期运动任务")
 							.type(TermSportsTaskType.getType())
 							.dataFetcher(environment ->  {
 								Term term = environment.getSource();
@@ -89,6 +96,7 @@ public class TermType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("term")
+	                .description("根据ID获取学期")
 	                .type(getType())
 	                .dataFetcher(environment -> {
 	                	long id = environment.getArgument("id");
@@ -106,6 +114,7 @@ public class TermType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	                .name("terms")
+	                .description("根据大学的ID获取所有学期)")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long universityId = environment.getArgument("universityId");

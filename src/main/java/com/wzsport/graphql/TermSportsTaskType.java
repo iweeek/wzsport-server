@@ -30,16 +30,20 @@ public class TermSportsTaskType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("TermSportsTask")
+					.description("学期运动任务")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
+							.description("唯一主键")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("termId")
+							.description("所属学期的ID")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("targetSportsTimes")
+							.description("目标运动次数")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.build();
@@ -53,6 +57,7 @@ public class TermSportsTaskType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("termSportsTask")
+	                .description("根据ID获取学期运动任务")
 	                .type(getType())
 	                .dataFetcher(environment -> {
 	                	long id = environment.getArgument("id");

@@ -39,24 +39,30 @@ public class TeacherType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("Teacher")
+					.description("教师类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
+							.description("唯一主键")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
+							.description("所属大学的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("jobNo")
+							.description("工号")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("教师名字")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("isMan")
+							.description("性别")
 							.type(Scalars.GraphQLBoolean)
 							.dataFetcher(environment ->  {
 								Teacher teacher = environment.getSource();
@@ -65,6 +71,7 @@ public class TeacherType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("classes")
+							.description("所有教学的班级")
 							.type(new GraphQLList(ClassType.getType()))
 							.dataFetcher(environment ->  {
 								Teacher teacher = environment.getSource();
@@ -83,6 +90,7 @@ public class TeacherType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("teacher")
+	                .description("根据ID获取教师")
 	                .type(getType())
 	                .dataFetcher(environment -> {
 	                	long id = environment.getArgument("id");
@@ -100,6 +108,7 @@ public class TeacherType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("classId").type(Scalars.GraphQLLong).build())
 	                .name("teachers")
+	                .description("根据班级的ID获取所有教师")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long classId = environment.getArgument("classId");
@@ -115,6 +124,7 @@ public class TeacherType {
 		if(listTeachers == null) {
 			listTeachers = GraphQLFieldDefinition.newFieldDefinition()
 					.name("searchTeachers")
+					.description("搜索教师")
 					.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("jobNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())

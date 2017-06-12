@@ -39,20 +39,25 @@ public class CollegeType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("College")
+					.description("学院类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
 							.type(Scalars.GraphQLLong)
+							.description("唯一主键")
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("学院名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
+							.description("学院所属大学的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("majors")
+							.description("该学院下所有的专业")
 							.type(new GraphQLList(MajorType.getType()))
 							.dataFetcher(environment ->  {
 								College college = environment.getSource();
@@ -73,6 +78,7 @@ public class CollegeType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("college")
+	                .description("根据ID获取专业")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
@@ -88,6 +94,7 @@ public class CollegeType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	                .name("colleges")
+	                .description("根据学院ID获取相关联的专业")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long universityId = environment.getArgument("universityId");

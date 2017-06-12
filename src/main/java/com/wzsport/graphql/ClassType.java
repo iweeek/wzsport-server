@@ -39,28 +39,35 @@ public class ClassType {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
 					.name("Class")
+					.description("班级类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
 							.type(Scalars.GraphQLLong)
+							.description("唯一主键")
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
+							.description("班级名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("majorId")
+							.description("所属专业的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("gradle")
+							.description("年级")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
+							.description("所属大学的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("students")
+							.description("该班级下所有的学生")
 							.type(new GraphQLList(StudentType.getType()))
 							.dataFetcher(environment ->  {
 								Class studentClass = environment.getSource();
@@ -72,6 +79,7 @@ public class ClassType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("studentsCount")
+							.description("该班级下所有的学生的总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								Class studentClass = environment.getSource();
@@ -83,6 +91,7 @@ public class ClassType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("maleStudentsCount")
+							.description("该班级下所有的男性学生的总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								Class studentClass = environment.getSource();
@@ -94,6 +103,7 @@ public class ClassType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("femaleStudentsCount")
+							.description("该班级下所有的女性学生的总数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment ->  {
 								Class studentClass = environment.getSource();
@@ -114,6 +124,7 @@ public class ClassType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("class")
+	                .description("根据ID获取班级")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
@@ -129,6 +140,7 @@ public class ClassType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
 	                .name("classes")
+	                .description("根据专业ID获取关联的班级")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long majorId = environment.getArgument("majorId");

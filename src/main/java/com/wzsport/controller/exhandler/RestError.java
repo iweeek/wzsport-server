@@ -17,7 +17,7 @@ public class RestError {
     /**
      * 提供给开发者的异常信息
      */
-    private String developerMessage;
+    private String[] developerMessages;
     
 	public int getStatus() {
 		return status;
@@ -37,10 +37,11 @@ public class RestError {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getDeveloperMessage() {
-		return developerMessage;
+	public String[] getDeveloperMessages() {
+		return developerMessages;
 	}
-	public void setDeveloperMessage(String developerMessage) {
-		this.developerMessage = developerMessage;
+	public void setDeveloperMessages(String[] developerMessages) {
+		this.developerMessages = developerMessages;
 	}
+	
 }

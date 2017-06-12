@@ -97,12 +97,11 @@ remotes {
 
 task deploy(dependsOn: [war, flywayMigrate]) {
   doLast {
-    def server
   	switch (env) {
   	  case 'test':
   	    println 'start deploy to ' + env
 	    ssh.run {
-	      session(testServer) {
+	      session(remotes.testServer) {
 	      	remove '/usr/local/webserver/tomcat/webapps/wzsport-server.war'
 	        put from: buildDir.toString() + '/libs/wzsport-server.war', into: '/usr/local/webserver/tomcat/webapps/'
 	        execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/shutdown.sh'

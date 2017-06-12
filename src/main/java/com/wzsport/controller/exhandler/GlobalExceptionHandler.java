@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 		restError.setStatus(HttpStatus.UNAUTHORIZED.value());
 		restError.setCode(HttpStatus.UNAUTHORIZED.value());
 		restError.setMessage("用户名或密码错误");
-		restError.setDeveloperMessage(exception.getMessage());
+		restError.setDeveloperMessages(new String[]{exception.getMessage()});
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(restError);
 	}
 
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 		restError.setStatus(HttpStatus.BAD_REQUEST.value());
 		restError.setCode(HttpStatus.BAD_REQUEST.value());
 		restError.setMessage("缺少请求参数:" + exception.getParameterName());
-		restError.setDeveloperMessage(exception.getMessage());
+		restError.setDeveloperMessages(new String[]{exception.getMessage()});
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
 	}
 
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
 		restError.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		restError.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		restError.setMessage("服务器发生了未知错误");
-		restError.setDeveloperMessage(exception.getMessage());
+		restError.setDeveloperMessages(new String[]{exception.getMessage()});
 		logger.error(exception);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
 	}

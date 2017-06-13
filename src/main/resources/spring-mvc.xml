@@ -43,4 +43,9 @@
 	<aop:config proxy-target-class="true"></aop:config>
 
 	<mvc:resources mapping="/*" location="/" />
+	
+	<!-- 跨域配置 -->
+	<mvc:cors>
+    	<mvc:mapping path="/**" />
+	</mvc:cors>
 </beans>

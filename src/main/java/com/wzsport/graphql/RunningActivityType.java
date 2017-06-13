@@ -76,7 +76,7 @@ public class RunningActivityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("costCalorie")
+							.name("caloriesConsumed")
 							.description("本次活动的卡路里消耗量")
 							.type(Scalars.GraphQLInt)
 							.build())

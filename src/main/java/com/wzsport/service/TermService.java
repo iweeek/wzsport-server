@@ -31,4 +31,12 @@ public interface TermService {
 	* @param term
 	*/
 	boolean update(Term term);
+	
+	
+	/**
+	* 获取某大学的当前学期
+	* 
+	* @param universityId 大学的id
+	*/
+	Term getCurrentTerm(long universityId);
 }

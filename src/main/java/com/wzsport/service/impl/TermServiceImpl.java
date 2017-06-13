@@ -1,6 +1,9 @@
 package com.wzsport.service.impl;
 
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,5 +89,25 @@ public class TermServiceImpl implements TermService {
 		}
 		
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.TermService#getCurrentTerm(long)
+	 */
+	@Override
+	public Term getCurrentTerm(long universityId) {
+		Date today = new Date();
+		TermExample termExample = new TermExample();
+		termExample.createCriteria().andUniversityIdEqualTo(universityId)
+									.andStartDateLessThanOrEqualTo(today)
+									.andEndDateGreaterThanOrEqualTo(today);
+		
+		List<Term>  termList = termMapper.selectByExample(termExample);
+		
+		if(termList.size() != 0) {
+			return termList.get(0);
+		} 
+	
+		return null;
 	}
 }

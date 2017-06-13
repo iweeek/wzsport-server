@@ -1,14 +1,23 @@
 package com.wzsport.graphql;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.StudentMapper;
+import com.wzsport.model.RunningActivity;
+import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.StudentExample.Criteria;
+import com.wzsport.model.Term;
+import com.wzsport.service.TermService;
+import com.wzsport.util.MyDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -25,7 +34,9 @@ import graphql.schema.GraphQLObjectType;
 @Component
 public class StudentType {
 	
+	private static TermService termService;
 	private static StudentMapper studentMapper;
+	private static RunningActivityMapper runningActivityMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -77,6 +88,78 @@ public class StudentType {
 							.description("关联的user的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentWeekActivities")
+							.description("本周活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+																.name("ActivitiesPage")
+																.description("跑步活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+			                	runningActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(MyDateUtil.getCurrentWeekStartDate(), new Date());
+			                	runningActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
+			                	return runningActivityList;
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentMonthActivities")
+							.description("本月活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+																.name("ActivitiesPage")
+																.description("跑步活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+			                	runningActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(MyDateUtil.getCurrentMonthStartDate(), new Date());
+			                	runningActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
+			                	return runningActivityList;
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermActivities")
+							.description("本学期活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+																.name("ActivitiesPage")
+																.description("跑步活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());     	
+			                	Date startDate = null;
+			                	Date endDate = null;
+			                	if(currentTerm != null) {
+			                		startDate = currentTerm.getStartDate();
+			                		endDate = currentTerm.getEndDate();
+			                	} else {
+			                		startDate = MyDateUtil.getCurrentYearStartDate();
+			                		endDate = new Date();
+			                	}
+			                	
+			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+			                	runningActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(startDate, endDate);
+			                	
+			                	runningActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
+			                	return runningActivityList;
+			                } ).build())
 					.build();
 		}
 		
@@ -173,4 +256,15 @@ public class StudentType {
 	public void setStudentMapper(StudentMapper studentMapper) {
 		StudentType.studentMapper = studentMapper;
 	}
+	
+	@Autowired(required = true)
+	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
+		StudentType.runningActivityMapper = runningActivityMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setTermService(TermService termService) {
+		StudentType.termService = termService;
+	}
+	
 }

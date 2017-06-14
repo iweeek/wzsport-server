@@ -1,5 +1,7 @@
 package com.wzsport.service;
 
+import java.util.Map;
+
 import graphql.ExecutionResult;
 
 /**
@@ -16,4 +18,12 @@ public interface GraphQLService {
 	* @param queryString 查询字符串
 	*/
 	ExecutionResult query(String queryString);
+	
+	/**
+	* 根据传入的查询字符串进行GraphQL查询
+	* 
+	* @param queryString 查询字符串
+	* @param variables
+	*/
+	ExecutionResult query(String queryString, Map<String, Object> variables);
 }

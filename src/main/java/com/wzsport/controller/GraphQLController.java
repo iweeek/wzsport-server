@@ -43,7 +43,15 @@ public class GraphQLController {
 	@RequestMapping(method = RequestMethod.POST)
 	@CrossOrigin
 	public ResponseEntity<?>  query(@RequestBody Map<String,Object> queryMap) {
-		ExecutionResult result = graphQLService.query((String)queryMap.get("query"));
+		String query = (String)queryMap.get("query");
+		ExecutionResult result = null;
+		if(queryMap.containsKey("variables")) {
+			@SuppressWarnings("unchecked")
+			Map<String,Object> variables = (Map<String, Object>) queryMap.get("variables");
+			result = graphQLService.query(query, variables);
+		} else {
+			result = graphQLService.query(query);
+		}
 		return ResponseEntity.ok().body(result);
 	}
 	

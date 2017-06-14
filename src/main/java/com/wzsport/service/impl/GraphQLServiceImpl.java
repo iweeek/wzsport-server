@@ -1,5 +1,7 @@
 package com.wzsport.service.impl;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.wzsport.graphql.ClassType;
@@ -77,26 +79,13 @@ public class GraphQLServiceImpl implements GraphQLService {
 	public ExecutionResult query(String queryString) {
 		return graphQL.execute(queryString);
 	}
-	
-//	/**
-//	* @author x1ny
-//	* @date 2017年5月15日
-//	* @Description: 创建GraphQL User查询类
-//	* @return
-//	* @throws
-//	*/
-//	private GraphQLFieldDefinition createUserField() {
-//        return GraphQLFieldDefinition.newFieldDefinition()
-//        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLInt).build())
-//                .name("user")
-//                .type(User.createGraphQLObjectType())
-//                .dataFetcher(environment ->  {
-//                	int id = environment.getArgument("id");
-//                	SqlSession sqlSession = sqlSessionFactory.openSession();
-//                	UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-//                	User user = userMapper.getUserById(id);
-//                	sqlSession.close();
-//                	return user;
-//                } ).build();
-//    }
+
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.GraphQLService#query(java.lang.String, java.util.Map)
+	 */
+	@Override
+	public ExecutionResult query(String queryString, Map<String, Object> variables) {
+		return graphQL.execute(queryString, (Object) null, variables);
+	}
 }

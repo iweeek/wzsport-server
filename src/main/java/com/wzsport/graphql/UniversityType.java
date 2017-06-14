@@ -12,6 +12,7 @@ import com.wzsport.model.College;
 import com.wzsport.model.CollegeExample;
 import com.wzsport.model.TeacherExample;
 import com.wzsport.model.University;
+import com.wzsport.service.TermService;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -31,6 +32,7 @@ public class UniversityType {
 	private static UniversityMapper universityMapper;
 	private static CollegeMapper collegeMapper;
 	private static TeacherMapper teacherMapper;
+	private static TermService termService;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 
@@ -115,8 +117,15 @@ public class UniversityType {
 			                	return universityMapper.getTimeCostedRanking(university.getId(), 10);
 							} )
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTerm")
+							.type(TermType.getType())
+							.dataFetcher(environment ->  {
+								University university = environment.getSource();
+								return termService.getCurrentTerm(university.getId());
+							} )
+							.build())
 					.build();
-			
 		}
 		
 		return type;
@@ -151,5 +160,10 @@ public class UniversityType {
 	@Autowired(required = true)
 	public void setUniversityMapper(UniversityMapper universityMapper) {
 		UniversityType.universityMapper = universityMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setTermService(TermService termService) {
+		UniversityType.termService = termService;
 	}
 }

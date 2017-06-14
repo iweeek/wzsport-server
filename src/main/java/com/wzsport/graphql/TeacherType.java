@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pagehelper.PageHelper;
 import com.wzsport.mapper.ClassMapper;
 import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.model.Class;
@@ -129,7 +130,12 @@ public class TeacherType {
 	        		.argument(GraphQLArgument.newArgument().name("jobNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
-	                .type(new GraphQLList(getType()))
+	        		.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+					.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+					.type(PageType.getPageTypeBuidler(getType())
+														.name("TeacherPage")
+														.description("教师类型分页")
+														.build())
 	                .dataFetcher(environment -> {
 	                	Long universityId = environment.getArgument("universityId");
 	                	String jobNo = environment.getArgument("jobNo");
@@ -151,6 +157,7 @@ public class TeacherType {
 	                		teacherExampleCriteria.andManEqualTo(isMan);
 	                	}
 	                	
+	                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
 	                	List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
 	                	
 	                	return teacherList;

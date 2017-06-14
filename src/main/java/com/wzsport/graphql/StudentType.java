@@ -8,10 +8,16 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.wzsport.mapper.FitnessCheckDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
+import com.wzsport.mapper.SportScoreMapper;
 import com.wzsport.mapper.StudentMapper;
+import com.wzsport.model.FitnessCheckData;
+import com.wzsport.model.FitnessCheckDataExample;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
+import com.wzsport.model.SportScore;
+import com.wzsport.model.SportScoreExample;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.StudentExample.Criteria;
@@ -36,7 +42,9 @@ public class StudentType {
 	
 	private static TermService termService;
 	private static StudentMapper studentMapper;
+	private static FitnessCheckDataMapper fitnessCheckDataMapper;
 	private static RunningActivityMapper runningActivityMapper;
+	private static SportScoreMapper sportScoreMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -87,6 +95,66 @@ public class StudentType {
 							.name("userId")
 							.description("关联的user的ID")
 							.type(Scalars.GraphQLLong)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("fitnessCheckDatas")
+							.description("该学生的所有体测数据")
+							.type(new GraphQLList(FitnessCheckDataType.getType()))
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								FitnessCheckDataExample fitnessCheckDataExample = new FitnessCheckDataExample();
+								fitnessCheckDataExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	List<FitnessCheckData> fitnessCheckDataScoreList = fitnessCheckDataMapper.selectByExample(fitnessCheckDataExample);
+			                	return fitnessCheckDataScoreList;
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("fitnessCheckData")
+							.description("该学生指定学期的体测数据")
+							.argument(GraphQLArgument.newArgument().name("termId").type(Scalars.GraphQLLong).build())
+							.type(FitnessCheckDataType.getType())
+							.dataFetcher(environment -> {
+								Long termId = environment.getArgument("termId");
+								Student student = environment.getSource();
+								FitnessCheckDataExample fitnessCheckDataExample = new FitnessCheckDataExample();
+								fitnessCheckDataExample.createCriteria().andStudentIdEqualTo(student.getId())
+																		.andTermIdEqualTo(termId);
+			                	List<FitnessCheckData> fitnessCheckDataList = fitnessCheckDataMapper.selectByExample(fitnessCheckDataExample);
+			                	if(fitnessCheckDataList.size() != 0) {
+			                		return fitnessCheckDataList.get(0);
+			                	}
+			                	return null;
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("sportScores")
+							.description("该学生的所有体育成绩")
+							.type(new GraphQLList(SportScoreType.getType()))
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								SportScoreExample sportScoreExample = new SportScoreExample();
+			                	sportScoreExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	List<SportScore> sportScoreList = sportScoreMapper.selectByExample(sportScoreExample);
+			                	return sportScoreList;
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("sportScore")
+							.description("该学生的指定学期的体育成绩")
+							.argument(GraphQLArgument.newArgument().name("termId").type(Scalars.GraphQLLong).build())
+							.type(SportScoreType.getType())
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								Long termId = environment.getArgument("termId");
+								SportScoreExample sportScoreExample = new SportScoreExample();
+			                	sportScoreExample.createCriteria().andStudentIdEqualTo(student.getId())
+			                									.andTermIdEqualTo(termId);
+			                	List<SportScore> sportScoreList = sportScoreMapper.selectByExample(sportScoreExample);
+			                	if(sportScoreList.size() != 0) {
+			                		return sportScoreList.get(0);
+			                	}
+			                	return null;
+			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("currentWeekActivities")
@@ -219,9 +287,14 @@ public class StudentType {
 	        		.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
+	        		.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+					.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+					.type(PageType.getPageTypeBuidler(getType())
+														.name("StudentPage")
+														.description("学生类型分页")
+														.build())
 	                .name("searchStudents")
 	                .description("搜索学生")
-	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	Long classId = environment.getArgument("classId");
 	                	String name = environment.getArgument("name");
@@ -243,6 +316,7 @@ public class StudentType {
 	                		studentExamplesCriteria.andManEqualTo(isMan);
 	                	}
 	                	
+	                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
 	                	List<Student> studentList = studentMapper.selectByExample(studentExample);
 	                			
 	                	return studentList;
@@ -267,4 +341,13 @@ public class StudentType {
 		StudentType.termService = termService;
 	}
 	
+	@Autowired(required = true)
+	public void setSportScoreMapper(SportScoreMapper sportScoreMapper) {
+		StudentType.sportScoreMapper = sportScoreMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setFitnessCheckDataMapper(FitnessCheckDataMapper fitnessCheckDataMapper) {
+		StudentType.fitnessCheckDataMapper = fitnessCheckDataMapper;
+	}
 }

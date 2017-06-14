@@ -99,4 +99,7 @@ public interface RunningActivityMapper {
 			"created_at = #{createdAt,jdbcType=TIMESTAMP},", "updated_at = #{updatedAt,jdbcType=TIMESTAMP}",
 			"where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(RunningActivity record);
+	
+	@Select("SELECT SUM(calories_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
+	int sumCaloriesConsumedByStudentId(long studentId);
 }

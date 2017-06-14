@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.RunningActivity;
+import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningProject;
+import com.wzsport.model.Term;
 import com.wzsport.service.RunningActivityService;
+import com.wzsport.service.TermService;
 import com.wzsport.util.CalorieUtil;
 
 /**
@@ -24,6 +27,8 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	private RunningProjectMapper runningProjectMapper;
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
+	@Autowired
+	private TermService termService;
 	
 	/* (non-Javadoc)
 	 * @see com.wzsport.service.RunningActivityService#create(com.wzsport.model.RunningActivity)
@@ -50,4 +55,32 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		
 		return runningActivity;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#getCurrentTermQualifiedActivityCount(long)
+	 */
+	@Override
+	public int getCurrentTermQualifiedActivityCount(long studentId, long universityId) {
+		Term term = termService.getCurrentTerm(universityId);
+		if(term != null) {
+			RunningActivityExample runningActivityExample = new RunningActivityExample();
+			runningActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
+												.andStudentIdEqualTo(studentId)
+												.andQualifiedEqualTo(true);
+			
+			return (int) runningActivityMapper.countByExample(runningActivityExample);
+		}
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#getStudentCaloriesConsumption(long)
+	 */
+	@Override
+	public int getStudentCaloriesConsumption(long studentId) {
+		
+		return runningActivityMapper.sumCaloriesConsumedByStudentId(studentId);
+	}
+	
+	
 }

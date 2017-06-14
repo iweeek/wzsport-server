@@ -48,7 +48,8 @@ public class GraphQLController {
 		if(queryMap.containsKey("variables")) {
 			@SuppressWarnings("unchecked")
 			Map<String,Object> variables = (Map<String, Object>) queryMap.get("variables");
-			result = graphQLService.query(query, variables);
+			result = variables == null ? graphQLService.query(query)
+										: graphQLService.query(query, variables);
 		} else {
 			result = graphQLService.query(query);
 		}

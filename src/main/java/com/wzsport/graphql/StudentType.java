@@ -22,6 +22,7 @@ import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.StudentExample.Criteria;
 import com.wzsport.model.Term;
+import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.TermService;
 import com.wzsport.util.MyDateUtil;
 
@@ -41,6 +42,7 @@ import graphql.schema.GraphQLObjectType;
 public class StudentType {
 	
 	private static TermService termService;
+	private static RunningActivityService runningActivityService;
 	private static StudentMapper studentMapper;
 	private static FitnessCheckDataMapper fitnessCheckDataMapper;
 	private static RunningActivityMapper runningActivityMapper;
@@ -228,6 +230,24 @@ public class StudentType {
 			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
 			                	return runningActivityList;
 			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("caloriesConsumption")
+							.description("该学生的累计卡路里消耗")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return runningActivityService.getStudentCaloriesConsumption(student.getId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermQualifiedActivityCount")
+							.description("该学生的当前学期的合格活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return runningActivityService.getCurrentTermQualifiedActivityCount(student.getId(), student.getUniversityId());
+			                } )
+							.build())
 					.build();
 		}
 		
@@ -349,5 +369,10 @@ public class StudentType {
 	@Autowired(required = true)
 	public void setFitnessCheckDataMapper(FitnessCheckDataMapper fitnessCheckDataMapper) {
 		StudentType.fitnessCheckDataMapper = fitnessCheckDataMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setRunningActivityService(RunningActivityService runningActivityService) {
+		StudentType.runningActivityService = runningActivityService;
 	}
 }

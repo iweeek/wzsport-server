@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiParam;
 */
 @Api(tags = "RunningActivity相关接口")
 @RestController()
-@RequestMapping(value = "/runningActivitys",produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/runningActivities",produces = "application/json;charset=UTF-8")
 public class RunningActivityController {
 
 	@Autowired

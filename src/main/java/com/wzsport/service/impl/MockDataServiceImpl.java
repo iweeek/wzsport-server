@@ -99,7 +99,7 @@ public class MockDataServiceImpl implements MockDataService {
 				for(int k = 1; k <= 5; k++ ) {
 					Class studentClasss = new Class();
 					studentClasss.setName("班级" + k);
-					studentClasss.setGradle(2017);
+					studentClasss.setGrade(2017);
 					studentClasss.setMajorId(major.getId());
 					studentClasss.setUniversityId(universityId);
 					classMapper.insertSelective(studentClasss);

@@ -9,6 +9,7 @@ import com.wzsport.mapper.ClassMapper;
 import com.wzsport.mapper.StudentMapper;
 import com.wzsport.model.Class;
 import com.wzsport.model.ClassExample;
+import com.wzsport.model.ClassExample.Criteria;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 
@@ -56,7 +57,7 @@ public class ClassType {
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("gradle")
+							.name("grade")
 							.description("年级")
 							.type(Scalars.GraphQLInt)
 							.build())
@@ -139,13 +140,18 @@ public class ClassType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
 	                .name("classes")
 	                .description("根据专业ID获取关联的班级")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long majorId = environment.getArgument("majorId");
 	                	ClassExample classExample = new ClassExample();
-	                	classExample.createCriteria().andMajorIdEqualTo(majorId);
+	                	Criteria criteria = classExample.createCriteria().andMajorIdEqualTo(majorId);
+	                	Integer gradle = environment.getArgument("grade");
+	                	if (gradle != null) {
+	                		criteria.andGradeEqualTo(gradle);
+	                	}
 	                	List<Class> classList = classMapper.selectByExample(classExample);
 	                	return classList;
 	                } ).build();

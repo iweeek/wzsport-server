@@ -11,6 +11,7 @@ import com.wzsport.model.Class;
 import com.wzsport.model.ClassExample;
 import com.wzsport.model.Major;
 import com.wzsport.model.MajorExample;
+import com.wzsport.model.ClassExample.Criteria;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -62,12 +63,17 @@ public class MajorType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("classes")
+							.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
 							.description("该专业下的所有班级")
 							.type(new GraphQLList(ClassType.getType()))
 							.dataFetcher(environment ->  {
 								Major major = environment.getSource();
 								ClassExample classExample = new ClassExample();
-								classExample.createCriteria().andMajorIdEqualTo(major.getId());
+								Criteria criteria = classExample.createCriteria().andMajorIdEqualTo(major.getId());
+								Integer gradle = environment.getArgument("grade");
+			                	if (gradle != null) {
+			                		criteria.andGradeEqualTo(gradle);
+			                	}
 			                	List<Class> classList = classMapper.selectByExample(classExample);
 			                	return classList;
 							} )

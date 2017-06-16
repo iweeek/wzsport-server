@@ -50,7 +50,7 @@
     
     <table schema="wzpsort" tableName="wzsport_class" domainObjectName ="Class" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
-      <columnOverride column="gradle" javaType="java.lang.Integer"/>
+      <columnOverride column="grade" javaType="java.lang.Integer"/>
     </table>
     
     <table schema="wzpsort" tableName="wzsport_student" domainObjectName ="Student" >

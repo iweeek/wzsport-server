@@ -102,7 +102,7 @@ public interface ClassMapper {
 			+ "class.major_id AS marjor_id, "
 			+ "class.university_id AS university_id, "
 			+ "class.name AS name, "
-			+ "class.gradle AS gradle, "
+			+ "class.grade AS grade, "
 			+ "class.created_at AS created_at "
 			+ "FROM wzsport_r_teacher_class "
 			+ "JOIN wzsport_class as class ON wzsport_r_teacher_class.class_id = class.id "

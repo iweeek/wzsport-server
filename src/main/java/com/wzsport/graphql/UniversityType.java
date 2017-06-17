@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pagehelper.PageHelper;
 import com.wzsport.mapper.CollegeMapper;
 import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
@@ -103,18 +104,32 @@ public class UniversityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("caloriesConsumptionRanking")
-							.type(new GraphQLList(StudentCaloriesConsumptionType.getType()))
+							.description("该校的学生累计卡路里消耗量排行榜")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(StudentCaloriesConsumptionType.getType())
+									.name("StudentCaloriesConsumptionPage")
+									.description("学生卡路里消耗量分页")
+									.build())
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-			                	return universityMapper.getCalorieCostedRanking(university.getId(), 10);
+								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	return universityMapper.getCalorieCostedRanking(university.getId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("timeCostedRanking")
-							.type(new GraphQLList(StudentTimeCostedType.getType()))
+							.description("该校的学生累计锻炼时长排行榜")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(StudentTimeCostedType.getType())
+									.name("StudentTimeCostedPage")
+									.description("学生锻炼时间累计分页")
+									.build())
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
-			                	return universityMapper.getTimeCostedRanking(university.getId(), 10);
+								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	return universityMapper.getTimeCostedRanking(university.getId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

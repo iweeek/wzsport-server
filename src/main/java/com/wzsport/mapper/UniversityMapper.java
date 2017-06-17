@@ -94,30 +94,28 @@ public interface UniversityMapper {
 	int updateByPrimaryKey(University record);
 
 	/**
-	* 获取指定大学的学生卡路里消耗量的前几位
+	* 获取指定大学的学生卡路里消耗量的排名列表
 	* 
 	* @param universityId 大学id
-	* @param top 需要获取前多少位
 	*/
 	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.calories_consumed) AS calories_consumption "
 			+ "FROM wzsport_student AS student "
 			+ "JOIN wzsport_running_activity AS activity ON student.id = activity.student_id "
 			+ "WHERE student.university_id = #{universityId} "
 			+ "GROUP BY student.id "
-			+ "ORDER BY calories_consumption DESC LIMIT #{top}")
-	List<StudentCaloriesConsumptionDTO> getCalorieCostedRanking(@Param("universityId") long universityId, @Param("top") int top);
+			+ "ORDER BY calories_consumption DESC")
+	List<StudentCaloriesConsumptionDTO> getCalorieCostedRanking(@Param("universityId") long universityId);
 	
 	/**
-	* 获取指定大学的学生运动时长的前几位
+	* 获取指定大学的学生运动时长的排名列表
 	* 
 	* @param universityId 大学id
-	* @param top 需要获取前多少位
 	*/
 	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.cost_time) AS time_costed "
 			+ "FROM wzsport_student AS student "
 			+ "JOIN wzsport_running_activity AS activity ON student.id = activity.student_id "
 			+ "WHERE student.university_id = #{universityId} "
 			+ "GROUP BY student.id "
-			+ "ORDER BY time_costed DESC LIMIT #{top}")
-	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId, @Param("top") int top);
+			+ "ORDER BY time_costed DESC")
+	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId);
 }

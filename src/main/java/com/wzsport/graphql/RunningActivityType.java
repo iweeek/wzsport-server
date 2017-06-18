@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.RunningActivityMapper;
+import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
 
@@ -28,6 +29,7 @@ public class RunningActivityType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
+	private static RunningProjectMapper runningProjectMapper;
 	
 	private RunningActivityType() {}
 	
@@ -85,6 +87,15 @@ public class RunningActivityType {
 							.description("本次活动是否达标")
 							.type(Scalars.GraphQLBoolean)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("runningProject")
+							.description("该活动所属的运动项目")
+							.type(RunningProjectType.getType())
+							.dataFetcher(environment ->  {
+								RunningActivity runningActivity = environment.getSource();
+			                	return runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+							} )
+							.build())
 					.build();
 		}
 		return type;
@@ -127,5 +138,10 @@ public class RunningActivityType {
 	@Autowired(required = true)
 	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
 		RunningActivityType.runningActivityMapper = runningActivityMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
+		RunningActivityType.runningProjectMapper = runningProjectMapper;
 	}
 }

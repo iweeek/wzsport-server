@@ -72,15 +72,37 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 		return 0;
 	}
+	
+	
+
+	@Override
+	public int getCurrentTermActivityCount(long studentId, long universityId) {
+		Term term = termService.getCurrentTerm(universityId);
+		if(term != null) {
+			RunningActivityExample runningActivityExample = new RunningActivityExample();
+			runningActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
+												.andStudentIdEqualTo(studentId);
+			
+			return (int) runningActivityMapper.countByExample(runningActivityExample);
+		}
+		return 0;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.wzsport.service.RunningActivityService#getStudentCaloriesConsumption(long)
 	 */
 	@Override
 	public int getStudentCaloriesConsumption(long studentId) {
-		
-		return runningActivityMapper.sumCaloriesConsumedByStudentId(studentId);
+		Integer caloriesConsumption = runningActivityMapper.sumCaloriesConsumedByStudentId(studentId);
+		return caloriesConsumption == null ? 0 : caloriesConsumption;
 	}
-	
-	
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#getStudentTimeCosted(long)
+	 */
+	@Override
+	public int getStudentTimeCosted(long studentId) {
+		Integer timeCosted = runningActivityMapper.sumCostTimeByStudentId(studentId);
+		return timeCosted == null ? 0 : timeCosted;
+	}
 }

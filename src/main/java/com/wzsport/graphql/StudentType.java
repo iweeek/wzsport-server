@@ -240,6 +240,24 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("timeCosted")
+							.description("该学生的累计运动时长(单位:秒)")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return runningActivityService.getStudentTimeCosted(student.getId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermActivityCount")
+							.description("该学生的当前学期的总活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return runningActivityService.getCurrentTermActivityCount(student.getId(), student.getUniversityId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("currentTermQualifiedActivityCount")
 							.description("该学生的当前学期的合格活动次数")
 							.type(Scalars.GraphQLInt)

@@ -26,9 +26,24 @@ public interface RunningActivityService {
 	int getCurrentTermQualifiedActivityCount(long studentId, long universityId);
 	
 	/**
+	* 获取一名学生本学期的总活动次数
+	* 
+	* @param studentId 学生id
+	* @param universityId 大学id
+	*/
+	int getCurrentTermActivityCount(long studentId, long universityId);
+	
+	/**
 	* 获取学生的卡路里消耗量
 	* 
 	* @param studentId
 	*/
 	int getStudentCaloriesConsumption(long studentId);
+	
+	/**
+	* 获取学生的累计运动时长
+	* 
+	* @param studentId
+	*/
+	int getStudentTimeCosted(long studentId);
 }

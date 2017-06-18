@@ -101,5 +101,8 @@ public interface RunningActivityMapper {
 	int updateByPrimaryKey(RunningActivity record);
 
 	@Select("SELECT SUM(calories_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
-	int sumCaloriesConsumedByStudentId(long studentId);
+	Integer sumCaloriesConsumedByStudentId(long studentId);
+	
+	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId}")
+	Integer sumCostTimeByStudentId(long studentId);
 }

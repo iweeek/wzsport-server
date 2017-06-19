@@ -1,6 +1,8 @@
 package com.wzsport.service.impl;
 
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +105,18 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	@Override
 	public int getStudentTimeCosted(long studentId) {
 		Integer timeCosted = runningActivityMapper.sumCostTimeByStudentId(studentId);
+		return timeCosted == null ? 0 : timeCosted;
+	}
+
+	@Override
+	public int getStudentCaloriesConsumption(long studentId, Date start, Date end) {
+		Integer timeCosted = runningActivityMapper.sumCaloriesConsumedByStudentIdAndDuration(studentId, start, end);
+		return timeCosted == null ? 0 : timeCosted;
+	}
+
+	@Override
+	public int getStudentTimeCosted(long studentId, Date start, Date end) {
+		Integer timeCosted = runningActivityMapper.sumCostTimeByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
 	}
 }

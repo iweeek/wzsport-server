@@ -1,5 +1,7 @@
 package com.wzsport.service;
 
+import java.util.Date;
+
 import com.wzsport.model.RunningActivity;
 
 /**
@@ -46,4 +48,22 @@ public interface RunningActivityService {
 	* @param studentId
 	*/
 	int getStudentTimeCosted(long studentId);
+	
+	/**
+	* 获取学生指定时段的卡路里消耗量
+	* 
+	* @param studentId
+	* @param start 开始时期
+	* @param end 结束时期
+	*/
+	int getStudentCaloriesConsumption(long studentId, Date start, Date end);
+	
+	/**
+	* 获取学生指定时段的运动时长
+	* 
+	* @param studentId
+	* @param start 开始时期
+	* @param end 结束时期
+	*/
+	int getStudentTimeCosted(long studentId, Date start, Date end);
 }

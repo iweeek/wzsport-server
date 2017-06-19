@@ -28,6 +28,7 @@ import com.wzsport.util.MyDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
@@ -52,6 +53,16 @@ public class StudentType {
 	private static GraphQLFieldDefinition listQueryField;
 	private static GraphQLFieldDefinition listQueryByConditionsField;
 
+	public static enum TimeRange {
+		CURRENT_WEEK, CURRENT_MONTH, CURRENT_TERM
+	};
+	private static GraphQLEnumType timeRangeEnumType = GraphQLEnumType.newEnum()
+														    .name("TimeRange")
+														    .value(TimeRange.CURRENT_WEEK.toString())
+														    .value(TimeRange.CURRENT_MONTH.toString())
+														    .value(TimeRange.CURRENT_TERM.toString())
+														    .build();
+	
 	private StudentType() {}
 	
 	public static GraphQLObjectType getType() {
@@ -232,25 +243,78 @@ public class StudentType {
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("caloriesConsumption")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
 							.description("该学生的累计卡路里消耗")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return runningActivityService.getStudentCaloriesConsumption(student.getId());
+									}
+									return runningActivityService.getStudentCaloriesConsumption(student.getId(),
+											start, end);
+								}
 			                	return runningActivityService.getStudentCaloriesConsumption(student.getId());
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("timeCosted")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
 							.description("该学生的累计运动时长(单位:秒)")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return runningActivityService.getStudentTimeCosted(student.getId());
+									}
+									return runningActivityService.getStudentTimeCosted(student.getId(),
+											start, end);
+								}
 			                	return runningActivityService.getStudentTimeCosted(student.getId());
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("currentTermActivityCount")
-							.description("该学生的当前学期的总活动次数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();

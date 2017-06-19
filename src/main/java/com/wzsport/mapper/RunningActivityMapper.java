@@ -1,5 +1,6 @@
 package com.wzsport.mapper;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -105,4 +106,14 @@ public interface RunningActivityMapper {
 	
 	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId}")
 	Integer sumCostTimeByStudentId(long studentId);
+	
+	@Select("SELECT SUM(calories_consumed) "
+			+ "FROM wzsport_running_activity "
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
+	Integer sumCaloriesConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
+	
+	@Select("SELECT SUM(cost_time) "
+			+ "FROM wzsport_running_activity "
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
+	Integer sumCostTimeByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
 }

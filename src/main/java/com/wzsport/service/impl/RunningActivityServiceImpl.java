@@ -10,6 +10,7 @@ import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
+import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.RunningProject;
 import com.wzsport.model.Term;
 import com.wzsport.service.RunningActivityService;
@@ -118,5 +119,24 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	public int getStudentTimeCosted(long studentId, Date start, Date end) {
 		Integer timeCosted = runningActivityMapper.sumCostTimeByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#getQualifiedActivityCount(long, java.util.Date, java.util.Date)
+	 */
+	@Override
+	public int getQualifiedActivityCount(long studentId, Date start, Date end) {
+		RunningActivityExample runningActivityExample = new RunningActivityExample();
+		Criteria criteria = runningActivityExample.createCriteria().andStudentIdEqualTo(studentId)
+											.andQualifiedEqualTo(true);
+		if(start != null) {
+			criteria.andStartTimeGreaterThanOrEqualTo(start);
+		}
+		
+		if(end != null) {
+			criteria.andStartTimeLessThanOrEqualTo(end);
+		}
+		
+		return (int) runningActivityMapper.countByExample(runningActivityExample);
 	}
 }

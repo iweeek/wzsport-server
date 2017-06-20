@@ -330,6 +330,42 @@ public class StudentType {
 			                	return runningActivityService.getCurrentTermQualifiedActivityCount(student.getId(), student.getUniversityId());
 			                } )
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("qualifiedActivityCount")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生的合格活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return runningActivityService.getQualifiedActivityCount(student.getId(), null, null);
+									}
+									return runningActivityService.getQualifiedActivityCount(student.getId(),
+											start, end);
+								}
+			                	return runningActivityService.getQualifiedActivityCount(student.getId(), null, null);
+			                } )
+							.build())
 					.build();
 		}
 		

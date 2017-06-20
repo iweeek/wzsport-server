@@ -28,6 +28,15 @@ public interface RunningActivityService {
 	int getCurrentTermQualifiedActivityCount(long studentId, long universityId);
 	
 	/**
+	* 获取一名学生指定时期内的有效活动次数
+	* 
+	* @param studentId 学生id
+	* @param start 开始时期
+	* @param end 结束时期 
+	*/
+	int getQualifiedActivityCount(long studentId, Date start, Date end);
+	
+	/**
 	* 获取一名学生本学期的总活动次数
 	* 
 	* @param studentId 学生id

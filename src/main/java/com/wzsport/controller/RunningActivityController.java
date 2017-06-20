@@ -42,6 +42,8 @@ public class RunningActivityController {
 								@RequestParam long studentId,
 								@ApiParam("活动距离(单位:米)")
 								@RequestParam int distance,
+								@ApiParam("运动步数累计")
+								@RequestParam int stepCount,
 								@ApiParam("活动耗时(单位:秒)")
 								@RequestParam int costTime,
 								@ApiParam("完成项目指标耗时(单位:秒),比如该项目目标距离为1000米，则需要提交此次活动距离达到1000米的耗时")
@@ -53,6 +55,7 @@ public class RunningActivityController {
 		runningActivity.setProjectId(projectId);
 		runningActivity.setStudentId(studentId);
 		runningActivity.setDistance(distance);
+		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);
 		runningActivity.setTargetTime(targetTime);
 		runningActivity.setStartTime(new Date(startTime));

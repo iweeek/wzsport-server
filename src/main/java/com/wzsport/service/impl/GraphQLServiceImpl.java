@@ -56,6 +56,7 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(RunningProjectType.getListQueryField())
                 .field(RunningActivityType.getSingleQueryField())
                 .field(RunningActivityType.getListQueryField())
+                .field(RunningActivityType.getSearchField())
                 .field(TermType.getSingleQueryField())
                 .field(TermType.getListQueryField())
                 .field(FitnessCheckDataType.getListQueryField())

@@ -1,20 +1,30 @@
 package com.wzsport.graphql;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningProjectMapper;
+import com.wzsport.mapper.StudentMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
+import com.wzsport.model.RunningActivityExample.Criteria;
+import com.wzsport.model.Student;
+import com.wzsport.model.StudentExample;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLTypeReference;
 
 /**
 * GraphQL RunningActivity类型的定义及查询字段定义
@@ -26,10 +36,24 @@ import graphql.schema.GraphQLObjectType;
 public class RunningActivityType {
 	
 	private static RunningActivityMapper runningActivityMapper;
+	private static RunningProjectMapper runningProjectMapper;
+	private static StudentMapper studentMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
-	private static RunningProjectMapper runningProjectMapper;
+	
+	
+	public static enum Operator {
+		LESS_THAN, GREATER_THAN, EQUALL, BETWEEN
+	}
+	
+	private static GraphQLEnumType operatorEnumType = GraphQLEnumType.newEnum()
+		    .name("Operator")
+		    .value(Operator.LESS_THAN.toString())
+		    .value(Operator.GREATER_THAN.toString())
+		    .value(Operator.EQUALL.toString())
+		    .value(Operator.BETWEEN.toString())
+		    .build();
 	
 	private RunningActivityType() {}
 	
@@ -56,6 +80,11 @@ public class RunningActivityType {
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("distance")
 							.description("活动距离(单位:米)")
+							.type(Scalars.GraphQLInt)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("stepCount")
+							.description("步数")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -88,12 +117,36 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLBoolean)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("speed")
+							.description("平均速度")
+							.type(Scalars.GraphQLFloat)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("stepPerSecond")
+							.description("平均每秒步数")
+							.type(Scalars.GraphQLFloat)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("distancePerStep")
+							.description("平均步幅")
+							.type(Scalars.GraphQLFloat)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("runningProject")
 							.description("该活动所属的运动项目")
 							.type(RunningProjectType.getType())
 							.dataFetcher(environment ->  {
 								RunningActivity runningActivity = environment.getSource();
 			                	return runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("student")
+							.description("该活动记录所属的学生")
+							.type(new GraphQLTypeReference("Student"))
+							.dataFetcher(environment ->  {
+								RunningActivity runningActivity = environment.getSource();
+			                	return studentMapper.selectByPrimaryKey(runningActivity.getStudentId());
 							} )
 							.build())
 					.build();
@@ -134,6 +187,153 @@ public class RunningActivityType {
 		}
         return listQueryField;
     }
+	
+	public static GraphQLFieldDefinition getSearchField() {
+		return GraphQLFieldDefinition.newFieldDefinition()
+	        		.argument(GraphQLArgument.newArgument().name("studentName").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
+	        		.argument(GraphQLArgument.newArgument().name("startTime").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("endTime").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("projectId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("speed").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("speedOperator").type(operatorEnumType).build())
+	        		.argument(GraphQLArgument.newArgument().name("anotherSpeed").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("stepPerSecond").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("stepPerSecondOperator").type(operatorEnumType).build())
+	        		.argument(GraphQLArgument.newArgument().name("anotherStepPerSecond").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("distancePerStep").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("distancePerStepOperator").type(operatorEnumType).build())
+	        		.argument(GraphQLArgument.newArgument().name("anotherDistancePerStep").type(Scalars.GraphQLFloat).build())
+	        		.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+					.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+					.type(PageType.getPageTypeBuidler(getType())
+														.name("RunningActivityPage")
+														.description("活动记录分页")
+														.build())
+	                .name("searchRunningActivitys")
+	                .dataFetcher(environment ->  {
+	                	
+	                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+	                	Criteria criteria = runningActivityExample.createCriteria();
+	                	
+	                	String studentName = environment.getArgument("studentName");
+	                	if(studentName != null) {
+	                		StudentExample studentExample =  new StudentExample();
+	                		studentExample.createCriteria().andNameLike("%" + studentName + "%");
+	                		List<Student> studentList = studentMapper.selectByExample(studentExample);
+	                		if(studentList.size() > 0) {
+	                			List<Long> studentIdList = new ArrayList<Long>();
+		                		for(Student student : studentList) {
+		                			studentIdList.add(student.getId());
+		                		}
+		                		criteria.andStudentIdIn(studentIdList);
+	                		} else {
+	                			return new Page<>();
+	                		}
+	                	}
+	                	
+	                	String studentNo = environment.getArgument("studentNo");
+	                	if(studentNo != null) {
+	                		StudentExample studentExample =  new StudentExample();
+	                		studentExample.createCriteria().andStudentNoLike("%" + studentNo + "%");
+	                		List<Student> studentList = studentMapper.selectByExample(studentExample);
+	                		if(studentList.size() > 0) {
+	                			List<Long> studentIdList = new ArrayList<Long>();
+		                		for(Student student : studentList) {
+		                			studentIdList.add(student.getId());
+		                		}
+		                		criteria.andStudentIdIn(studentIdList);
+	                		} else {
+	                			return new Page<>();
+	                		}
+	                	}
+	                	
+	                	Long projectId = environment.getArgument("projectId");
+	                	if(projectId != null) {
+	                		criteria.andProjectIdEqualTo(projectId);
+	                	}
+	                	
+	                	Long startTime = environment.getArgument("startTime");
+	                	if(startTime != null) {
+	                		criteria.andStartTimeGreaterThanOrEqualTo(new Date(startTime));
+	                	}
+	                	
+	                	Long endTime = environment.getArgument("endTime");
+	                	if(endTime != null) {
+	                		criteria.andStartTimeLessThanOrEqualTo(new Date(endTime));
+	                	}
+	                	
+	                	Double speed = environment.getArgument("speed");
+	                	if(speed != null) {
+	                		
+	                		switch(Operator.valueOf(environment.getArgument("speedOperator"))) {
+							case BETWEEN:
+								double anotherSpeed = environment.getArgument("anotherSpeed");
+								criteria.andSpeedBetween(speed, anotherSpeed);
+								break;
+							case EQUALL:
+								criteria.andSpeedEqualTo(speed);
+								break;
+							case GREATER_THAN:
+								criteria.andSpeedGreaterThanOrEqualTo(speed);
+								break;
+							case LESS_THAN:
+								criteria.andSpeedLessThanOrEqualTo(speed);
+								break;
+							default:
+								break;
+	                		}
+	                	}
+	                	
+	                	Double stepPerSecond = environment.getArgument("stepPerSecond");
+	                	if(stepPerSecond != null) {
+	                		
+	                		switch(Operator.valueOf(environment.getArgument("stepPerSecondOperator"))) {
+							case BETWEEN:
+								double anotherStepPerSecond = environment.getArgument("anotherStepPerSecond");
+								criteria.andStepPerSecondBetween(stepPerSecond, anotherStepPerSecond);
+								break;
+							case EQUALL:
+								criteria.andStepPerSecondEqualTo(stepPerSecond);
+								break;
+							case GREATER_THAN:
+								criteria.andStepPerSecondGreaterThanOrEqualTo(stepPerSecond);
+								break;
+							case LESS_THAN:
+								criteria.andStepPerSecondLessThanOrEqualTo(stepPerSecond);
+								break;
+							default:
+								break;
+	                		}
+	                	}
+	                	
+	                	Double distancePerStep = environment.getArgument("distancePerStep");
+	                	if(distancePerStep != null) {
+	                		
+	                		switch(Operator.valueOf(environment.getArgument("distancePerStepOperator"))) {
+							case BETWEEN:
+								double anotherDistancePerStep = environment.getArgument("anotherDistancePerStep");
+								criteria.andDistancePerStepBetween(distancePerStep, anotherDistancePerStep);
+								break;
+							case EQUALL:
+								criteria.andDistancePerStepEqualTo(distancePerStep);
+								break;
+							case GREATER_THAN:
+								criteria.andDistancePerStepGreaterThanOrEqualTo(distancePerStep);
+								break;
+							case LESS_THAN:
+								criteria.andDistancePerStepLessThanOrEqualTo(distancePerStep);
+								break;
+							default:
+								break;
+	                		}
+	                	}
+	                	
+	                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+	                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
+	                	return runningActivityList;
+	                } ).build();
+    }
 
 	@Autowired(required = true)
 	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
@@ -143,5 +343,10 @@ public class RunningActivityType {
 	@Autowired(required = true)
 	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
 		RunningActivityType.runningProjectMapper = runningProjectMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setStudentMapper(StudentMapper studentMapper) {
+		RunningActivityType.studentMapper = studentMapper;
 	}
 }

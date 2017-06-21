@@ -1,6 +1,8 @@
 package com.wzsport.service.impl;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,21 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
 				runningProject.getHourlyCalorieConsumption());
 		runningActivity.setCaloriesConsumed(caloriesConsumed);
+		
+		//步数至少为1
+		if(runningActivity.getStepCount() == 0) {
+			runningActivity.setStepCount(1);
+		}
+				
+		BigDecimal speed = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getCostTime());
+		runningActivity.setSpeed(speed.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		
+		
+		BigDecimal stepPerSecond = new BigDecimal((double)runningActivity.getStepCount() / runningActivity.getCostTime());
+		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		
+		BigDecimal distancePerStep = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getStepCount());
+		runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		
 		runningActivityMapper.insertSelective(runningActivity);
 		

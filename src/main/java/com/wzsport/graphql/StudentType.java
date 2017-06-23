@@ -170,6 +170,23 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("activities")
+							.description("所有活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+																.name("ActivitiesPage")
+																.description("跑步活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+			                	runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	runningActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	return runningActivityMapper.selectByExample(runningActivityExample);
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("currentWeekActivities")
 							.description("本周活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())

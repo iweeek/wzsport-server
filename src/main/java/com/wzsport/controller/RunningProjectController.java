@@ -47,9 +47,11 @@ public class RunningProjectController {
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("该项目的最少耗时(单位：秒)")
-							@RequestParam int minCostTime
+							@RequestParam int minCostTime,
+							@ApiParam("该项目的运动数据采集间隔(单位：秒)")
+							@RequestParam int acquisitionInterval
 							) {
-		boolean isSuccess = runningProjectService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime);
+		boolean isSuccess = runningProjectService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime, acquisitionInterval);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();
 		} else {

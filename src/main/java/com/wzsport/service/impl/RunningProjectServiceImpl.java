@@ -18,11 +18,12 @@ public class RunningProjectServiceImpl implements RunningProjectService {
 	 * @see com.wzsport.service.RunningProjectService#updateIndex(long, int, int, int)
 	 */
 	@Override
-	public boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime) {
+	public boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime, int acquisitionInterval) {
 		RunningProject runningProject = new RunningProject();
 		runningProject.setId(id);
 		runningProject.setQualifiedCostTime(qualifiedCostTime);
 		runningProject.setQualifiedDistance(qualifiedDistance);
+		runningProject.setAcquisitionInterval(acquisitionInterval);
 		
 		int affectedCount = runningProjectMapper.updateByPrimaryKeySelective(runningProject);
 		if(affectedCount > 0) {

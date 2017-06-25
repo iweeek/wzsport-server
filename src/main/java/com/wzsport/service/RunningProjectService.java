@@ -15,8 +15,9 @@ public interface RunningProjectService {
 	* @param qualifiedDistance 合格距离
 	* @param qualifiedCostTime 合格时间
 	* @param minCostTime 最少耗时
+	* @param acquisitionInterval 运动数据采集间隔
 	*/
-	boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime);
+	boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime, int acquisitionInterval);
 	
 	/**
 	* 更改指定id的项目的启动状态

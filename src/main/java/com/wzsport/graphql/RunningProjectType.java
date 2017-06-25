@@ -76,6 +76,11 @@ public class RunningProjectType {
 							.description("该项目的最少耗时(单位:秒)")
 							.type(Scalars.GraphQLInt)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("acquisitionInterval")
+							.description("采集运动数据的时间间隔(单位:秒)")
+							.type(Scalars.GraphQLInt)
+							.build())
 					.build();
 		}
 		return type;

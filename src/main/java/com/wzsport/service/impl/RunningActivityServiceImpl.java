@@ -4,8 +4,10 @@ package com.wzsport.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.mapper.RunningActivityMapper;
@@ -40,8 +42,18 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	 */
 	@Override
 	public RunningActivity create(RunningActivity runningActivity) {
+		//根据学生ID和开始时间来判断数据是否重复
+		RunningActivityExample sameRecordExample = new RunningActivityExample();
+		sameRecordExample.createCriteria().andStudentIdEqualTo(runningActivity.getStudentId())
+										.andStartTimeEqualTo(runningActivity.getStartTime());
+		List<RunningActivity> sameRecordList = runningActivityMapper.selectByExample(sameRecordExample);
+		if(sameRecordList.size() != 0) {
+			throw new DuplicateKeyException("运动记录重复");
+		}
 		
+		//获取关联的项目
 		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		
 		//判断是否合格
 		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
 				&& runningActivity.getTargetTime() != null
@@ -61,9 +73,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			runningActivity.setStepCount(1);
 		}
 				
+		//计算速度、步幅和步频
 		BigDecimal speed = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getCostTime());
 		runningActivity.setSpeed(speed.setScale(2, RoundingMode.HALF_UP).doubleValue());
-		
 		
 		BigDecimal stepPerSecond = new BigDecimal((double)runningActivity.getStepCount() / runningActivity.getCostTime());
 		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
@@ -71,6 +83,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		BigDecimal distancePerStep = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getStepCount());
 		runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		
+		//插入数据
 		runningActivityMapper.insertSelective(runningActivity);
 		
 		return runningActivity;

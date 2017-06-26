@@ -3,6 +3,7 @@ package com.wzsport.controller.exhandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -56,6 +57,19 @@ public class GlobalExceptionHandler {
 		restError.setDeveloperMessages(new String[]{exception.getMessage()});
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
 	}
+	
+	/**
+	* 处理重复记录异常
+	*/
+	@ExceptionHandler(DuplicateKeyException.class)
+	public ResponseEntity<RestError> handler(DuplicateKeyException exception) {
+		RestError restError = new RestError();
+		restError.setStatus(HttpStatus.BAD_REQUEST.value());
+		restError.setCode(HttpStatus.BAD_REQUEST.value());
+		restError.setMessage(exception.getMessage());
+		restError.setDeveloperMessages(new String[]{exception.getMessage()});
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
+	}
 
 	/**
 	* @author x1ny
@@ -73,6 +87,6 @@ public class GlobalExceptionHandler {
 		restError.setMessage("服务器发生了未知错误");
 		restError.setDeveloperMessages(new String[]{exception.getMessage()});
 		logger.error(exception);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restError);
 	}
 }

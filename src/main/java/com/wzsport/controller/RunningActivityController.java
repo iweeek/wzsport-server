@@ -63,4 +63,51 @@ public class RunningActivityController {
 		runningActivity = runningActivityService.create(runningActivity);
 		return ResponseEntity.ok().body(runningActivity); 
 	}
+	
+	/**
+	* 开始活动接口
+	*/
+	@ApiOperation(value = "开始跑步活动", notes = "开始跑步活动")
+	@RequestMapping(value = "/start", method = RequestMethod.POST)
+	public ResponseEntity<RunningActivity> start(
+								@ApiParam("活动项目id,目前仅对应RunningProject的id")
+								@RequestParam long projectId,
+								@ApiParam("学生id") 
+								@RequestParam long studentId,
+								@ApiParam("活动开始的时间(使用时间戳格式)")
+								@RequestParam Long startTime) {
+		
+		RunningActivity runningActivity = runningActivityService.startRunningActivity(studentId, projectId, new Date(startTime));
+		
+		return ResponseEntity.ok().body(runningActivity); 
+	}
+	
+	/**
+	* 创建RunningActivity接口
+	*/
+	@ApiOperation(value = "结束活动", notes = "结束活动")
+	@RequestMapping(value = "/end", method = RequestMethod.POST)
+	public ResponseEntity<RunningActivity> end(
+								@ApiParam("活动id")
+								@RequestParam long id,
+								@ApiParam("活动距离(单位:米)")
+								@RequestParam int distance,
+								@ApiParam("运动步数累计")
+								@RequestParam int stepCount,
+								@ApiParam("活动耗时(单位:秒)")
+								@RequestParam int costTime,
+								@ApiParam("完成项目指标耗时(单位:秒),比如该项目目标距离为1000米，则需要提交此次活动距离达到1000米的耗时")
+								@RequestParam int targetTime) {
+		
+		RunningActivity runningActivity = new RunningActivity();
+		runningActivity.setId(id);
+		runningActivity.setDistance(distance);
+		runningActivity.setStepCount(stepCount);
+		runningActivity.setCostTime(costTime);
+		runningActivity.setTargetTime(targetTime);
+		
+		runningActivity = runningActivityService.endRunningActivity(runningActivity);
+		
+		return ResponseEntity.ok().body(runningActivity); 
+	}
 }

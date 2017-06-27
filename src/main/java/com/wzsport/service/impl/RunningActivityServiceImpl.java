@@ -7,9 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import com.wzsport.exception.RunningActivityAlreadyEndException;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.RunningActivity;
@@ -88,6 +90,79 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		
 		return runningActivity;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#startRunningActivity(long, long, java.util.Date)
+	 */
+	public RunningActivity startRunningActivity(long studentId, long projectId, Date startTime) {
+		RunningActivity runningActivity = new RunningActivity();
+		runningActivity.setStudentId(studentId);
+		runningActivity.setProjectId(projectId);
+		runningActivity.setStartTime(startTime);
+		runningActivity.setEnded(false);
+		
+		runningActivityMapper.insertSelective(runningActivity);
+		
+		return runningActivity;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#endRunningActivity(com.wzsport.model.RunningActivity)
+	 */
+	public RunningActivity endRunningActivity(RunningActivity runningActivity) {
+		RunningActivity oldRecord = runningActivityMapper.selectByPrimaryKey(runningActivity.getId());
+		
+		if(oldRecord == null) {
+			throw new DataRetrievalFailureException("找不到指定的记录");
+		}
+		
+		if(oldRecord.getEnded() == true) {
+			throw new RunningActivityAlreadyEndException("本次运动已经结束");
+		}
+		
+		runningActivity.setProjectId(oldRecord.getId());
+		runningActivity.setStudentId(oldRecord.getStudentId());
+		runningActivity.setStartTime(oldRecord.getStartTime());
+		
+		//获取关联的项目
+		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(oldRecord.getProjectId());
+		
+		//判断是否合格
+		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
+				&& runningActivity.getTargetTime() != null
+				&& runningActivity.getTargetTime() <= runningProject.getQualifiedCostTime()){
+			runningActivity.setQualified(true);
+		} else {
+			runningActivity.setQualified(false);
+		}
+		
+		//计算卡路里消耗
+		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
+				runningProject.getHourlyCalorieConsumption());
+		runningActivity.setCaloriesConsumed(caloriesConsumed);
+		
+		//步数至少为1
+		if(runningActivity.getStepCount() == 0) {
+			runningActivity.setStepCount(1);
+		}
+				
+		//计算速度、步幅和步频
+		BigDecimal speed = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getCostTime());
+		runningActivity.setSpeed(speed.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		
+		BigDecimal stepPerSecond = new BigDecimal((double)runningActivity.getStepCount() / runningActivity.getCostTime());
+		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		
+		BigDecimal distancePerStep = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getStepCount());
+		runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
+
+		runningActivity.setEnded(true);
+		
+		//插入数据
+		runningActivityMapper.updateByPrimaryKeySelective(runningActivity);
+
+		return runningActivity;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.wzsport.service.RunningActivityService#getCurrentTermQualifiedActivityCount(long)
@@ -108,6 +183,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	
 	
 
+	/* (non-Javadoc)
+	 * @see com.wzsport.service.RunningActivityService#getCurrentTermActivityCount(long, long)
+	 */
 	@Override
 	public int getCurrentTermActivityCount(long studentId, long universityId) {
 		Term term = termService.getCurrentTerm(universityId);

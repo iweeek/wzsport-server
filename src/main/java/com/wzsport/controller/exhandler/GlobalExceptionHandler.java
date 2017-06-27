@@ -3,6 +3,7 @@ package com.wzsport.controller.exhandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.wzsport.exception.RunningActivityAlreadyEndException;
 
 /**
 * @ClassName: GlobalExceptionHandler
@@ -68,6 +71,31 @@ public class GlobalExceptionHandler {
 		restError.setCode(HttpStatus.BAD_REQUEST.value());
 		restError.setMessage(exception.getMessage());
 		restError.setDeveloperMessages(new String[]{exception.getMessage()});
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
+	}
+	
+	/**
+	* 处理记录不存在异常
+	*/
+	@ExceptionHandler(DataRetrievalFailureException.class)
+	public ResponseEntity<RestError> handler(DataRetrievalFailureException exception) {
+		RestError restError = new RestError();
+		restError.setStatus(HttpStatus.BAD_REQUEST.value());
+		restError.setCode(HttpStatus.BAD_REQUEST.value());
+		restError.setMessage(exception.getMessage());
+		restError.setDeveloperMessages(new String[]{exception.getMessage()});
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
+	}
+	
+	/**
+	* 处理运动已结束异常
+	*/
+	@ExceptionHandler(RunningActivityAlreadyEndException.class)
+	public ResponseEntity<RestError> handler(RunningActivityAlreadyEndException exception) {
+		RestError restError = new RestError();
+		restError.setStatus(HttpStatus.BAD_REQUEST.value());
+		restError.setCode(HttpStatus.BAD_REQUEST.value());
+		restError.setMessage(exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restError);
 	}
 

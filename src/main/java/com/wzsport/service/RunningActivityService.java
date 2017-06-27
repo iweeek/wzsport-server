@@ -19,6 +19,21 @@ public interface RunningActivityService {
 	*/
 	RunningActivity create(RunningActivity runningActivity);
 	
+	
+	/**
+	* 活动开始记录
+	* 
+	* @param studentId
+	* @param projectId
+	* @param startTime
+	*/
+	RunningActivity startRunningActivity(long studentId, long projectId, Date startTime);
+	
+	/**
+	* 结束一次活动
+	*/
+	RunningActivity endRunningActivity(RunningActivity runningActivity);
+	
 	/**
 	* 获取一名学生本学期的有效活动次数
 	* 

@@ -40,7 +40,9 @@ public class RunningActivityDataController {
 								@ApiParam("当前的纬度)")
 								@RequestParam double latitude,
 								@ApiParam("定位类型")
-								@RequestParam int locationType) {
+								@RequestParam int locationType,
+								@ApiParam("数据是否正常")
+								@RequestParam boolean normal) {
 		
 		RunningActivityData runningActivityData = new RunningActivityData();
 		runningActivityData.setActivityId(activityId);
@@ -50,6 +52,7 @@ public class RunningActivityDataController {
 		runningActivityData.setLongitude(longitude);
 		runningActivityData.setLatitude(latitude);
 		runningActivityData.setLocationType(locationType);
+		runningActivityData.setNormal(normal);
 		
 		runningActivityDataService.create(runningActivityData);
 		

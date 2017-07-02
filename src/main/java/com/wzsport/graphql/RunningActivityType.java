@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.mapper.StudentMapper;
 import com.wzsport.model.RunningActivity;
+import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.Student;
@@ -36,6 +38,7 @@ import graphql.schema.GraphQLTypeReference;
 public class RunningActivityType {
 	
 	private static RunningActivityMapper runningActivityMapper;
+	private static RunningActivityDataMapper runningActivityDataMapper;
 	private static RunningProjectMapper runningProjectMapper;
 	private static StudentMapper studentMapper;
 	private static GraphQLObjectType type;
@@ -147,6 +150,17 @@ public class RunningActivityType {
 							.dataFetcher(environment ->  {
 								RunningActivity runningActivity = environment.getSource();
 			                	return studentMapper.selectByPrimaryKey(runningActivity.getStudentId());
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("data")
+							.description("该活动记录的采集数据")
+							.type(new GraphQLList(RunningActivityDataType.getType()))
+							.dataFetcher(environment ->  {
+								RunningActivity runningActivity = environment.getSource();
+								RunningActivityDataExample example = new RunningActivityDataExample();
+								example.createCriteria().andActivityIdEqualTo(runningActivity.getId());
+			                	return runningActivityDataMapper.selectByExample(example);
 							} )
 							.build())
 					.build();
@@ -348,5 +362,10 @@ public class RunningActivityType {
 	@Autowired(required = true)
 	public void setStudentMapper(StudentMapper studentMapper) {
 		RunningActivityType.studentMapper = studentMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setRunningActivityDataMapper(RunningActivityDataMapper runningActivityDataMapper) {
+		RunningActivityType.runningActivityDataMapper = runningActivityDataMapper;
 	}
 }

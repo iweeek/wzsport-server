@@ -95,11 +95,17 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	 * @see com.wzsport.service.RunningActivityService#startRunningActivity(long, long, java.util.Date)
 	 */
 	public RunningActivity startRunningActivity(long studentId, long projectId, Date startTime) {
+		
+		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(projectId);
+		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setStudentId(studentId);
 		runningActivity.setProjectId(projectId);
 		runningActivity.setStartTime(startTime);
 		runningActivity.setEnded(false);
+		runningActivity.setQualifiedDistance(runningProject.getQualifiedDistance());
+		runningActivity.setQualifiedCostTime(runningProject.getQualifiedCostTime());
+		runningActivity.setMinCostTime(runningProject.getMinCostTime());
 		
 		runningActivityMapper.insertSelective(runningActivity);
 		
@@ -123,19 +129,22 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setProjectId(oldRecord.getId());
 		runningActivity.setStudentId(oldRecord.getStudentId());
 		runningActivity.setStartTime(oldRecord.getStartTime());
-		
-		//获取关联的项目
-		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(oldRecord.getProjectId());
+		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());
+		runningActivity.setQualifiedCostTime(oldRecord.getQualifiedCostTime());
+		runningActivity.setMinCostTime(oldRecord.getMinCostTime());
 		
 		//判断是否合格
-		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
+		if(runningActivity.getDistance() >= runningActivity.getQualifiedDistance()
 				&& runningActivity.getTargetFinishedTime() != null
-				&& runningActivity.getTargetFinishedTime() <= runningProject.getQualifiedCostTime()){
+				&& runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()){
 			runningActivity.setQualified(true);
 		} else {
 			runningActivity.setQualified(false);
 		}
 		
+		//获取关联的项目
+		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+				
 		//计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
 				runningProject.getHourlyCalorieConsumption());

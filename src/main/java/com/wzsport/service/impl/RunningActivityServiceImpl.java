@@ -126,7 +126,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			throw new RunningActivityAlreadyEndException("本次运动已经结束");
 		}
 		
-		runningActivity.setProjectId(oldRecord.getId());
+		runningActivity.setProjectId(oldRecord.getProjectId());
 		runningActivity.setStudentId(oldRecord.getStudentId());
 		runningActivity.setStartTime(oldRecord.getStartTime());
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());

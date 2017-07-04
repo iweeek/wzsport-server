@@ -47,7 +47,7 @@ public class RunningActivityController {
 								@ApiParam("活动耗时(单位:秒)")
 								@RequestParam int costTime,
 								@ApiParam("完成项目指标耗时(单位:秒),比如该项目目标距离为1000米，则需要提交此次活动距离达到1000米的耗时")
-								@RequestParam int targetTime,
+								@RequestParam int targetFinishedTime,
 								@ApiParam("活动开始的时间(使用时间戳格式)")
 								@RequestParam Long startTime) {
 		
@@ -57,7 +57,7 @@ public class RunningActivityController {
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);
-		runningActivity.setTargetTime(targetTime);
+		runningActivity.setTargetFinishedTime(targetFinishedTime);
 		runningActivity.setStartTime(new Date(startTime));
 		
 		runningActivity = runningActivityService.create(runningActivity);
@@ -97,14 +97,14 @@ public class RunningActivityController {
 								@ApiParam("活动耗时(单位:秒)")
 								@RequestParam int costTime,
 								@ApiParam("完成项目指标耗时(单位:秒),比如该项目目标距离为1000米，则需要提交此次活动距离达到1000米的耗时")
-								@RequestParam int targetTime) {
+								@RequestParam int targetFinishedTime) {
 		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setId(id);
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);
-		runningActivity.setTargetTime(targetTime);
+		runningActivity.setTargetFinishedTime(targetFinishedTime);
 		
 		runningActivity = runningActivityService.endRunningActivity(runningActivity);
 		

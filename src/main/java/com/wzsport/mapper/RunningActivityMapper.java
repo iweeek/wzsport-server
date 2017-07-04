@@ -113,13 +113,13 @@ public interface RunningActivityMapper {
 			"updated_at = #{updatedAt,jdbcType=TIMESTAMP}", "where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(RunningActivity record);
 
-	@Select("SELECT SUM(calories_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
+	@Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
 	Integer sumCaloriesConsumedByStudentId(long studentId);
 	
 	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId}")
 	Integer sumCostTimeByStudentId(long studentId);
 	
-	@Select("SELECT SUM(calories_consumed) "
+	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
 	Integer sumCaloriesConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);

@@ -98,7 +98,7 @@ public interface UniversityMapper {
 	* 
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.calories_consumed) AS calories_consumption "
+	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.kcal_consumed) AS calories_consumption "
 			+ "FROM wzsport_student AS student "
 			+ "JOIN wzsport_running_activity AS activity ON student.id = activity.student_id "
 			+ "WHERE student.university_id = #{universityId} "

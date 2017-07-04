@@ -58,8 +58,8 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		
 		//判断是否合格
 		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
-				&& runningActivity.getTargetTime() != null
-				&& runningActivity.getTargetTime() <= runningProject.getQualifiedCostTime()){
+				&& runningActivity.getTargetFinishedTime() != null
+				&& runningActivity.getTargetFinishedTime() <= runningProject.getQualifiedCostTime()){
 			runningActivity.setQualified(true);
 		} else {
 			runningActivity.setQualified(false);
@@ -129,8 +129,8 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		
 		//判断是否合格
 		if(runningActivity.getDistance() >= runningProject.getQualifiedDistance()
-				&& runningActivity.getTargetTime() != null
-				&& runningActivity.getTargetTime() <= runningProject.getQualifiedCostTime()){
+				&& runningActivity.getTargetFinishedTime() != null
+				&& runningActivity.getTargetFinishedTime() <= runningProject.getQualifiedCostTime()){
 			runningActivity.setQualified(true);
 		} else {
 			runningActivity.setQualified(false);

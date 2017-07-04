@@ -90,7 +90,7 @@ remotes {
     identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
   }
   
-  proderver {
+  prodServer {
     host = '暂无'
     user = '暂无'
     identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')

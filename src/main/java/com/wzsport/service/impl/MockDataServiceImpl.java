@@ -157,7 +157,7 @@ public class MockDataServiceImpl implements MockDataService {
 						runningActivity.setStudentId(student.getId());
 						runningActivity.setDistance(1000);
 						runningActivity.setCostTime(300);
-						runningActivity.setTargetTime(250);
+						runningActivity.setTargetFinishedTime(250);
 						runningActivity.setStartTime(new Date());
 						runningActivity = runningActivityService.create(runningActivity);
 					}

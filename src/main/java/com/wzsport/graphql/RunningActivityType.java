@@ -96,7 +96,7 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("targetTime")
+							.name("targetFinishedTime")
 							.description("达到目标距离的时间(单位:秒)")
 							.type(Scalars.GraphQLInt)
 							.build())

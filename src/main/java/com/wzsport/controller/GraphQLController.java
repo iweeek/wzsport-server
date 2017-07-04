@@ -31,7 +31,6 @@ public class GraphQLController {
 	@Autowired
 	private GraphQLService graphQLService;
 	
-	
 	/**
 	* GraphQL查询接口 json格式提交
 	* 
@@ -41,7 +40,6 @@ public class GraphQLController {
 	*/
 	@ApiOperation(value = "GraphQL查询入口", notes = "具体使用请参考本项目提供的GraphQL调试器，此处不再介绍")
 	@RequestMapping(method = RequestMethod.POST)
-	@CrossOrigin
 	public ResponseEntity<?>  query(@RequestBody Map<String,Object> queryMap) {
 		String query = (String)queryMap.get("query");
 		ExecutionResult result = null;

@@ -68,7 +68,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		//计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
 				runningProject.getHourlyCalorieConsumption());
-		runningActivity.setCaloriesConsumed(caloriesConsumed);
+		runningActivity.setKcalConsumed(caloriesConsumed);
 		
 		//步数至少为1
 		if(runningActivity.getStepCount() == 0) {
@@ -148,7 +148,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		//计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(80, runningActivity.getCostTime(),
 				runningProject.getHourlyCalorieConsumption());
-		runningActivity.setCaloriesConsumed(caloriesConsumed);
+		runningActivity.setKcalConsumed(caloriesConsumed);
 		
 		//步数至少为1
 		if(runningActivity.getStepCount() == 0) {

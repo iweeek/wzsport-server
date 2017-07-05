@@ -60,7 +60,7 @@ public class RunningActivityDataType {
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("normal")
+							.name("isNormal")
 							.description("数据是否正常")
 							.type(Scalars.GraphQLBoolean)
 							.build())

@@ -4,14 +4,14 @@ import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
-public class StudentCaloriesConsumptionType {
+public class StudentKcalConsumptionType {
 
 	private static GraphQLObjectType type;
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("StudentCaloriesConsumption")
+					.name("StudentKcalConsumption")
 					.description("学生卡路里消耗量")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("studentId")
@@ -30,7 +30,7 @@ public class StudentCaloriesConsumptionType {
 							.staticValue("http://wx.qlogo.cn/mmopen/2eKq6oMge2lyho7S3shicMAticbD2KWhIe9fBicYtAjDDDrnmV5QC952hiaNVdLiaz8OQibs53pZZeej60XStgEWSfow/0")
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("caloriesConsumption")
+							.name("kcalConsumption")
 							.description("卡路里消耗量")
 							.type(Scalars.GraphQLInt)
 							.build())

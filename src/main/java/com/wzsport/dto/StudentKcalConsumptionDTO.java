@@ -1,10 +1,10 @@
 package com.wzsport.dto;
 
-public class StudentCaloriesConsumptionDTO {
+public class StudentKcalConsumptionDTO {
 
 	private Long studentId;
 	private String studentName;
-	private Integer caloriesConsumption;
+	private Integer kcalConsumption;
 	
 	public Long getStudentId() {
 		return studentId;
@@ -18,10 +18,10 @@ public class StudentCaloriesConsumptionDTO {
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
-	public Integer getCaloriesConsumption() {
-		return caloriesConsumption;
+	public Integer getKcalConsumption() {
+		return kcalConsumption;
 	}
-	public void setCaloriesConsumption(Integer caloriesConsumption) {
-		this.caloriesConsumption = caloriesConsumption;
+	public void setKcalConsumption(Integer kcalConsumption) {
+		this.kcalConsumption = kcalConsumption;
 	}
 }

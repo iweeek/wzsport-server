@@ -12,10 +12,11 @@ public class CalorieUtil {
 	 * 标准体重
 	 */
 	private static final double  STANDARD_WEIGHT = 68.00;
+	
 	/**
 	 * 标准时间
 	 */
-	private static final double STANDARD_FACTOR = 60.00;
+	private static final double STANDARD_FACTOR = 60.00 * 60;
 	
 	/**
 	* 计算卡路里消耗量

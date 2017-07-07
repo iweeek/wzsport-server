@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 
-import com.wzsport.dto.StudentCaloriesConsumptionDTO;
+import com.wzsport.dto.StudentKcalConsumptionDTO;
 import com.wzsport.dto.StudentTimeCostedDTO;
 import com.wzsport.model.University;
 import com.wzsport.model.UniversityExample;
@@ -98,13 +98,13 @@ public interface UniversityMapper {
 	* 
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.kcal_consumed) AS calories_consumption "
+	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(activity.kcal_consumed) AS kcal_consumption "
 			+ "FROM wzsport_student AS student "
 			+ "JOIN wzsport_running_activity AS activity ON student.id = activity.student_id "
 			+ "WHERE student.university_id = #{universityId} "
 			+ "GROUP BY student.id "
-			+ "ORDER BY calories_consumption DESC")
-	List<StudentCaloriesConsumptionDTO> getCalorieCostedRanking(@Param("universityId") long universityId);
+			+ "ORDER BY kcal_consumption DESC")
+	List<StudentKcalConsumptionDTO> getCalorieCostedRanking(@Param("universityId") long universityId);
 	
 	/**
 	* 获取指定大学的学生运动时长的排名列表

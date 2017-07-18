@@ -29,8 +29,6 @@ public class RunningActivityDataController {
 	public ResponseEntity<?> create(
 								@ApiParam("活动id")
 								@RequestParam long activityId,
-								@ApiParam("采集时间(使用时间戳格式,毫秒级)")
-								@RequestParam long acquisitionTime,
 								@ApiParam("运动步数累计")
 								@RequestParam int stepCount,
 								@ApiParam("运动距离(单位:米)")
@@ -46,7 +44,7 @@ public class RunningActivityDataController {
 		
 		RunningActivityData runningActivityData = new RunningActivityData();
 		runningActivityData.setActivityId(activityId);
-		runningActivityData.setAcquisitionTime(new Date(acquisitionTime));
+		runningActivityData.setAcquisitionTime(new Date());
 		runningActivityData.setStepCount(stepCount);
 		runningActivityData.setDistance(distance);
 		runningActivityData.setLongitude(longitude);

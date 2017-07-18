@@ -67,7 +67,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		
 		//计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
-				runningProject.getHourlyCalorieConsumption());
+				runningProject.getHourlyKcalConsumption());
 		runningActivity.setKcalConsumed(caloriesConsumed);
 		
 		//步数至少为1
@@ -101,8 +101,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setStudentId(studentId);
 		runningActivity.setProjectId(projectId);
-		runningActivity.setStartTime(startTime);
-		runningActivity.setEnded(false);
+		runningActivity.setStartTime(new Date());
 		runningActivity.setQualifiedDistance(runningProject.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(runningProject.getQualifiedCostTime());
 		runningActivity.setMinCostTime(runningProject.getMinCostTime());
@@ -122,7 +121,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			throw new DataRetrievalFailureException("找不到指定的记录");
 		}
 		
-		if(oldRecord.getEnded() == true) {
+		if(oldRecord.getEndedAt() != null) {
 			throw new RunningActivityAlreadyEndException("本次运动已经结束");
 		}
 		
@@ -147,7 +146,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 				
 		//计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
-				runningProject.getHourlyCalorieConsumption());
+				runningProject.getHourlyKcalConsumption());
 		runningActivity.setKcalConsumed(caloriesConsumed);
 		
 		//步数至少为1
@@ -165,7 +164,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		BigDecimal distancePerStep = new BigDecimal((double)runningActivity.getDistance() / runningActivity.getStepCount());
 		runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-		runningActivity.setEnded(true);
+		runningActivity.setEndedAt(new Date());
 		
 		//插入数据
 		runningActivityMapper.updateByPrimaryKeySelective(runningActivity);

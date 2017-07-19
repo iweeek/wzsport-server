@@ -106,10 +106,19 @@ public interface RunningActivityService {
 	
 	
 	/**
-	 * 获取参加人数。
+	 * 获取参加人数。.
 	 *
 	 * @param projectId the project id
 	 * @return the participant num
 	 */
 	int getParticipantNum(long projectId);
+	
+	
+	/**
+	 * Checks if is activity exist.
+	 *
+	 * @param activityId the activity id
+	 * @return true, if is activity exist
+	 */
+	boolean isActivityExist(long activityId);
 }

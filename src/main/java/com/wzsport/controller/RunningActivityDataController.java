@@ -2,6 +2,8 @@ package com.wzsport.controller;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.service.RunningActivityDataService;
+import com.wzsport.service.RunningActivityService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,8 +24,13 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/runningActivityData",produces="application/json;charset=UTF-8")
 public class RunningActivityDataController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(RunningActivityDataController.class);
+	
 	@Autowired
 	private RunningActivityDataService runningActivityDataService;
+	
+	@Autowired
+	private RunningActivityService runningActivityService;
 	
 	@ApiOperation(value = "创建RunningActivityData", notes = "向服务端提交运动的采集数据")
 	@RequestMapping(method = RequestMethod.POST)
@@ -42,7 +50,13 @@ public class RunningActivityDataController {
 								@ApiParam("数据是否正常")
 								@RequestParam boolean isNormal) {
 		
+		if (!runningActivityService.isActivityExist(activityId)) {
+			logger.error("activityId 不存在。");
+			return null;
+		}
+		
 		RunningActivityData runningActivityData = new RunningActivityData();
+		
 		runningActivityData.setActivityId(activityId);
 		runningActivityData.setAcquisitionTime(new Date());
 		runningActivityData.setStepCount(stepCount);

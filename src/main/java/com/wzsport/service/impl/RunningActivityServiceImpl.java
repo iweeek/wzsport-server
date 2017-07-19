@@ -291,4 +291,13 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivityExample.or().andProjectIdEqualTo(projectId).andEndedAtIsNull();
 		return (int) runningActivityMapper.countByExample(runningActivityExample);
 	}
+
+	@Override
+	public boolean isActivityExist(long activityId) {
+		if (runningActivityMapper.selectByPrimaryKey(activityId) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

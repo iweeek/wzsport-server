@@ -19,6 +19,7 @@ import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
+import com.wzsport.service.RunningActivityService;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -44,7 +45,6 @@ public class RunningActivityType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
-	
 	
 	public static enum Operator {
 		LESS_THAN, GREATER_THAN, EQUALL, BETWEEN

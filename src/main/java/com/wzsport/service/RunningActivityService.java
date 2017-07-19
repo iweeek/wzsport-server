@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.wzsport.model.RunningActivity;
 
+// TODO: Auto-generated Javadoc
 /**
 * RunningActivity service interface.
 * 
@@ -13,81 +14,102 @@ import com.wzsport.model.RunningActivity;
 public interface RunningActivityService {
 
 	/**
-	* 创建RunningActivity
-	* 
-	* @param runningActivity
-	*/
+	 * 创建RunningActivity.
+	 *
+	 * @param runningActivity the running activity
+	 * @return the running activity
+	 */
 	RunningActivity create(RunningActivity runningActivity);
 	
 	
 	/**
-	* 活动开始记录
-	* 
-	* @param studentId
-	* @param projectId
-	* @param startTime
-	*/
+	 * 活动开始记录.
+	 *
+	 * @param studentId the student id
+	 * @param projectId the project id
+	 * @param startTime the start time
+	 * @return the running activity
+	 */
 	RunningActivity startRunningActivity(long studentId, long projectId, Date startTime);
 	
 	/**
-	* 结束一次活动
-	*/
+	 * 结束一次活动.
+	 *
+	 * @param runningActivity the running activity
+	 * @return the running activity
+	 */
 	RunningActivity endRunningActivity(RunningActivity runningActivity);
 	
 	/**
-	* 获取一名学生本学期的有效活动次数
-	* 
-	* @param studentId 学生id
-	* @param universityId 大学id
-	*/
+	 * 获取一名学生本学期的有效活动次数.
+	 *
+	 * @param studentId 学生id
+	 * @param universityId 大学id
+	 * @return the current term qualified activity count
+	 */
 	int getCurrentTermQualifiedActivityCount(long studentId, long universityId);
 	
 	/**
-	* 获取一名学生指定时期内的有效活动次数
-	* 
-	* @param studentId 学生id
-	* @param start 开始时期
-	* @param end 结束时期 
-	*/
+	 * 获取一名学生指定时期内的有效活动次数.
+	 *
+	 * @param studentId 学生id
+	 * @param start 开始时期
+	 * @param end 结束时期
+	 * @return the qualified activity count
+	 */
 	int getQualifiedActivityCount(long studentId, Date start, Date end);
 	
 	/**
-	* 获取一名学生本学期的总活动次数
-	* 
-	* @param studentId 学生id
-	* @param universityId 大学id
-	*/
+	 * 获取一名学生本学期的总活动次数.
+	 *
+	 * @param studentId 学生id
+	 * @param universityId 大学id
+	 * @return the current term activity count
+	 */
 	int getCurrentTermActivityCount(long studentId, long universityId);
 	
 	/**
-	* 获取学生的卡路里消耗量
-	* 
-	* @param studentId
-	*/
+	 * 获取学生的卡路里消耗量.
+	 *
+	 * @param studentId the student id
+	 * @return the student calories consumption
+	 */
 	int getStudentCaloriesConsumption(long studentId);
 	
 	/**
-	* 获取学生的累计运动时长
-	* 
-	* @param studentId
-	*/
+	 * 获取学生的累计运动时长.
+	 *
+	 * @param studentId the student id
+	 * @return the student time costed
+	 */
 	int getStudentTimeCosted(long studentId);
 	
 	/**
-	* 获取学生指定时段的卡路里消耗量
-	* 
-	* @param studentId
-	* @param start 开始时期
-	* @param end 结束时期
-	*/
+	 * 获取学生指定时段的卡路里消耗量.
+	 *
+	 * @param studentId the student id
+	 * @param start 开始时期
+	 * @param end 结束时期
+	 * @return the student calories consumption
+	 */
 	int getStudentCaloriesConsumption(long studentId, Date start, Date end);
 	
 	/**
-	* 获取学生指定时段的运动时长
-	* 
-	* @param studentId
-	* @param start 开始时期
-	* @param end 结束时期
-	*/
+	 * 获取学生指定时段的运动时长.
+	 *
+	 * @param studentId the student id
+	 * @param start 开始时期
+	 * @param end 结束时期
+	 * @return the student time costed
+	 */
 	int getStudentTimeCosted(long studentId, Date start, Date end);
+	
+	
+	/**
+	 * 获取参加人数。
+	 *
+	 * @param projectId the project id
+	 * @return the participant num
+	 */
+	int getParticipantNum(long projectId);
 }

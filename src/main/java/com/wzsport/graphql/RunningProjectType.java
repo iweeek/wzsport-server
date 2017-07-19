@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.RunningProjectMapper;
+import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningProject;
 import com.wzsport.model.RunningProjectExample;
+import com.wzsport.service.RunningActivityService;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -28,6 +30,7 @@ public class RunningProjectType {
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
+	private static RunningActivityService runningActivityService;
 	
 	private RunningProjectType() {}
 	
@@ -81,6 +84,15 @@ public class RunningProjectType {
 							.description("采集运动数据的时间间隔(单位:秒)")
 							.type(Scalars.GraphQLInt)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("participantNum")
+							.description("参加人数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								RunningProject runningProject = environment.getSource();
+								return runningActivityService.getParticipantNum(runningProject.getId());
+							} )
+							.build())
 					.build();
 		}
 		return type;
@@ -123,5 +135,10 @@ public class RunningProjectType {
 	@Autowired(required = true)
 	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
 		RunningProjectType.runningProjectMapper = runningProjectMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setRunningActivityService(RunningActivityService runningActivityService) {
+		RunningProjectType.runningActivityService = runningActivityService;
 	}
 }

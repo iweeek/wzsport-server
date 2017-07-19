@@ -90,7 +90,7 @@ remotes {
     identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
   }
   
-  prodServer {
+  productServer {
     host = '暂无'
     user = '暂无'
     identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
@@ -101,21 +101,23 @@ task deploy(dependsOn: [war, flywayMigrate]) {
   doLast {
   	switch (env) {
   	  case 'test':
+  	  case 'dev':
   	    println 'start deploy to ' + env
 	    ssh.run {
 	      session(remotes.testServer) {
 	      	remove '/usr/local/webserver/tomcat/webapps/wzsport-server.war'
 	        put from: buildDir.toString() + '/libs/wzsport-server.war', into: '/usr/local/webserver/tomcat/webapps/'
-	        execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/shutdown.sh'
-	        execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/startup.sh'
+	       // execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/shutdown.sh'
+	       // execute 'export JAVA_HOME=/usr/local/jdk1.8.0_71; /usr/local/webserver/tomcat/bin/startup.sh'
 	      }
 	    }
   	    break
-  	  case 'pord':
-  	    server = remotes.prodServer
+  	  case 'product':
+  	    server = remotes.productServer
   	    break
   	  default:
-  	    throw new RuntimeException("环境变量应该设置为test或者prod")
+  	  	println 'env: ' + env
+  	    throw new RuntimeException("环境变量应该设置为test、dev或者product")
   	}
   }
 }

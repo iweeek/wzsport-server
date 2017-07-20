@@ -110,6 +110,19 @@ public class RunningActivityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("endedAt")
+							.description("活动结束时间,时间戳格式(毫秒)")
+							.type(Scalars.GraphQLLong)
+							.dataFetcher(environment ->  {
+								RunningActivity runningActivity = environment.getSource();
+								if (runningActivity.getEndedAt() != null) {
+									return runningActivity.getEndedAt().getTime();
+								} else {
+									return 0;
+								}
+							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("qualifiedDistance")
 							.description("该次活动的合格距离(单位:米)")
 							.type(Scalars.GraphQLInt)

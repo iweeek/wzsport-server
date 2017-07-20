@@ -74,7 +74,7 @@ public interface RunningActivityService {
 	 * @param studentId the student id
 	 * @return the student calories consumption
 	 */
-	int getStudentCaloriesConsumption(long studentId);
+	int getStudentKCalConsumption(long studentId);
 	
 	/**
 	 * 获取学生的累计运动时长.

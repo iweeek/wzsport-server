@@ -233,7 +233,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	 * long)
 	 */
 	@Override
-	public int getStudentCaloriesConsumption(long studentId) {
+	public int getStudentKCalConsumption(long studentId) {
 		Integer caloriesConsumption = runningActivityMapper.sumCaloriesConsumedByStudentId(studentId);
 		return caloriesConsumption == null ? 0 : caloriesConsumption;
 	}
@@ -252,7 +252,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	@Override
 	public int getStudentCaloriesConsumption(long studentId, Date start, Date end) {
-		Integer timeCosted = runningActivityMapper.sumCaloriesConsumedByStudentIdAndDuration(studentId, start, end);
+		Integer timeCosted = runningActivityMapper.sumKCalConsumedByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
 	}
 

@@ -122,7 +122,7 @@ public interface RunningActivityMapper {
 	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
-	Integer sumCaloriesConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
+	Integer sumKCalConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
 	
 	@Select("SELECT SUM(cost_time) "
 			+ "FROM wzsport_running_activity "

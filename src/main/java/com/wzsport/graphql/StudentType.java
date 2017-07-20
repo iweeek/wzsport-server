@@ -286,12 +286,12 @@ public class StudentType {
 										}
 										break;
 									default:
-										return runningActivityService.getStudentCaloriesConsumption(student.getId());
+										return runningActivityService.getStudentKCalConsumption(student.getId());
 									}
 									return runningActivityService.getStudentCaloriesConsumption(student.getId(),
 											start, end);
 								}
-			                	return runningActivityService.getStudentCaloriesConsumption(student.getId());
+			                	return runningActivityService.getStudentKCalConsumption(student.getId());
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

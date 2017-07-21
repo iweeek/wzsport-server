@@ -2,6 +2,10 @@ package com.wzsport.model;
 
 import java.math.BigDecimal;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FixLocationOutdoorSportPoint.
+ */
 public class FixLocationOutdoorSportPoint {
     /**
      *
@@ -200,4 +204,24 @@ public class FixLocationOutdoorSportPoint {
     public void setUniversityId(Integer universityId) {
         this.universityId = universityId;
     }
+    
+    /**
+     * Instantiates a new fix location outdoor sport point.
+     *
+     * @param id the id
+     * @param latitude the latitude
+     * @param longitude the longitude
+     * @param name the name
+     * @param universityId the university id
+     */
+    public FixLocationOutdoorSportPoint(double latitude, double longitude, String name, byte radius, int universityId) {
+    	this.latitude = BigDecimal.valueOf(latitude);
+    	this.longitude = BigDecimal.valueOf(longitude);
+    	this.radius = radius;
+    	this.name = name;
+    	this.universityId = universityId;
+    }
+
+	public FixLocationOutdoorSportPoint() {
+	}
 }

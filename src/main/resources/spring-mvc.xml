@@ -54,7 +54,8 @@
 	
 	<!-- 跨域配置 -->
 	<mvc:cors>
-    	<mvc:mapping path="/**" />
+    	<mvc:mapping path="/**" 
+    		allowed-methods="GET, PUT, POST, DELETE"/>
 	</mvc:cors>
 	
 	<context:annotation-config />  

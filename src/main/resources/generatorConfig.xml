@@ -119,5 +119,9 @@
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="forced" javaType="java.lang.Boolean"/>
     </table>
+    
+    <table schema="wzpsort" tableName="wzsport_fix_location_outdoor_sport_point" domainObjectName ="FixLocationOutdoorSportPoint" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
   </context>
 </generatorConfiguration>

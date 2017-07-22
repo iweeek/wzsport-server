@@ -1,5 +1,8 @@
 package com.wzsport.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -100,5 +103,13 @@ public class FixLocationOutdoorSportPointsController {
 				FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint(latitude, longitude, name, radius, universityId, desc);
 				response.setStatus(fixLocationSportPointService.update(point));
 				return point;
+	}
+	
+	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
+	@RequestMapping(value = "/", method = RequestMethod.GET) 
+	public List<FixLocationOutdoorSportPoint> index(HttpServletResponse response) {
+		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
+		response.setStatus(fixLocationSportPointService.index(list));
+		return list;
 	}
 }

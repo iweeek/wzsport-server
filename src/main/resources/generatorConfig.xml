@@ -122,6 +122,7 @@
     
     <table schema="wzpsort" tableName="wzsport_fix_location_outdoor_sport_point" domainObjectName ="FixLocationOutdoorSportPoint" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="is_enable" javaType="java.lang.Boolean"/>
     </table>
   </context>
 </generatorConfiguration>

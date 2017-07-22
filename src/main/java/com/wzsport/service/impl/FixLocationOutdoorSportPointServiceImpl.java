@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 	private FixLocationOutdoorSportPointMapper fixLocationOutdoorSportPointMapper;
 
 	@Override
-	public FixLocationOutdoorSportPoint put(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
+	public int create(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
 		//判断数据是否重复
 		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
 		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
@@ -53,11 +55,45 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 		if (sameRecordList.size() != 0) {
 			logMsg = "重复提交记录，point: " + fixLocationOutdoorSportPoint;
 			logger.info(logMsg);
-			return sameRecordList.get(0);
+			fixLocationOutdoorSportPoint.setId(sameRecordList.get(0).getId());
+			return HttpServletResponse.SC_CONFLICT;
 		}
 
 		fixLocationOutdoorSportPointMapper.insert(fixLocationOutdoorSportPoint);
 		
-		return fixLocationOutdoorSportPoint;
+		return HttpServletResponse.SC_CREATED;
+	}
+
+	@Override
+	public int get(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
+		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
+		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
+		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
+		if (list.size() > 0) {
+			fixLocationOutdoorSportPoint.setId(list.get(0).getId());
+			fixLocationOutdoorSportPoint.setLatitude(list.get(0).getLatitude());
+			fixLocationOutdoorSportPoint.setLongitude(list.get(0).getLongitude());
+			fixLocationOutdoorSportPoint.setRadius(list.get(0).getRadius());
+			fixLocationOutdoorSportPoint.setUniversityId(list.get(0).getUniversityId());
+			fixLocationOutdoorSportPoint.setDescription(list.get(0).getDescription());
+			return HttpServletResponse.SC_OK;
+		} else {
+			return HttpServletResponse.SC_NOT_FOUND;
+		}
+	}
+
+	@Override
+	public int update(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
+		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
+		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
+		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
+		if (list.size() > 0) {
+			fixLocationOutdoorSportPoint.setId(list.get(0).getId());
+			fixLocationOutdoorSportPointMapper.updateByPrimaryKey(fixLocationOutdoorSportPoint);
+			return HttpServletResponse.SC_OK;
+		} else {
+			return HttpServletResponse.SC_NOT_FOUND;
+		}
+		
 	}
 }

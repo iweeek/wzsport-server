@@ -4,6 +4,10 @@ import com.wzsport.model.FixLocationOutdoorSportPoint;
 
 public interface FixLocationOutdoorSportPointService {
 
-	public FixLocationOutdoorSportPoint put(FixLocationOutdoorSportPoint point);
+	public int create(FixLocationOutdoorSportPoint point);
+
+	public int get(FixLocationOutdoorSportPoint point);
+
+	public int update(FixLocationOutdoorSportPoint point);
 
 }

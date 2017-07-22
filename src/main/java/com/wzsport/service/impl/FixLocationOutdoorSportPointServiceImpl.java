@@ -96,4 +96,17 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 		}
 		
 	}
+
+	@Override
+	public int index(List<FixLocationOutdoorSportPoint> pointList) {
+		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
+		example.createCriteria().andIsEnableEqualTo(true);
+		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
+		if (list.size() > 0) {
+			pointList.addAll(list);
+			return HttpServletResponse.SC_OK;
+		} else {
+			return HttpServletResponse.SC_NOT_FOUND;
+		}
+	}
 }

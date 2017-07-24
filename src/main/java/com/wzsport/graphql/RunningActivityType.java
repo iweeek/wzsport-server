@@ -70,7 +70,7 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("projectId")
+							.name("RunningSportId")
 							.description("该活动关联的项目的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
@@ -167,7 +167,7 @@ public class RunningActivityType {
 							.type(RunningSportType.getType())
 							.dataFetcher(environment ->  {
 								RunningActivity runningActivity = environment.getSource();
-			                	return runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
+			                	return runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -235,7 +235,7 @@ public class RunningActivityType {
 	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("startTime").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("endTime").type(Scalars.GraphQLLong).build())
-	        		.argument(GraphQLArgument.newArgument().name("projectId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("RunningSportId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("speed").type(Scalars.GraphQLFloat).build())
 	        		.argument(GraphQLArgument.newArgument().name("speedOperator").type(operatorEnumType).build())
 	        		.argument(GraphQLArgument.newArgument().name("anotherSpeed").type(Scalars.GraphQLFloat).build())
@@ -289,9 +289,9 @@ public class RunningActivityType {
 	                		}
 	                	}
 	                	
-	                	Long projectId = environment.getArgument("projectId");
-	                	if(projectId != null) {
-	                		criteria.andProjectIdEqualTo(projectId);
+	                	Long RunningSportId = environment.getArgument("RunningSportId");
+	                	if(RunningSportId != null) {
+	                		criteria.andRunningSportIdEqualTo(RunningSportId);
 	                	}
 	                	
 	                	Long startTime = environment.getArgument("startTime");

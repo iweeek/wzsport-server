@@ -52,7 +52,7 @@ public class RunningActivityController {
 								@RequestParam Long startTime) {
 		
 		RunningActivity runningActivity = new RunningActivity();
-		runningActivity.setProjectId(projectId);
+		runningActivity.setRunningSportId(projectId);
 		runningActivity.setStudentId(studentId);
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);

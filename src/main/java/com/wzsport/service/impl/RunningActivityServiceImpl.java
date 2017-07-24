@@ -56,7 +56,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 
 		// 获取关联的项目
-		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
 
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningSport.getQualifiedDistance()
@@ -108,7 +108,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setStudentId(studentId);
-		runningActivity.setProjectId(projectId);
+		runningActivity.setRunningSportId(projectId);
 		runningActivity.setStartTime(new Date());
 		runningActivity.setQualifiedDistance(runningSport.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(runningSport.getQualifiedCostTime());
@@ -137,7 +137,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			throw new RunningActivityAlreadyEndException("本次运动已经结束");
 		}
 
-		runningActivity.setProjectId(oldRecord.getProjectId());
+		runningActivity.setRunningSportId(oldRecord.getRunningSportId());
 		runningActivity.setStudentId(oldRecord.getStudentId());
 		runningActivity.setStartTime(oldRecord.getStartTime());
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());
@@ -154,7 +154,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 
 		// 获取关联的项目
-		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
 
 		// 计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
@@ -162,9 +162,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setKcalConsumed(caloriesConsumed);
 
 		// 步数至少为1
-		if (runningActivity.getStepCount() == 0) {
-			runningActivity.setStepCount(1);
-		}
+//		if (runningActivity.getStepCount() == 0) {
+//			runningActivity.setStepCount(1);
+//		}
 
 		// 计算速度、步幅和步频
 		BigDecimal speed = new BigDecimal((double) runningActivity.getDistance() / runningActivity.getCostTime());
@@ -174,9 +174,13 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 				(double) runningActivity.getStepCount() / runningActivity.getCostTime());
 		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-		BigDecimal distancePerStep = new BigDecimal(
-				(double) runningActivity.getDistance() / runningActivity.getStepCount());
-		runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		if (runningActivity.getStepCount() != 0) {
+			BigDecimal distancePerStep = new BigDecimal(
+					(double) runningActivity.getDistance() / runningActivity.getStepCount());
+			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
+		} else {
+			runningActivity.setDistancePerStep((double) 0);
+		}
 
 		runningActivity.setEndedAt(new Date());
 
@@ -288,7 +292,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	@Override
 	public int getParticipantNum(long projectId) {
 		RunningActivityExample runningActivityExample = new RunningActivityExample();
-		runningActivityExample.or().andProjectIdEqualTo(projectId).andEndedAtIsNull();
+		runningActivityExample.or().andRunningSportIdEqualTo(projectId).andEndedAtIsNull();
 		return (int) runningActivityMapper.countByExample(runningActivityExample);
 	}
 

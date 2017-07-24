@@ -6,7 +6,7 @@ package com.wzsport.service;
 * @author x1ny
 * @date 2017年5月25日
 */
-public interface RunningProjectService {
+public interface RunningSportService {
 
 	/**
 	* 修改指定id的项目指标

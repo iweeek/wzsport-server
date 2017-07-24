@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wzsport.mapper.RunningProjectMapper;
-import com.wzsport.model.RunningActivity;
-import com.wzsport.model.RunningProject;
-import com.wzsport.model.RunningProjectExample;
+import com.wzsport.mapper.RunningSportMapper;
+import com.wzsport.model.RunningSport;
+import com.wzsport.model.RunningSportExample;
 import com.wzsport.service.RunningActivityService;
 
 import graphql.Scalars;
@@ -24,20 +23,20 @@ import graphql.schema.GraphQLObjectType;
 * @date 2017年5月26日
 */
 @Component
-public class RunningProjectType {
+public class RunningSportType {
 
-	private static RunningProjectMapper runningProjectMapper;
+	private static RunningSportMapper runningSportMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
 	private static RunningActivityService runningActivityService;
 	
-	private RunningProjectType() {}
+	private RunningSportType() {}
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("RunningProject")
+					.name("RunningSport")
 					.description("跑步项目类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
@@ -89,8 +88,8 @@ public class RunningProjectType {
 							.description("参加人数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
-								RunningProject runningProject = environment.getSource();
-								return runningActivityService.getParticipantNum(runningProject.getId());
+								RunningSport runningSport = environment.getSource();
+								return runningActivityService.getParticipantNum(runningSport.getId());
 							} )
 							.build())
 					.build();
@@ -107,8 +106,8 @@ public class RunningProjectType {
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
-	                	RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(id);
-	                	return runningProject;
+	                	RunningSport runningSport = runningSportMapper.selectByPrimaryKey(id);
+	                	return runningSport;
 	                } ).build();
 		}
         return singleQueryField;
@@ -118,27 +117,27 @@ public class RunningProjectType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
-	                .name("runningProjects")
+	                .name("runningSport")
 	                .description("根据大学ID获取关联的所有跑步项目")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long universityId = environment.getArgument("universityId");
-	                	RunningProjectExample runningProjectExample = new RunningProjectExample();
-	                	runningProjectExample.createCriteria().andUniversityIdEqualTo(universityId);
-	                	List<RunningProject> runningProjectList = runningProjectMapper.selectByExample(runningProjectExample);
-	                	return runningProjectList;
+	                	RunningSportExample runningSportExample = new RunningSportExample();
+	                	runningSportExample.createCriteria().andUniversityIdEqualTo(universityId);
+	                	List<RunningSport> runningSportList = runningSportMapper.selectByExample(runningSportExample);
+	                	return runningSportList;
 	                } ).build();
 		}
         return listQueryField;
     }
 
 	@Autowired(required = true)
-	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
-		RunningProjectType.runningProjectMapper = runningProjectMapper;
+	public void setRunningProjectMapper(RunningSportMapper runningSportMapper) {
+		RunningSportType.runningSportMapper = runningSportMapper;
 	}
 	
 	@Autowired(required = true)
 	public void setRunningActivityService(RunningActivityService runningActivityService) {
-		RunningProjectType.runningActivityService = runningActivityService;
+		RunningSportType.runningActivityService = runningActivityService;
 	}
 }

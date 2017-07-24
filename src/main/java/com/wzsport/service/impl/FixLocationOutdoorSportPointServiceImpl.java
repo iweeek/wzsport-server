@@ -1,8 +1,5 @@
 package com.wzsport.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,26 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import com.wzsport.controller.RunningActivityDataController;
-import com.wzsport.exception.RunningActivityAlreadyEndException;
 import com.wzsport.mapper.FixLocationOutdoorSportPointMapper;
-import com.wzsport.mapper.RunningActivityMapper;
-import com.wzsport.mapper.RunningProjectMapper;
 import com.wzsport.model.FixLocationOutdoorSportPoint;
 import com.wzsport.model.FixLocationOutdoorSportPointExample;
-import com.wzsport.model.RunningActivity;
-import com.wzsport.model.RunningActivityExample;
-import com.wzsport.model.RunningActivityExample.Criteria;
-import com.wzsport.model.RunningProject;
-import com.wzsport.model.Term;
 import com.wzsport.service.FixLocationOutdoorSportPointService;
-import com.wzsport.service.RunningActivityService;
-import com.wzsport.service.TermService;
-import com.wzsport.util.CalorieUtil;
 
 /**
  * RunningActivity Service 实现类.
@@ -57,17 +40,16 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 			logger.info(logMsg);
 			fixLocationOutdoorSportPoint.setId(sameRecordList.get(0).getId());
 			return HttpServletResponse.SC_CONFLICT;
+		} else {
+			fixLocationOutdoorSportPointMapper.insert(fixLocationOutdoorSportPoint);
+			return HttpServletResponse.SC_CREATED;
 		}
-
-		fixLocationOutdoorSportPointMapper.insert(fixLocationOutdoorSportPoint);
-		
-		return HttpServletResponse.SC_CREATED;
 	}
 
 	@Override
-	public int get(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
+	public int show(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint) {
 		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
+		example.createCriteria().andIdEqualTo(fixLocationOutdoorSportPoint.getId());
 		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 		if (list.size() > 0) {
 			fixLocationOutdoorSportPoint.setId(list.get(0).getId());
@@ -88,7 +70,6 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
 		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 		if (list.size() > 0) {
-			fixLocationOutdoorSportPoint.setId(list.get(0).getId());
 			fixLocationOutdoorSportPointMapper.updateByPrimaryKey(fixLocationOutdoorSportPoint);
 			return HttpServletResponse.SC_OK;
 		} else {
@@ -100,7 +81,7 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 	@Override
 	public int index(List<FixLocationOutdoorSportPoint> pointList) {
 		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-		example.createCriteria().andIsEnableEqualTo(true);
+		example.createCriteria().andIdNotEqualTo(0l);
 		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 		if (list.size() > 0) {
 			pointList.addAll(list);

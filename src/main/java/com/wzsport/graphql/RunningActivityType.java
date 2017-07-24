@@ -11,7 +11,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
-import com.wzsport.mapper.RunningProjectMapper;
+import com.wzsport.mapper.RunningSportMapper;
 import com.wzsport.mapper.StudentMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityDataExample;
@@ -19,7 +19,6 @@ import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
-import com.wzsport.service.RunningActivityService;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -40,7 +39,7 @@ public class RunningActivityType {
 	
 	private static RunningActivityMapper runningActivityMapper;
 	private static RunningActivityDataMapper runningActivityDataMapper;
-	private static RunningProjectMapper runningProjectMapper;
+	private static RunningSportMapper runningSportMapper;
 	private static StudentMapper studentMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
@@ -165,10 +164,10 @@ public class RunningActivityType {
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("runningProject")
 							.description("该活动所属的运动项目")
-							.type(RunningProjectType.getType())
+							.type(RunningSportType.getType())
 							.dataFetcher(environment ->  {
 								RunningActivity runningActivity = environment.getSource();
-			                	return runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+			                	return runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -383,8 +382,8 @@ public class RunningActivityType {
 	}
 	
 	@Autowired(required = true)
-	public void setRunningProjectMapper(RunningProjectMapper runningProjectMapper) {
-		RunningActivityType.runningProjectMapper = runningProjectMapper;
+	public void setRunningProjectMapper(RunningSportMapper runningSportMapper) {
+		RunningActivityType.runningSportMapper = runningSportMapper;
 	}
 	
 	@Autowired(required = true)

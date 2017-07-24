@@ -10,7 +10,7 @@ import com.wzsport.graphql.CollegeType;
 import com.wzsport.graphql.FitnessCheckDataType;
 import com.wzsport.graphql.MajorType;
 import com.wzsport.graphql.RunningActivityType;
-import com.wzsport.graphql.RunningProjectType;
+import com.wzsport.graphql.RunningSportType;
 import com.wzsport.graphql.SportScoreType;
 import com.wzsport.graphql.StudentType;
 import com.wzsport.graphql.TeacherType;
@@ -53,8 +53,8 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(TeacherType.getSingleQueryField())
                 .field(TeacherType.getListTeacherByJobNoAndNameAndSex())
                 .field(TeacherType.getListQueryField())
-                .field(RunningProjectType.getSingleQueryField())
-                .field(RunningProjectType.getListQueryField())
+                .field(RunningSportType.getSingleQueryField())
+                .field(RunningSportType.getListQueryField())
                 .field(RunningActivityType.getSingleQueryField())
                 .field(RunningActivityType.getListQueryField())
                 .field(RunningActivityType.getSearchField())

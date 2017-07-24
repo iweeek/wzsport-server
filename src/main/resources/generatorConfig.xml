@@ -82,7 +82,7 @@
       <columnOverride column="ended" javaType="java.lang.Boolean"/>
     </table>
     
-    <table schema="wzpsort" tableName="wzsport_running_project" domainObjectName ="RunningProject" >
+    <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="enabled" property="enabled" javaType="java.lang.Boolean"/>
       <columnOverride column="acquisition_interval" javaType="java.lang.Integer"/>
@@ -121,6 +121,11 @@
     </table>
     
     <table schema="wzpsort" tableName="wzsport_fix_location_outdoor_sport_point" domainObjectName ="FixLocationOutdoorSportPoint" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="is_enable" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_area_sport" domainObjectName ="AreaSport" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_enable" javaType="java.lang.Boolean"/>
     </table>

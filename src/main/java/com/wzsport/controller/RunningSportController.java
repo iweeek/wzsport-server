@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wzsport.service.RunningProjectService;
+import com.wzsport.service.RunningSportService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,13 +21,13 @@ import io.swagger.annotations.ApiParam;
 * @author x1ny
 * @date 2017年5月25日
 */
-@Api(tags = "RunningProject相关接口")
+@Api(tags = "跑步项目相关接口")
 @RestController
-@RequestMapping(value="/runningProjects",produces="application/json;charset=UTF-8")
-public class RunningProjectController {
+@RequestMapping(value="/runningSports", produces="application/json;charset=UTF-8")
+public class RunningSportController {
 
 	@Autowired
-	private RunningProjectService runningProjectService;
+	private RunningSportService runningProjectService;
 	
 	/**
 	* 更新项目指标

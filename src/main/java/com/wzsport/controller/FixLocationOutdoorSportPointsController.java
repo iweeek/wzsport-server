@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wzsport.model.FixLocationOutdoorSportPoint;
 import com.wzsport.service.FixLocationOutdoorSportPointService;
 import com.wzsport.service.RunningActivityDataService;
-import com.wzsport.service.RunningProjectService;
+import com.wzsport.service.RunningSportService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiParam;
 */
 @Api(tags = "定点室外运动点相关接口")
 @RestController
-@RequestMapping(value="/fixLocationOutdoorSportPoints")
+@RequestMapping(value="/fixLocationOutdoorSportPoints", produces="application/json;charset=UTF-8")
 public class FixLocationOutdoorSportPointsController {
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
@@ -71,21 +71,22 @@ public class FixLocationOutdoorSportPointsController {
 		return point;
 	}
 	
-	@ApiOperation(value = "获取一个室外定点活动点", notes = "根据名称来获取一个活动点")
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET) 
+	@ApiOperation(value = "获取一个室外定点活动点", notes = "根据Id来获取一个活动点")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET) 
 	public FixLocationOutdoorSportPoint show(
-							@PathVariable String name,
+							@PathVariable long id,
 							HttpServletResponse response
 							) {
 		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
-		point.setName(name);
-		response.setStatus(fixLocationSportPointService.get(point));
+		point.setId(id);
+		response.setStatus(fixLocationSportPointService.show(point));
 		return point;
 	}
 	
-	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据名称来更新一个活动点")
-	@RequestMapping(value = "/{name}", method = RequestMethod.POST) 
+	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据Id来更新一个活动点")
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST) 
 	public FixLocationOutdoorSportPoint update(
+			@PathVariable long id,
 			@ApiParam("纬度")
 			@RequestParam double latitude,
 			@ApiParam("经度")
@@ -100,7 +101,7 @@ public class FixLocationOutdoorSportPointsController {
 			@RequestParam String desc,
 			HttpServletResponse response
 			) {
-				FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint(latitude, longitude, name, radius, universityId, desc);
+				FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint(id, latitude, longitude, name, radius, universityId, desc);
 				response.setStatus(fixLocationSportPointService.update(point));
 				return point;
 	}

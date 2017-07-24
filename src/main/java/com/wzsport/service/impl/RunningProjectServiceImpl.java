@@ -3,15 +3,15 @@ package com.wzsport.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wzsport.mapper.RunningProjectMapper;
-import com.wzsport.model.RunningProject;
-import com.wzsport.service.RunningProjectService;
+import com.wzsport.mapper.RunningSportMapper;
+import com.wzsport.model.RunningSport;
+import com.wzsport.service.RunningSportService;
 
 @Service
-public class RunningProjectServiceImpl implements RunningProjectService {
+public class RunningProjectServiceImpl implements RunningSportService {
 
 	@Autowired
-	private RunningProjectMapper runningProjectMapper;
+	private RunningSportMapper runningSportMapper;
 	
 	
 	/* (non-Javadoc)
@@ -19,13 +19,13 @@ public class RunningProjectServiceImpl implements RunningProjectService {
 	 */
 	@Override
 	public boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime, int acquisitionInterval) {
-		RunningProject runningProject = new RunningProject();
-		runningProject.setId(id);
-		runningProject.setQualifiedCostTime(qualifiedCostTime);
-		runningProject.setQualifiedDistance(qualifiedDistance);
-		runningProject.setAcquisitionInterval(acquisitionInterval);
+		RunningSport runningSport = new RunningSport();
+		runningSport.setId(id);
+		runningSport.setQualifiedCostTime(qualifiedCostTime);
+		runningSport.setQualifiedDistance(qualifiedDistance);
+		runningSport.setAcquisitionInterval(acquisitionInterval);
 		
-		int affectedCount = runningProjectMapper.updateByPrimaryKeySelective(runningProject);
+		int affectedCount = runningSportMapper.updateByPrimaryKeySelective(runningSport);
 		if(affectedCount > 0) {
 			return true;
 		}
@@ -38,11 +38,11 @@ public class RunningProjectServiceImpl implements RunningProjectService {
 	 */
 	@Override
 	public boolean updateEnable(long id, boolean enabled) {
-		RunningProject runningProject = new RunningProject();
-		runningProject.setId(id);
-		runningProject.setEnabled(enabled);
+		RunningSport runningSport = new RunningSport();
+		runningSport.setId(id);
+		runningSport.setEnabled(enabled);
 		
-		int affectedCount = runningProjectMapper.updateByPrimaryKeySelective(runningProject);
+		int affectedCount = runningSportMapper.updateByPrimaryKeySelective(runningSport);
 		if(affectedCount > 0) {
 			return true;
 		}

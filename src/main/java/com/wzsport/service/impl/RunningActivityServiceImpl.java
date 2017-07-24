@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.wzsport.exception.RunningActivityAlreadyEndException;
 import com.wzsport.mapper.RunningActivityMapper;
-import com.wzsport.mapper.RunningProjectMapper;
+import com.wzsport.mapper.RunningSportMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningActivityExample.Criteria;
-import com.wzsport.model.RunningProject;
+import com.wzsport.model.RunningSport;
 import com.wzsport.model.Term;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.TermService;
@@ -32,7 +32,7 @@ import com.wzsport.util.CalorieUtil;
 public class RunningActivityServiceImpl implements RunningActivityService {
 
 	@Autowired
-	private RunningProjectMapper runningProjectMapper;
+	private RunningSportMapper runningSportMapper;
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
 	@Autowired
@@ -56,12 +56,12 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 
 		// 获取关联的项目
-		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
 
 		// 判断是否合格
-		if (runningActivity.getDistance() >= runningProject.getQualifiedDistance()
+		if (runningActivity.getDistance() >= runningSport.getQualifiedDistance()
 				&& runningActivity.getTargetFinishedTime() != null
-				&& runningActivity.getTargetFinishedTime() <= runningProject.getQualifiedCostTime()) {
+				&& runningActivity.getTargetFinishedTime() <= runningSport.getQualifiedCostTime()) {
 			runningActivity.setQualified(true);
 		} else {
 			runningActivity.setQualified(false);
@@ -69,7 +69,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 		// 计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
-				runningProject.getHourlyKcalConsumption());
+				runningSport.getHourlyKcalConsumption());
 		runningActivity.setKcalConsumed(caloriesConsumed);
 
 		// 步数至少为1
@@ -104,15 +104,15 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	 */
 	public RunningActivity startRunningActivity(long studentId, long projectId, Date startTime) {
 
-		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(projectId);
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(projectId);
 
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setStudentId(studentId);
 		runningActivity.setProjectId(projectId);
 		runningActivity.setStartTime(new Date());
-		runningActivity.setQualifiedDistance(runningProject.getQualifiedDistance());
-		runningActivity.setQualifiedCostTime(runningProject.getQualifiedCostTime());
-		runningActivity.setMinCostTime(runningProject.getMinCostTime());
+		runningActivity.setQualifiedDistance(runningSport.getQualifiedDistance());
+		runningActivity.setQualifiedCostTime(runningSport.getQualifiedCostTime());
+		runningActivity.setMinCostTime(runningSport.getMinCostTime());
 
 		runningActivityMapper.insertSelective(runningActivity);
 
@@ -154,11 +154,11 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 
 		// 获取关联的项目
-		RunningProject runningProject = runningProjectMapper.selectByPrimaryKey(runningActivity.getProjectId());
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getProjectId());
 
 		// 计算卡路里消耗
 		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
-				runningProject.getHourlyKcalConsumption());
+				runningSport.getHourlyKcalConsumption());
 		runningActivity.setKcalConsumed(caloriesConsumed);
 
 		// 步数至少为1

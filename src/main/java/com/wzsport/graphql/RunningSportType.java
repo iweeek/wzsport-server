@@ -17,7 +17,7 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 /**
-* GraphQL RunningProject类型的定义及查询字段定义
+* GraphQL RunningSport类型的定义及查询字段定义
 * 
 * @author x1ny
 * @date 2017年5月26日
@@ -101,7 +101,7 @@ public class RunningSportType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
-	                .name("runningProject")
+	                .name("runningSport")
 	                .description("根据ID获取跑步项目")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
@@ -132,7 +132,7 @@ public class RunningSportType {
     }
 
 	@Autowired(required = true)
-	public void setRunningProjectMapper(RunningSportMapper runningSportMapper) {
+	public void setRunningSportMapper(RunningSportMapper runningSportMapper) {
 		RunningSportType.runningSportMapper = runningSportMapper;
 	}
 	

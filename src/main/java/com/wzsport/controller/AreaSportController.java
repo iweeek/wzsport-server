@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
-* RunningProject Controller.
+* AreaSport Controller.
 * 
 * @author x1ny
 * @date 2017年5月25日
@@ -33,9 +33,21 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/areaSport",produces="application/json;charset=UTF-8")
 public class AreaSportController {
 
+	/** The area sport service. */
 	@Autowired
 	private AreaSportService areaSportService;
 	
+	/**
+	 * Creates the.
+	 *
+	 * @param name the name
+	 * @param acquisitionInterval the acquisition interval
+	 * @param isEnable the is enable
+	 * @param qualifiedCostTime the qualified cost time
+	 * @param universityId the university id
+	 * @param response the response
+	 * @return the area sport
+	 */
 	@ApiOperation(value = "创建一个定点运动项目", notes = "创建一个定点运动项目")
 	@RequestMapping(value="/",method = RequestMethod.POST) 
 	public AreaSport create(
@@ -56,6 +68,18 @@ public class AreaSportController {
 		return sport;
 	}
 	
+	/**
+	 * Update.
+	 *
+	 * @param id the id
+	 * @param name the name
+	 * @param acquisitionInterval the acquisition interval
+	 * @param isEnable the is enable
+	 * @param qualifiedCostTime the qualified cost time
+	 * @param universityId the university id
+	 * @param response the response
+	 * @return the area sport
+	 */
 	@ApiOperation(value = "根据id来更新一个定点运动项目", notes = "根据id来更新一个定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
 	public AreaSport update(
@@ -78,6 +102,13 @@ public class AreaSportController {
 		return sport;
 	}
 	
+	/**
+	 * Show.
+	 *
+	 * @param id the id
+	 * @param response the response
+	 * @return the area sport
+	 */
 	@ApiOperation(value = "根据id来获取定点运动项目", notes = "根据id来获取定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
 	public AreaSport show(
@@ -91,6 +122,12 @@ public class AreaSportController {
 		return sport;
 	}
 	
+	/**
+	 * Index.
+	 *
+	 * @param response the response
+	 * @return the list
+	 */
 	@ApiOperation(value = "获取定点运动项目列表", notes = "获取定点运动项目列表")
 	@RequestMapping(value="/",method = RequestMethod.GET) 
 	public List<AreaSport> index(

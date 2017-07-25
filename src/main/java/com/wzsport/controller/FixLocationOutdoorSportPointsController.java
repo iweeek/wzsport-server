@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
-* RunningProject Controller.
+* FixLocationOutdoorSportPoints Controller.
 * 
 * @author x1ny
 * @date 2017年5月25日

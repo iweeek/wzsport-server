@@ -162,7 +162,7 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLFloat)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("runningProject")
+							.name("runningSport")
 							.description("该活动所属的运动项目")
 							.type(RunningSportType.getType())
 							.dataFetcher(environment ->  {
@@ -382,7 +382,7 @@ public class RunningActivityType {
 	}
 	
 	@Autowired(required = true)
-	public void setRunningProjectMapper(RunningSportMapper runningSportMapper) {
+	public void setRunningSportMapper(RunningSportMapper runningSportMapper) {
 		RunningActivityType.runningSportMapper = runningSportMapper;
 	}
 	

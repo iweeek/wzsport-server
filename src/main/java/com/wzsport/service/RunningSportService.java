@@ -1,7 +1,7 @@
 package com.wzsport.service;
 
 /**
-* RunningProject service interface.
+* RunningSport service interface.
 * 
 * @author x1ny
 * @date 2017年5月25日

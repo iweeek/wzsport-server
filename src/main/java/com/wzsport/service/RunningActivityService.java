@@ -26,11 +26,11 @@ public interface RunningActivityService {
 	 * 活动开始记录.
 	 *
 	 * @param studentId the student id
-	 * @param projectId the project id
+	 * @param runningSportId the runningSport id
 	 * @param startTime the start time
 	 * @return the running activity
 	 */
-	RunningActivity startRunningActivity(long studentId, long projectId, Date startTime);
+	RunningActivity startRunningActivity(long studentId, long runningSportId, Date startTime);
 	
 	/**
 	 * 结束一次活动.
@@ -108,10 +108,10 @@ public interface RunningActivityService {
 	/**
 	 * 获取参加人数。.
 	 *
-	 * @param projectId the project id
+	 * @param runningSportId the runningSport id
 	 * @return the participant num
 	 */
-	int getParticipantNum(long projectId);
+	int getParticipantNum(long runningSportId);
 	
 	
 	/**

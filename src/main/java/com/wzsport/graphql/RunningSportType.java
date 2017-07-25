@@ -36,7 +36,7 @@ public class RunningSportType {
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("RunningSport")
+					.name("runningSport")
 					.description("跑步项目类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
@@ -101,7 +101,7 @@ public class RunningSportType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
-	                .name("runningSport")
+	                .name("runningSports")
 	                .description("根据ID获取跑步项目")
 	                .type(getType())
 	                .dataFetcher(environment ->  {

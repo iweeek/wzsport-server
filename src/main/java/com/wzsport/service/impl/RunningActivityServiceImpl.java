@@ -102,13 +102,13 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	 * com.wzsport.service.RunningActivityService#startRunningActivity(long,
 	 * long, java.util.Date)
 	 */
-	public RunningActivity startRunningActivity(long studentId, long projectId, Date startTime) {
+	public RunningActivity startRunningActivity(long studentId, long runningSportId, Date startTime) {
 
-		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(projectId);
+		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningSportId);
 
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setStudentId(studentId);
-		runningActivity.setRunningSportId(projectId);
+		runningActivity.setRunningSportId(runningSportId);
 		runningActivity.setStartTime(new Date());
 		runningActivity.setQualifiedDistance(runningSport.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(runningSport.getQualifiedCostTime());
@@ -290,9 +290,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	}
 
 	@Override
-	public int getParticipantNum(long projectId) {
+	public int getParticipantNum(long runningSportId) {
 		RunningActivityExample runningActivityExample = new RunningActivityExample();
-		runningActivityExample.or().andRunningSportIdEqualTo(projectId).andEndedAtIsNull();
+		runningActivityExample.or().andRunningSportIdEqualTo(runningSportId).andEndedAtIsNull();
 		return (int) runningActivityMapper.countByExample(runningActivityExample);
 	}
 

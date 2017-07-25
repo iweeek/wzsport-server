@@ -300,7 +300,7 @@ public class MockDataServiceImpl implements MockDataService {
 //				sportScoreMapper.insertSelective(sportScore);
 //
 //				RunningActivity runningActivity = new RunningActivity();
-//				runningActivity.setProjectId(2l);
+//				runningActivity.setRunningSportId(2l);
 //				runningActivity.setStudentId(student.getId());
 //				runningActivity.setDistance(1000);
 //				runningActivity.setCostTime(300);

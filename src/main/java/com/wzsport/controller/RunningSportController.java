@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
-* RunningProject Controller.
+* RunningSport Controller.
 * 
 * @author x1ny
 * @date 2017年5月25日
@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiParam;
 public class RunningSportController {
 
 	@Autowired
-	private RunningSportService runningProjectService;
+	private RunningSportService runningSportService;
 	
 	/**
 	* 更新项目指标
@@ -51,7 +51,7 @@ public class RunningSportController {
 							@ApiParam("该项目的运动数据采集间隔(单位：秒)")
 							@RequestParam int acquisitionInterval
 							) {
-		boolean isSuccess = runningProjectService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime, acquisitionInterval);
+		boolean isSuccess = runningSportService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime, acquisitionInterval);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();
 		} else {
@@ -72,7 +72,7 @@ public class RunningSportController {
 							@PathVariable("id") long id,
 							@ApiParam("该项目的启用状态,true或者false")
 							@RequestParam boolean enabled) {
-		boolean isSuccess = runningProjectService.updateEnable(id, enabled);
+		boolean isSuccess = runningSportService.updateEnable(id, enabled);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();
 		} else {

@@ -36,8 +36,8 @@ public class RunningActivityController {
 	@ApiOperation(value = "创建RunningActivity", notes = "向服务端提交一条活动结果数据，服务端对其进行验证后存储至数据库并返回数据。")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<RunningActivity> create(
-								@ApiParam("活动项目id,目前仅对应RunningProject的id")
-								@RequestParam long projectId,
+								@ApiParam("活动项目id,目前仅对应RunningSport的id")
+								@RequestParam long runningSportId,
 								@ApiParam("学生id") 
 								@RequestParam long studentId,
 								@ApiParam("活动距离(单位:米)")
@@ -52,7 +52,7 @@ public class RunningActivityController {
 								@RequestParam Long startTime) {
 		
 		RunningActivity runningActivity = new RunningActivity();
-		runningActivity.setRunningSportId(projectId);
+		runningActivity.setRunningSportId(runningSportId);
 		runningActivity.setStudentId(studentId);
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
@@ -70,14 +70,14 @@ public class RunningActivityController {
 	@ApiOperation(value = "开始跑步活动", notes = "开始跑步活动")
 	@RequestMapping(value = "/start", method = RequestMethod.POST)
 	public ResponseEntity<RunningActivity> start(
-								@ApiParam("活动项目id,目前仅对应RunningProject的id")
-								@RequestParam long projectId,
+								@ApiParam("活动项目id,目前仅对应RunningSport的id")
+								@RequestParam long runningSportId,
 								@ApiParam("学生id") 
 								@RequestParam long studentId,
 								@ApiParam("活动开始的时间(使用时间戳格式)")
 								@RequestParam Long startTime) {
 		
-		RunningActivity runningActivity = runningActivityService.startRunningActivity(studentId, projectId, new Date(startTime));
+		RunningActivity runningActivity = runningActivityService.startRunningActivity(studentId, runningSportId, new Date(startTime));
 		
 		return ResponseEntity.ok().body(runningActivity); 
 	}

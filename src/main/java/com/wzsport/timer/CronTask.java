@@ -34,12 +34,15 @@ public class CronTask {
     	int stepCount = 0;
     	int costTime = 0;
     	
+    	System.out.println("job list size: " + list.size());
+    	
     	//根据活动数据表最后一条记录来进行统计，把结果写入活动表
     	for (RunningActivity act : list) {
     		RunningActivityDataExample dataExample = new RunningActivityDataExample();
     		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
     		dataExample.setOrderByClause("created_at asc");
     		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
+    		System.out.println("job act data list: " + runningActivityDataList.size());
     		if (runningActivityDataList.size() > 0) {
 	    		for (RunningActivityData data : runningActivityDataList) {
 	    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {

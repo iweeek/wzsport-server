@@ -70,7 +70,7 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("RunningSportId")
+							.name("runningSportId")
 							.description("该活动关联的项目的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
@@ -235,7 +235,7 @@ public class RunningActivityType {
 	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("startTime").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("endTime").type(Scalars.GraphQLLong).build())
-	        		.argument(GraphQLArgument.newArgument().name("RunningSportId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("runningSportId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("speed").type(Scalars.GraphQLFloat).build())
 	        		.argument(GraphQLArgument.newArgument().name("speedOperator").type(operatorEnumType).build())
 	        		.argument(GraphQLArgument.newArgument().name("anotherSpeed").type(Scalars.GraphQLFloat).build())
@@ -289,9 +289,9 @@ public class RunningActivityType {
 	                		}
 	                	}
 	                	
-	                	Long RunningSportId = environment.getArgument("RunningSportId");
-	                	if(RunningSportId != null) {
-	                		criteria.andRunningSportIdEqualTo(RunningSportId);
+	                	Long runningSportId = environment.getArgument("runningSportId");
+	                	if(runningSportId != null) {
+	                		criteria.andRunningSportIdEqualTo(runningSportId);
 	                	}
 	                	
 	                	Long startTime = environment.getArgument("startTime");

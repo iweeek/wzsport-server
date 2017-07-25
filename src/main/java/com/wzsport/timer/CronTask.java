@@ -2,10 +2,13 @@ package com.wzsport.timer;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.wzsport.controller.FixLocationOutdoorSportPointsController;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.model.RunningActivity;
@@ -22,6 +25,8 @@ public class CronTask {
 	RunningActivityMapper runningActivityMapper;
 	@Autowired
 	RunningActivityService runningActivityService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
     @Scheduled(cron = "*/5 * * * * ?")  
     public void job() {  
@@ -42,7 +47,7 @@ public class CronTask {
     		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
     		dataExample.setOrderByClause("created_at asc");
     		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
-    		System.out.println("job act data list: " + runningActivityDataList.size());
+    		logger.info("job act data list: " + runningActivityDataList.size());
     		if (runningActivityDataList.size() > 0) {
 	    		for (RunningActivityData data : runningActivityDataList) {
 	    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
@@ -54,10 +59,10 @@ public class CronTask {
 	    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
 	    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getCreatedAt().getTime()
 	    				- runningActivityDataList.get(0).getCreatedAt().getTime()) / 1000);
-	    		System.out.println("job distance: " + distance);
-	    		System.out.println("job stepCount: " + stepCount);
-	    		System.out.println("job costTime: " + costTime);
-	    		System.out.println("job targetFinishedTime: " + targetFinishedTime);
+	    		logger.info("job distance: " + distance);
+	    		logger.info("job stepCount: " + stepCount);
+	    		logger.info("job costTime: " + costTime);
+	    		logger.info("job targetFinishedTime: " + targetFinishedTime);
 	    		
 	    		RunningActivity runningActivity = new RunningActivity();
 	    		runningActivity.setId(act.getId());

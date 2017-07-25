@@ -101,7 +101,7 @@ public class RunningSportType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
-	                .name("runningSports")
+	                .name("runningSport")
 	                .description("根据ID获取跑步项目")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
@@ -117,7 +117,7 @@ public class RunningSportType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
-	                .name("runningSport")
+	                .name("runningSports")
 	                .description("根据大学ID获取关联的所有跑步项目")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {

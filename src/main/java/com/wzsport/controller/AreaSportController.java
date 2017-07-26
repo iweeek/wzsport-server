@@ -32,6 +32,8 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/areaSports",produces="application/json;charset=UTF-8")
 public class AreaSportController {
 	
+	private int status = 0;
+	
 	/** The res body. */
 	@SuppressWarnings("rawtypes")
 	private ResponseBody resBody;
@@ -81,8 +83,8 @@ public class AreaSportController {
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<AreaSport>();
-		areaSportService.create(sport, resBody);
-		return ResponseEntity.status(resBody.status).body(resBody);
+		status = areaSportService.create(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -132,8 +134,8 @@ public class AreaSportController {
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<AreaSport>();
-		areaSportService.update(sport, resBody);
-		return ResponseEntity.status(resBody.status).body(resBody);
+		status = areaSportService.update(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -153,8 +155,8 @@ public class AreaSportController {
 		AreaSport sport = new AreaSport();
 		sport.setId(id);
 		resBody = new ResponseBody<AreaSport>();
-		areaSportService.show(sport, resBody);
-		return ResponseEntity.status(resBody.status).body(resBody);
+		status = areaSportService.show(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -170,8 +172,8 @@ public class AreaSportController {
 							) {
 		List<AreaSport> list = new ArrayList<AreaSport>();
 		resBody = new ResponseBody<AreaSport>();
-		areaSportService.index(list, resBody);
-		return ResponseEntity.status(resBody.status).body(resBody);
+		status = areaSportService.index(list, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 }

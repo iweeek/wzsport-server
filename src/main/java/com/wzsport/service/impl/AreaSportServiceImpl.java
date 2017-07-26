@@ -35,7 +35,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void create(AreaSport sport, ResponseBody respBody) {
+	public int create(AreaSport sport, ResponseBody respBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andNameEqualTo(sport.getName());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
@@ -44,21 +44,21 @@ public class AreaSportServiceImpl implements AreaSportService {
 			logger.error(logMsg);
 			sport.setId(list.get(0).getId());
 			respBody.obj = sport;
-			respBody.status = HttpServletResponse.SC_CONFLICT;
 			respBody.statusMsg = logMsg; 
+			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			areaSportMapper.insert(sport);
 			logMsg = MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
-			respBody.status = HttpServletResponse.SC_OK;
 			respBody.statusMsg = logMsg; 
+			return HttpServletResponse.SC_OK;
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void update(AreaSport sport, ResponseBody respBody) {
+	public int update(AreaSport sport, ResponseBody respBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andNameEqualTo(sport.getName()).andIdNotEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
@@ -66,8 +66,8 @@ public class AreaSportServiceImpl implements AreaSportService {
 			logMsg = MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
 			respBody.obj = sport;
-			respBody.status = HttpServletResponse.SC_CONFLICT;
 			respBody.statusMsg = logMsg; 
+			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			example.createCriteria().andIdEqualTo(sport.getId());
 			list = areaSportMapper.selectByExample(example);
@@ -76,21 +76,21 @@ public class AreaSportServiceImpl implements AreaSportService {
 				logMsg = MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);
 				respBody.obj = sport;
-				respBody.status = HttpServletResponse.SC_OK;
 				respBody.statusMsg = logMsg; 
+				return HttpServletResponse.SC_OK;
 			} else {
 				logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
 				logger.error(logMsg);
 				respBody.obj = null;
-				respBody.status = HttpServletResponse.SC_NOT_FOUND;
 				respBody.statusMsg = logMsg;
+				return HttpServletResponse.SC_NOT_FOUND;
 			}
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void show(AreaSport sport, ResponseBody respBody) {
+	public int show(AreaSport sport, ResponseBody respBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andIdEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
@@ -105,20 +105,20 @@ public class AreaSportServiceImpl implements AreaSportService {
 			logMsg = MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
-			respBody.status = HttpServletResponse.SC_OK;
 			respBody.statusMsg = logMsg; 
+			return HttpServletResponse.SC_OK;
 		} else {
 			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
 			logger.error(logMsg);
 			respBody.obj = null;
-			respBody.status = HttpServletResponse.SC_NOT_FOUND;
 			respBody.statusMsg = logMsg;
+			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void index(List<AreaSport> areaList, ResponseBody resBody) {
+	public int index(List<AreaSport> areaList, ResponseBody resBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andIdNotEqualTo(0l);
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
@@ -127,14 +127,14 @@ public class AreaSportServiceImpl implements AreaSportService {
 			logMsg = "MSG_TEMPLATE_OPERATION_OK";
 			logger.info(logMsg);
 			resBody.obj = areaList;
-			resBody.status = HttpServletResponse.SC_OK;
 			resBody.statusMsg = logMsg;
+			return HttpServletResponse.SC_OK;
 		} else {
 			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT;
 			logger.error(logMsg);
 			resBody.obj = null;
-			resBody.status = HttpServletResponse.SC_NOT_FOUND;
 			resBody.statusMsg = logMsg;
+			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}
 

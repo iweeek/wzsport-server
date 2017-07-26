@@ -3,22 +3,17 @@ package com.wzsport.service;
 import java.util.List;
 
 import com.wzsport.model.AreaSport;
+import com.wzsport.util.ResponseBody;
 
-/**
-* AreaSport service interface.
-* 
-* @author x1ny
-* @date 2017年5月26日
-*/
 public interface AreaSportService {
 
-	int create(AreaSport sport);
+	void create(AreaSport sport, ResponseBody resBody);
 
-	int update(AreaSport sport);
+	void update(AreaSport sport, ResponseBody resBody);
 
-	int show(AreaSport sport);
+	void show(AreaSport sport, ResponseBody resBody);
 
-	int index(List<AreaSport> list);
+	void index(List<AreaSport> list, ResponseBody resBody);
 	
 	
 	

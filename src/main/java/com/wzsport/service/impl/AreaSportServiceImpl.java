@@ -24,6 +24,10 @@ import com.wzsport.util.ResponseBody;
 @Service
 public class AreaSportServiceImpl implements AreaSportService {
 	private static final Logger logger = LoggerFactory.getLogger(AreaSportServiceImpl.class);
+	public String MSG_TEMPLATE_NAME_EXIST = "已经存在使用‘%s’这个名字的运动";
+	public String MSG_TEMPLATE_OPERATION_OK = "记录提交成功";
+	public String MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID = "没有找到id是‘%s’的运动";
+	public String MSG_TEMPLATE_NOT_FIND_SPORT = "没有找到运动";
 	String logMsg = "";
 
 	@Autowired
@@ -36,19 +40,19 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andNameEqualTo(sport.getName());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			logMsg = "已经存在使用‘" + sport.getName() +"’这个名字的运动";
+			logMsg = MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
 			sport.setId(list.get(0).getId());
 			respBody.obj = sport;
 			respBody.status = HttpServletResponse.SC_CONFLICT;
-			respBody.retMsg = logMsg; 
+			respBody.statusMsg = logMsg; 
 		} else {
 			areaSportMapper.insert(sport);
-			logMsg = "记录提交成功";
+			logMsg = MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
 			respBody.status = HttpServletResponse.SC_OK;
-			respBody.retMsg = logMsg; 
+			respBody.statusMsg = logMsg; 
 		}
 	}
 
@@ -59,27 +63,27 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andNameEqualTo(sport.getName()).andIdNotEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			logMsg = "已经存在使用‘" + sport.getName() +"’这个名字的运动";
+			logMsg = MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
 			respBody.obj = sport;
 			respBody.status = HttpServletResponse.SC_CONFLICT;
-			respBody.retMsg = logMsg; 
+			respBody.statusMsg = logMsg; 
 		} else {
 			example.createCriteria().andIdEqualTo(sport.getId());
 			list = areaSportMapper.selectByExample(example);
 			if (list.size() > 0) {
 				areaSportMapper.updateByPrimaryKey(sport);
-				logMsg = "操作成功";
+				logMsg = MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);
 				respBody.obj = sport;
 				respBody.status = HttpServletResponse.SC_OK;
-				respBody.retMsg = logMsg; 
+				respBody.statusMsg = logMsg; 
 			} else {
-				logMsg = "没有找到id是" + sport.getId() + "的运动";
+				logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
 				logger.error(logMsg);
-				respBody.obj = sport;
+				respBody.obj = null;
 				respBody.status = HttpServletResponse.SC_NOT_FOUND;
-				respBody.retMsg = logMsg;
+				respBody.statusMsg = logMsg;
 			}
 		}
 	}
@@ -98,17 +102,17 @@ public class AreaSportServiceImpl implements AreaSportService {
 			sport.setUniversityId(list.get(0).getUniversityId());
 			sport.setAddr(list.get(0).getAddr());
 			sport.setType(list.get(0).getType());
-			logMsg = "操作成功";
+			logMsg = MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
 			respBody.status = HttpServletResponse.SC_OK;
-			respBody.retMsg = logMsg; 
+			respBody.statusMsg = logMsg; 
 		} else {
-			logMsg = "没有找到id是" + sport.getId() + "的运动";
+			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
 			logger.error(logMsg);
-			respBody.obj = sport;
+			respBody.obj = null;
 			respBody.status = HttpServletResponse.SC_NOT_FOUND;
-			respBody.retMsg = logMsg;
+			respBody.statusMsg = logMsg;
 		}
 	}
 
@@ -120,16 +124,17 @@ public class AreaSportServiceImpl implements AreaSportService {
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
 			areaList.addAll(list);
-			logMsg = "操作成功";
+			logMsg = "MSG_TEMPLATE_OPERATION_OK";
 			logger.info(logMsg);
 			resBody.obj = areaList;
 			resBody.status = HttpServletResponse.SC_OK;
-			resBody.retMsg = logMsg;
+			resBody.statusMsg = logMsg;
 		} else {
-			logMsg = "没有找到运动";
+			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT;
 			logger.error(logMsg);
+			resBody.obj = null;
 			resBody.status = HttpServletResponse.SC_NOT_FOUND;
-			resBody.retMsg = logMsg;
+			resBody.statusMsg = logMsg;
 		}
 	}
 

@@ -75,5 +75,6 @@ public class RunningActivityTask {
 			runningActivity = runningActivityService.endRunningActivity(runningActivity);
 		}
     	
-    } 
+
+    }
 }

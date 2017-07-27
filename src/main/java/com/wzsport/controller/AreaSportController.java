@@ -63,10 +63,6 @@ public class AreaSportController {
 							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnable,
-							@ApiParam("地址")
-							@RequestParam String addr,
-							@ApiParam("运动项目类型：室内：0/室外：1")
-							@RequestParam byte type,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
@@ -78,8 +74,6 @@ public class AreaSportController {
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setIsEnable(isEnable);
-		sport.setAddr(addr);
-		sport.setType(type);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<AreaSport>();
@@ -112,10 +106,6 @@ public class AreaSportController {
 							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnable,
-							@ApiParam("地址")
-							@RequestParam String addr,
-							@ApiParam("运动项目类型：室内：0/室外：1")
-							@RequestParam byte type,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
@@ -129,8 +119,6 @@ public class AreaSportController {
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setIsEnable(isEnable);
-		sport.setAddr(addr);
-		sport.setType(type);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<AreaSport>();

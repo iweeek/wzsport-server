@@ -14,6 +14,7 @@ import com.wzsport.model.AreaSport;
 import com.wzsport.model.AreaSportExample;
 import com.wzsport.service.AreaSportService;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 /**
  * RunningActivity Service 实现类.
@@ -24,10 +25,7 @@ import com.wzsport.util.ResponseBody;
 @Service
 public class AreaSportServiceImpl implements AreaSportService {
 	private static final Logger logger = LoggerFactory.getLogger(AreaSportServiceImpl.class);
-	public String MSG_TEMPLATE_NAME_EXIST = "已经存在使用‘%s’这个名字的运动";
-	public String MSG_TEMPLATE_OPERATION_OK = "记录提交成功";
-	public String MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID = "没有找到id是‘%s’的运动";
-	public String MSG_TEMPLATE_NOT_FIND_SPORT = "没有找到运动";
+	
 	String logMsg = "";
 
 	@Autowired
@@ -40,7 +38,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andNameEqualTo(sport.getName());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			logMsg = MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
 			sport.setId(list.get(0).getId());
 			respBody.obj = sport;
@@ -48,7 +46,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			areaSportMapper.insert(sport);
-			logMsg = MSG_TEMPLATE_OPERATION_OK;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
 			respBody.statusMsg = logMsg; 
@@ -63,7 +61,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andNameEqualTo(sport.getName()).andIdNotEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			logMsg = MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
 			respBody.obj = sport;
 			respBody.statusMsg = logMsg; 
@@ -73,13 +71,13 @@ public class AreaSportServiceImpl implements AreaSportService {
 			list = areaSportMapper.selectByExample(example);
 			if (list.size() > 0) {
 				areaSportMapper.updateByPrimaryKey(sport);
-				logMsg = MSG_TEMPLATE_OPERATION_OK;
+				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);
 				respBody.obj = sport;
 				respBody.statusMsg = logMsg; 
 				return HttpServletResponse.SC_OK;
 			} else {
-				logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
+				logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(sport.getId()));
 				logger.error(logMsg);
 				respBody.obj = null;
 				respBody.statusMsg = logMsg;
@@ -100,15 +98,13 @@ public class AreaSportServiceImpl implements AreaSportService {
 			sport.setName(list.get(0).getName());
 			sport.setQualifiedCostTime(list.get(0).getQualifiedCostTime());
 			sport.setUniversityId(list.get(0).getUniversityId());
-			sport.setAddr(list.get(0).getAddr());
-			sport.setType(list.get(0).getType());
-			logMsg = MSG_TEMPLATE_OPERATION_OK;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			respBody.obj = sport;
 			respBody.statusMsg = logMsg; 
 			return HttpServletResponse.SC_OK;
 		} else {
-			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT_BY_ID.replace("%s", String.valueOf(sport.getId()));
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(sport.getId()));
 			logger.error(logMsg);
 			respBody.obj = null;
 			respBody.statusMsg = logMsg;
@@ -130,7 +126,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 			resBody.statusMsg = logMsg;
 			return HttpServletResponse.SC_OK;
 		} else {
-			logMsg = MSG_TEMPLATE_NOT_FIND_SPORT;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
 			logger.error(logMsg);
 			resBody.obj = null;
 			resBody.statusMsg = logMsg;

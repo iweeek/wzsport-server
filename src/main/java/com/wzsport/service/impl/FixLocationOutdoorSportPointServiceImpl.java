@@ -42,18 +42,22 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 		if (sameRecordList.size() != 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", fixLocationOutdoorSportPoint.getName());
 			logger.error(logMsg);
+			
 			fixLocationOutdoorSportPoint.setId(sameRecordList.get(0).getId());
 			
 			resBody.statusMsg = logMsg;
 			resBody.obj = fixLocationOutdoorSportPoint;
+			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
+			fixLocationOutdoorSportPointMapper.insert(fixLocationOutdoorSportPoint);
+			
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
-			fixLocationOutdoorSportPointMapper.insert(fixLocationOutdoorSportPoint);
 			
 			resBody.statusMsg = logMsg;
 			resBody.obj = fixLocationOutdoorSportPoint;
+			
 			return HttpServletResponse.SC_CREATED;
 		}
 	}
@@ -65,18 +69,11 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 		example.createCriteria().andIdEqualTo(fixLocationOutdoorSportPoint.getId());
 		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 		if (list.size() > 0) {
-			fixLocationOutdoorSportPoint.setId(list.get(0).getId());
-			fixLocationOutdoorSportPoint.setLatitude(list.get(0).getLatitude());
-			fixLocationOutdoorSportPoint.setLongitude(list.get(0).getLongitude());
-			fixLocationOutdoorSportPoint.setRadius(list.get(0).getRadius());
-			fixLocationOutdoorSportPoint.setUniversityId(list.get(0).getUniversityId());
-			fixLocationOutdoorSportPoint.setDescription(list.get(0).getDescription());
-			
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			
 			resBody.statusMsg = logMsg;
-			resBody.obj = fixLocationOutdoorSportPoint;
+			resBody.obj = list.get(0);
 			
 			return HttpServletResponse.SC_OK;
 		} else {
@@ -94,26 +91,38 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 	@Override
 	public int update(FixLocationOutdoorSportPoint fixLocationOutdoorSportPoint, ResponseBody resBody) {
 		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName());
+		example.createCriteria().andNameEqualTo(fixLocationOutdoorSportPoint.getName()).andIdNotEqualTo(fixLocationOutdoorSportPoint.getId());
 		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 		if (list.size() > 0) {
-			fixLocationOutdoorSportPointMapper.updateByPrimaryKey(fixLocationOutdoorSportPoint);
-			
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
-			logger.info(logMsg);
-			
-			resBody.statusMsg = logMsg;
-			resBody.obj = fixLocationOutdoorSportPoint;
-			
-			return HttpServletResponse.SC_OK;
-		} else {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", fixLocationOutdoorSportPoint.getName());
 			logger.error(logMsg);
 			
-			resBody.statusMsg = logMsg;
-			resBody.obj = fixLocationOutdoorSportPoint;
+			resBody.obj = list.get(0);
+			resBody.statusMsg = logMsg; 
 			
-			return HttpServletResponse.SC_NOT_FOUND;
+			return HttpServletResponse.SC_CONFLICT;
+		} else {
+			example.createCriteria().andIdEqualTo(fixLocationOutdoorSportPoint.getId());
+			list = fixLocationOutdoorSportPointMapper.selectByExample(example);
+			if (list.size() > 0) {
+				fixLocationOutdoorSportPointMapper.updateByPrimaryKey(fixLocationOutdoorSportPoint);
+				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+				logger.info(logMsg);
+				
+				resBody.obj = fixLocationOutdoorSportPoint;
+				resBody.statusMsg = logMsg; 
+				
+				return HttpServletResponse.SC_OK;
+			} else {
+				logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(fixLocationOutdoorSportPoint.getId()));
+				logger.error(logMsg);
+				
+				resBody.obj = null;
+				resBody.statusMsg = logMsg;
+				
+				return HttpServletResponse.SC_NOT_FOUND;
+			}
+		
 		}
 		
 	}

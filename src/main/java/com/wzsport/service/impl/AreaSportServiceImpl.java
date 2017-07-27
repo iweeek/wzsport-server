@@ -33,54 +33,67 @@ public class AreaSportServiceImpl implements AreaSportService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int create(AreaSport sport, ResponseBody respBody) {
+	public int create(AreaSport sport, ResponseBody resBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andNameEqualTo(sport.getName());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
+			
 			sport.setId(list.get(0).getId());
-			respBody.obj = sport;
-			respBody.statusMsg = logMsg; 
+			
+			resBody.obj = sport;
+			resBody.statusMsg = logMsg; 
+			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			areaSportMapper.insert(sport);
+			
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
-			respBody.obj = sport;
-			respBody.statusMsg = logMsg; 
+			
+			resBody.obj = sport;
+			resBody.statusMsg = logMsg; 
+			
 			return HttpServletResponse.SC_OK;
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int update(AreaSport sport, ResponseBody respBody) {
+	public int update(AreaSport sport, ResponseBody resBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andNameEqualTo(sport.getName()).andIdNotEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", sport.getName());
 			logger.error(logMsg);
-			respBody.obj = sport;
-			respBody.statusMsg = logMsg; 
+			
+			resBody.obj = list.get(0);
+			resBody.statusMsg = logMsg; 
+			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			example.createCriteria().andIdEqualTo(sport.getId());
 			list = areaSportMapper.selectByExample(example);
 			if (list.size() > 0) {
 				areaSportMapper.updateByPrimaryKey(sport);
+				
 				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);
-				respBody.obj = sport;
-				respBody.statusMsg = logMsg; 
+				
+				resBody.obj = sport;
+				resBody.statusMsg = logMsg; 
+				
 				return HttpServletResponse.SC_OK;
 			} else {
 				logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(sport.getId()));
 				logger.error(logMsg);
-				respBody.obj = null;
-				respBody.statusMsg = logMsg;
+				
+				resBody.obj = null;
+				resBody.statusMsg = logMsg;
+				
 				return HttpServletResponse.SC_NOT_FOUND;
 			}
 		}
@@ -88,26 +101,25 @@ public class AreaSportServiceImpl implements AreaSportService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int show(AreaSport sport, ResponseBody respBody) {
+	public int show(AreaSport sport, ResponseBody resBody) {
 		AreaSportExample example = new AreaSportExample();
 		example.createCriteria().andIdEqualTo(sport.getId());
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			sport.setAcquisitionInterval(list.get(0).getAcquisitionInterval());
-			sport.setIsEnable(list.get(0).getIsEnable());
-			sport.setName(list.get(0).getName());
-			sport.setQualifiedCostTime(list.get(0).getQualifiedCostTime());
-			sport.setUniversityId(list.get(0).getUniversityId());
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
-			respBody.obj = sport;
-			respBody.statusMsg = logMsg; 
+			
+			resBody.obj = list.get(0);
+			resBody.statusMsg = logMsg; 
+			
 			return HttpServletResponse.SC_OK;
 		} else {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(sport.getId()));
 			logger.error(logMsg);
-			respBody.obj = null;
-			respBody.statusMsg = logMsg;
+			
+			resBody.obj = null;
+			resBody.statusMsg = logMsg;
+			
 			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}
@@ -119,17 +131,20 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andIdNotEqualTo(0l);
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			areaList.addAll(list);
 			logMsg = "MSG_TEMPLATE_OPERATION_OK";
 			logger.info(logMsg);
-			resBody.obj = areaList;
+			
+			resBody.obj = list;
 			resBody.statusMsg = logMsg;
+			
 			return HttpServletResponse.SC_OK;
 		} else {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
 			logger.error(logMsg);
+			
 			resBody.obj = null;
 			resBody.statusMsg = logMsg;
+			
 			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}

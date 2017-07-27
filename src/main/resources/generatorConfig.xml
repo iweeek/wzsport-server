@@ -84,8 +84,10 @@
     
     <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
-      <columnOverride column="enabled" property="enabled" javaType="java.lang.Boolean"/>
-      <columnOverride column="acquisition_interval" javaType="java.lang.Integer"/>
+      <columnOverride column="is_enable" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+      <!-- <columnOverride column="acquisition_interval" javaType="java.lang.Integer"/> -->
     </table>
     
     <table schema="wzpsort" tableName="wzsport_sport_score" domainObjectName ="SportScore" >

@@ -78,9 +78,16 @@ def env = System.getProperty("env") ?: "dev"
 
 ext {
 	configProperties = new Properties()
+
+    file("$project.rootDir/src/main/environment/" + env + "/config.properties").withInputStream {configProperties.load(it)}
+    file("src/main/resources/gradle.properties").withInputStream {configProperties.load(it)}
+
+    configProperties.each {
+        project.extensions.add("$it.key",it.value);
+    }
 }
 
-configProperties.load(new FileInputStream("$project.rootDir/src/main/environment/" + env + "/config.properties"))
+//configProperties.load(new FileInputStream("$project.rootDir/src/main/environment/" + env + "/config.properties"))
 
 flyway {
     url = configProperties['database.url']
@@ -168,6 +175,40 @@ eclipse {
         facet {
             facet name: 'jst.web', version: '3.0'
             facet name: 'jst.java', version: '1.8'
+        }
+    }
+}
+
+
+task mybatisGenerate << {
+    ant.properties['targetProject'] = projectDir.path
+    ant.properties['driverClass'] = configProperties['database.driver']
+    ant.properties['connectionURL'] = configProperties['database.url']
+    ant.properties['userId'] = configProperties['database.username']
+    ant.properties['password'] = configProperties['database.password']
+    ant.properties['src_main_java'] = sourceSets.main.java.srcDirs[0].path
+    ant.properties['src_main_resources'] = sourceSets.main.resources.srcDirs[0].path
+    ant.properties['modelPackage'] = configProperties["modelPackage"]
+    ant.properties['mapperPackage'] = configProperties["mapperPackage"]
+    ant.properties['sqlMapperPackage'] = configProperties["sqlMapperPackage"]
+    ant.taskdef(
+            name: 'mbgenerator',
+            classname: 'org.mybatis.generator.ant.GeneratorAntTask',
+            classpath: configurations.mybatisGenerator.asPath
+    )
+    ant.mbgenerator(overwrite: true,
+            configfile: 'src/main/resources/generatorConfig.xml', verbose: true) {
+        propertyset {
+            propertyref(name: 'targetProject')
+            propertyref(name: 'userId')
+            propertyref(name: 'driverClass')
+            propertyref(name: 'connectionURL')
+            propertyref(name: 'password')
+            propertyref(name: 'src_main_java')
+            propertyref(name: 'src_main_resources')
+            propertyref(name: 'modelPackage')
+            propertyref(name: 'mapperPackage')
+            propertyref(name: 'sqlMapperPackage')
         }
     }
 }

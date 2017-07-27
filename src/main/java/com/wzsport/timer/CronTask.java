@@ -6,8 +6,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CronTask {
-
-    @Scheduled(cron = "*/5 * * * * ?")  
+	@Autowired
+	RunningActivityDataMapper runningActivityDataMapper;
+	@Autowired
+	RunningActivityMapper runningActivityMapper;
+	@Autowired
+	RunningActivityService runningActivityService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
+	
+    @Scheduled(cron = "0 0 1 * * ?")  
     public void job() {  
 
     } 

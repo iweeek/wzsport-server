@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.model.AreaSport;
 import com.wzsport.service.AreaSportService;
-import com.wzsport.service.RunningSportService;
+import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,8 +29,14 @@ import io.swagger.annotations.ApiParam;
 */
 @Api(tags = "定点区域运动相关接口")
 @RestController
-@RequestMapping(value="/areaSport",produces="application/json;charset=UTF-8")
+@RequestMapping(value="/areaSports",produces="application/json;charset=UTF-8")
 public class AreaSportController {
+	
+	private int status = 0;
+	
+	/** The res body. */
+	@SuppressWarnings("rawtypes")
+	private ResponseBody resBody;
 
 	/** The area sport service. */
 	@Autowired
@@ -41,31 +46,39 @@ public class AreaSportController {
 	 * Creates the.
 	 *
 	 * @param name the name
-	 * @param acquisitionInterval the acquisition interval
+	 * @param sampleNum the sample num
 	 * @param isEnable the is enable
+	 * @param addr the addr
+	 * @param type the type
 	 * @param qualifiedCostTime the qualified cost time
 	 * @param universityId the university id
-	 * @param response the response
 	 * @return the area sport
 	 */
 	@ApiOperation(value = "创建一个定点运动项目", notes = "创建一个定点运动项目")
-	@RequestMapping(value="/",method = RequestMethod.POST) 
-	public AreaSport create(
+	@RequestMapping(value="",method = RequestMethod.POST) 
+	public ResponseEntity<?> create(
 							@ApiParam("项目名称")
 							@RequestParam String name,
-							@ApiParam("采样间隔")
-							@RequestParam byte acquisitionInterval,
+							@ApiParam("采样样本数，范围1-120")
+							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnable,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
-							@RequestParam int universityId,
-							HttpServletResponse response
+							@RequestParam long universityId
 							) {
-		AreaSport sport = new AreaSport(name, acquisitionInterval, isEnable, qualifiedCostTime, universityId);
-		response.setStatus(areaSportService.create(sport));
-		return sport;
+		AreaSport sport = new AreaSport();
+		sport.setName(name);
+		sport.setSampleNum(sampleNum);
+		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
+		sport.setAcquisitionInterval(acquisitionInterval);
+		sport.setIsEnable(isEnable);
+		sport.setQualifiedCostTime(qualifiedCostTime);
+		sport.setUniversityId(universityId);
+		resBody = new ResponseBody<AreaSport>();
+		status = areaSportService.create(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -73,8 +86,10 @@ public class AreaSportController {
 	 *
 	 * @param id the id
 	 * @param name the name
-	 * @param acquisitionInterval the acquisition interval
+	 * @param sampleNum the sample num
 	 * @param isEnable the is enable
+	 * @param addr the addr
+	 * @param type the type
 	 * @param qualifiedCostTime the qualified cost time
 	 * @param universityId the university id
 	 * @param response the response
@@ -82,24 +97,33 @@ public class AreaSportController {
 	 */
 	@ApiOperation(value = "根据id来更新一个定点运动项目", notes = "根据id来更新一个定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
-	public AreaSport update(
-							@ApiParam("项目id")
+	public ResponseEntity<?> update(
+							@ApiParam("id")
 							@PathVariable long id,
 							@ApiParam("项目名称")
 							@RequestParam String name,
-							@ApiParam("采样间隔")
-							@RequestParam byte acquisitionInterval,
+							@ApiParam("采样样本数，范围1-120")
+							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnable,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
-							@RequestParam int universityId,
+							@RequestParam long universityId,
 							HttpServletResponse response
 							) {
-		AreaSport sport = new AreaSport(id, name, acquisitionInterval, isEnable, qualifiedCostTime, universityId);
-		response.setStatus(areaSportService.update(sport));
-		return sport;
+		AreaSport sport = new AreaSport();
+		sport.setId(id);
+		sport.setName(name);
+		sport.setSampleNum(sampleNum);
+		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
+		sport.setAcquisitionInterval(acquisitionInterval);
+		sport.setIsEnable(isEnable);
+		sport.setQualifiedCostTime(qualifiedCostTime);
+		sport.setUniversityId(universityId);
+		resBody = new ResponseBody<AreaSport>();
+		status = areaSportService.update(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -111,15 +135,16 @@ public class AreaSportController {
 	 */
 	@ApiOperation(value = "根据id来获取定点运动项目", notes = "根据id来获取定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
-	public AreaSport show(
+	public ResponseEntity<?> show(
 							@ApiParam("项目id")
 							@PathVariable long id,
 							HttpServletResponse response
 							) {
 		AreaSport sport = new AreaSport();
 		sport.setId(id);
-		response.setStatus(areaSportService.show(sport));
-		return sport;
+		resBody = new ResponseBody<AreaSport>();
+		status = areaSportService.show(sport, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**
@@ -129,13 +154,14 @@ public class AreaSportController {
 	 * @return the list
 	 */
 	@ApiOperation(value = "获取定点运动项目列表", notes = "获取定点运动项目列表")
-	@RequestMapping(value="/",method = RequestMethod.GET) 
-	public List<AreaSport> index(
+	@RequestMapping(value="",method = RequestMethod.GET) 
+	public ResponseEntity<?> index(
 							HttpServletResponse response
 							) {
 		List<AreaSport> list = new ArrayList<AreaSport>();
-		response.setStatus(areaSportService.index(list));
-		return list;
+		resBody = new ResponseBody<AreaSport>();
+		status = areaSportService.index(list, resBody);
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.wzsport.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.wzsport.model.FixLocationOutdoorSportPoint;
 import com.wzsport.service.FixLocationOutdoorSportPointService;
 import com.wzsport.service.RunningActivityDataService;
 import com.wzsport.service.RunningSportService;
+import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +38,13 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping(value="/fixLocationOutdoorSportPoints", produces="application/json;charset=UTF-8")
 public class FixLocationOutdoorSportPointsController {
+	
+	/** The res body. */
+	@SuppressWarnings("rawtypes")
+	private ResponseBody resBody;
+	
+	private int status;
+	
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
 	@Autowired
@@ -50,67 +59,98 @@ public class FixLocationOutdoorSportPointsController {
 	* @param minCostTime
 	*/
 	@ApiOperation(value = "创建一个室外定点活动点", notes = "使用POST来创建一个新的室外活动地点，这个时候对父一级目录进行请求，由服务端来分配创建一个新资源")
-	@RequestMapping(value = "/", method = RequestMethod.POST) 
-	public FixLocationOutdoorSportPoint create(
+	@RequestMapping(value = "", method = RequestMethod.POST) 
+	public ResponseEntity<?> create(
 							@ApiParam("纬度")
-							@RequestParam double latitude,
+							@RequestParam BigDecimal latitude,
 							@ApiParam("经度")
-							@RequestParam double longitude,
+							@RequestParam BigDecimal longitude,
 							@ApiParam("活动点名称")
 							@RequestParam String name,
+							@ApiParam("定点活动区域的地址")
+							@RequestParam String addr,
 							@ApiParam("定点活动区域的半径（米）")
 							@RequestParam byte radius,
 							@ApiParam("学校Id")
 							@RequestParam int universityId,
 							@ApiParam("对该地点的描述")
-							@RequestParam String desc,
-							HttpServletResponse response
+							@RequestParam String desc
 							) {
-		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint(latitude, longitude, name, radius, universityId, desc);
-		response.setStatus(fixLocationSportPointService.create(point));
-		return point;
+		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
+		point.setLatitude(latitude);
+		point.setLongitude(longitude);
+		point.setName(name);
+		point.setAddr(addr);
+		point.setRadius(radius);
+		point.setUniversityId(universityId);
+		point.setDescription(desc);
+		
+		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		
+		status = fixLocationSportPointService.create(point, resBody);
+		
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	@ApiOperation(value = "获取一个室外定点活动点", notes = "根据Id来获取一个活动点")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET) 
-	public FixLocationOutdoorSportPoint show(
-							@PathVariable long id,
-							HttpServletResponse response
+	public ResponseEntity<?> show(
+							@PathVariable long id
 							) {
 		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
 		point.setId(id);
-		response.setStatus(fixLocationSportPointService.show(point));
-		return point;
+		
+		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		
+		status = fixLocationSportPointService.show(point, resBody);
+		
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据Id来更新一个活动点")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST) 
-	public FixLocationOutdoorSportPoint update(
-			@PathVariable long id,
-			@ApiParam("纬度")
-			@RequestParam double latitude,
-			@ApiParam("经度")
-			@RequestParam double longitude,
-			@ApiParam("活动点名称")
-			@RequestParam String name,
-			@ApiParam("定点活动区域的半径（米）")
-			@RequestParam byte radius,
-			@ApiParam("学校Id")
-			@RequestParam int universityId,
-			@ApiParam("对该地点的描述")
-			@RequestParam String desc,
-			HttpServletResponse response
-			) {
-				FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint(id, latitude, longitude, name, radius, universityId, desc);
-				response.setStatus(fixLocationSportPointService.update(point));
-				return point;
+	public ResponseEntity<?> update(
+								@PathVariable long id,
+								@ApiParam("纬度")
+								@RequestParam BigDecimal latitude,
+								@ApiParam("经度")
+								@RequestParam BigDecimal longitude,
+								@ApiParam("活动点名称")
+								@RequestParam String name,
+								@ApiParam("定点活动区域的地址")
+								@RequestParam String addr,
+								@ApiParam("定点活动区域的半径（米）")
+								@RequestParam byte radius,
+								@ApiParam("学校Id")
+								@RequestParam int universityId,
+								@ApiParam("对该地点的描述")
+								@RequestParam String desc
+							) {
+		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
+		point.setLatitude(latitude);
+		point.setLongitude(longitude);
+		point.setName(name);
+		point.setAddr(addr);
+		point.setRadius(radius);
+		point.setUniversityId(universityId);
+		point.setDescription(desc);
+		
+		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		
+		status = fixLocationSportPointService.update(point, resBody);
+		
+		return ResponseEntity.status(status).body(resBody);	
 	}
 	
 	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
-	@RequestMapping(value = "/", method = RequestMethod.GET) 
-	public List<FixLocationOutdoorSportPoint> index(HttpServletResponse response) {
+	@RequestMapping(value = "", method = RequestMethod.GET) 
+	public ResponseEntity<?> index(HttpServletResponse response) {
 		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
-		response.setStatus(fixLocationSportPointService.index(list));
-		return list;
+		
+		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		
+		status = fixLocationSportPointService.index(list, resBody);
+		
+		return ResponseEntity.status(status).body(resBody);	
 	}
 }

@@ -175,7 +175,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
 		if (runningActivity.getStepCount() != 0) {
-			BigDecimal distancePerStep = new BigDecimal(
+			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
 					(double) runningActivity.getDistance() / runningActivity.getStepCount());
 			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {

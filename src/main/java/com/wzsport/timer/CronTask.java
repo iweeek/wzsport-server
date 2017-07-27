@@ -28,7 +28,7 @@ public class CronTask {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
-    @Scheduled(cron = "*/5 * * * * ?")  
+    @Scheduled(cron = "0 0 1 * * ?")  
     public void job() {  
     	//找到昨天所有没有正常结束的活动
     	RunningActivityExample example = new RunningActivityExample();

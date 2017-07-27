@@ -1,7 +1,5 @@
 package com.wzsport.timer;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +13,18 @@ import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityExample;
-import com.wzsport.service.RunningActivityService; 
+import com.wzsport.service.RunningActivityService;
+
+import java.util.List;
 
 @Component
-public class CronTask {
+public class RunningActivityTask {
 	@Autowired
-	RunningActivityDataMapper runningActivityDataMapper;
+	private RunningActivityDataMapper runningActivityDataMapper;
 	@Autowired
-	RunningActivityMapper runningActivityMapper;
+	private RunningActivityMapper runningActivityMapper;
 	@Autowired
-	RunningActivityService runningActivityService;
+	private RunningActivityService runningActivityService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
@@ -63,17 +63,17 @@ public class CronTask {
 	    		logger.info("job stepCount: " + stepCount);
 	    		logger.info("job costTime: " + costTime);
 	    		logger.info("job targetFinishedTime: " + targetFinishedTime);
-	    		
-	    		RunningActivity runningActivity = new RunningActivity();
-	    		runningActivity.setId(act.getId());
-	    		runningActivity.setDistance(distance);
-	    		runningActivity.setStepCount(stepCount);
-	    		runningActivity.setCostTime(costTime);
-	    		runningActivity.setTargetFinishedTime(targetFinishedTime);
-	    		
-	    		runningActivity = runningActivityService.endRunningActivity(runningActivity);
-    		}
-    	}
+			}
+
+			RunningActivity runningActivity = new RunningActivity();
+			runningActivity.setId(act.getId());
+			runningActivity.setDistance(distance);
+			runningActivity.setStepCount(stepCount);
+			runningActivity.setCostTime(costTime);
+			runningActivity.setTargetFinishedTime(targetFinishedTime);
+
+			runningActivity = runningActivityService.endRunningActivity(runningActivity);
+		}
     	
     } 
 }

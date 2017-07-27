@@ -167,15 +167,15 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 //		}
 
 		// 计算速度、步幅和步频
-		BigDecimal speed = new BigDecimal((double) runningActivity.getDistance() / runningActivity.getCostTime());
+		BigDecimal speed = runningActivity.getCostTime() == 0 ? new BigDecimal(0) : new BigDecimal((double) runningActivity.getDistance() / runningActivity.getCostTime());
 		runningActivity.setSpeed(speed.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-		BigDecimal stepPerSecond = new BigDecimal(
+		BigDecimal stepPerSecond = runningActivity.getCostTime() == 0 ? new BigDecimal(0) : new BigDecimal(
 				(double) runningActivity.getStepCount() / runningActivity.getCostTime());
 		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
 		if (runningActivity.getStepCount() != 0) {
-			BigDecimal distancePerStep = new BigDecimal(
+			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
 					(double) runningActivity.getDistance() / runningActivity.getStepCount());
 			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {

@@ -5,61 +5,69 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wzsport.mapper.FixLocationOutdoorSportPointMapper;
+import com.wzsport.mapper.AreaSportMapper;
 import com.wzsport.model.AreaSport;
 import com.wzsport.model.AreaSportExample;
-import com.wzsport.model.FixLocationOutdoorSportPoint;
-import com.wzsport.model.FixLocationOutdoorSportPointExample;
+import com.wzsport.service.AreaActivityService;
+import com.wzsport.service.RunningActivityService;
+
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
-/**
-* GraphQL班级类型的定义及查询字段定义
-* 
-* @author chaiyu
-* @date 2017年7月21日
-*/
 @Component
-public class FixLocationOutdoorSportPointType {
-	private static GraphQLObjectType type;
-	private static GraphQLFieldDefinition listQueryField;
-	private static GraphQLFieldDefinition singleQueryField;
-	private static FixLocationOutdoorSportPointMapper fixLocationOutdoorSportPointMapper;
+public class AreaSportType {
 
-	private FixLocationOutdoorSportPointType() {}
+	private static AreaSportMapper areaSportMapper;
+	private static GraphQLObjectType type;
+	private static GraphQLFieldDefinition singleQueryField;
+	private static GraphQLFieldDefinition listQueryField;
+	
+	@Autowired
+	private static AreaActivityService areaActivityService;
+	
+	private AreaSportType() {}
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("FixLocationOutdoorSportPoint")
-					.description("室外定点运动地点")
+					.name("areaSport")
+					.description("区域运动项目类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
-							.type(Scalars.GraphQLLong)
 							.description("唯一主键")
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("name")
-							.description("运动地点名称")
+							.description("区域运动项目名称")
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("latitude")
-							.description("纬度")
-							.type(Scalars.GraphQLFloat)
+							.name("is_enable")
+							.description("该项目是否启用")
+							.type(Scalars.GraphQLBoolean)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("longitude")
-							.description("经度")
-							.type(Scalars.GraphQLFloat)
+							.name("qualifiedCostTime")
+							.description("该项目的合格耗时(单位:秒)")
+							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("radius")
-							.description("半径（米）")
-							.type(Scalars.GraphQLLong)
+							.name("acquisitionInterval")
+							.description("采集运动数据的时间间隔(单位:秒)")
+							.type(Scalars.GraphQLInt)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("participantNum")
+							.description("参加人数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								AreaSport runningSport = environment.getSource();
+								return areaActivityService.getParticipantNum(runningSport.getId());
+							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
@@ -68,7 +76,6 @@ public class FixLocationOutdoorSportPointType {
 							.build())
 					.build();
 		}
-		
 		return type;
 	}
 	
@@ -76,13 +83,13 @@ public class FixLocationOutdoorSportPointType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
-	                .name("fixLocationOutdoorSportPoint")
-	                .description("根据ID获取一项区域运动的信息")
+	                .name("areaSport")
+	                .description("根据ID获取区域运动项目")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
-	                	FixLocationOutdoorSportPoint point = fixLocationOutdoorSportPointMapper.selectByPrimaryKey(id);
-	                	return point;
+	                	AreaSport runningSport = areaSportMapper.selectByPrimaryKey(id);
+	                	return runningSport;
 	                } ).build();
 		}
         return singleQueryField;
@@ -92,22 +99,22 @@ public class FixLocationOutdoorSportPointType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
-	                .name("fixLocationOutdoorSportPoints")
-	                .description("根据学校ID获取关联的固定运动的地点列表")
+	                .name("areaSports")
+	                .description("根据大学ID获取关联的所有区域运动项目")
 	                .type(new GraphQLList(getType()))
-	                .dataFetcher(environment -> {
-	                	int universityId = environment.getArgument("universityId");
-	                	FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-	                	example.createCriteria().andUniversityIdEqualTo(universityId);
-	                	List<FixLocationOutdoorSportPoint> pointList = fixLocationOutdoorSportPointMapper.selectByExample(example);
-	                	return pointList;
+	                .dataFetcher(environment ->  {
+	                	long universityId = environment.getArgument("universityId");
+	                	AreaSportExample areaSportExample = new AreaSportExample();
+	                	areaSportExample.createCriteria().andUniversityIdEqualTo(universityId);
+	                	List<AreaSport> runningSportList = areaSportMapper.selectByExample(areaSportExample);
+	                	return runningSportList;
 	                } ).build();
 		}
         return listQueryField;
     }
 
-	@Autowired(required = true) 
-	public void setClassMapper(FixLocationOutdoorSportPointMapper fixLocationOutdoorSportPointMapper) {
-		FixLocationOutdoorSportPointType.fixLocationOutdoorSportPointMapper = fixLocationOutdoorSportPointMapper;
+	@Autowired(required = true)
+	public void setRunningSportMapper(AreaSportMapper areaSportMapper) {
+		AreaSportType.areaSportMapper = areaSportMapper;
 	}
 }

@@ -79,7 +79,13 @@
       <columnOverride column="speed" javaType="java.lang.Double"/>
       <columnOverride column="step_per_second" javaType="java.lang.Double"/>
       <columnOverride column="distance_per_step" javaType="java.lang.Double"/>
-      <columnOverride column="ended" javaType="java.lang.Boolean"/>
+      <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_area_activity" domainObjectName ="AreaActivity" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
+      <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
     </table>
     
     <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >

@@ -76,6 +76,7 @@ public class AreaSportController {
 		sport.setIsEnable(isEnable);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
+		
 		resBody = new ResponseBody<AreaSport>();
 		status = areaSportService.create(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);

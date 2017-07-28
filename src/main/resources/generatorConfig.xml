@@ -123,6 +123,13 @@
       <columnOverride column="is_normal" javaType="java.lang.Boolean"/>
     </table>
     
+     <table schema="wzpsort" tableName="wzsport_area_activity_data" domainObjectName ="AreaActivityData" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="longitude" javaType="java.lang.Double"/>
+      <columnOverride column="latitude" javaType="java.lang.Double"/>
+      <columnOverride column="location_type" javaType="java.lang.Integer"/>
+    </table>
+    
     <table schema="wzpsort" tableName="wzsport_android_version_info" domainObjectName ="AndroidVersionInfo" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="forced" javaType="java.lang.Boolean"/>

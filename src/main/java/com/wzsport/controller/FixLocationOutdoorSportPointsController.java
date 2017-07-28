@@ -72,7 +72,7 @@ public class FixLocationOutdoorSportPointsController {
 							@ApiParam("定点活动区域的半径（米）")
 							@RequestParam byte radius,
 							@ApiParam("学校Id")
-							@RequestParam int universityId,
+							@RequestParam long universityId,
 							@ApiParam("对该地点的描述")
 							@RequestParam String desc
 							) {
@@ -122,7 +122,7 @@ public class FixLocationOutdoorSportPointsController {
 								@ApiParam("定点活动区域的半径（米）")
 								@RequestParam byte radius,
 								@ApiParam("学校Id")
-								@RequestParam int universityId,
+								@RequestParam long universityId,
 								@ApiParam("对该地点的描述")
 								@RequestParam String desc
 							) {

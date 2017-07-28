@@ -62,6 +62,11 @@ public class FixLocationOutdoorSportPointType {
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("qualifiedCostTime")
+							.description("达标时间（秒）")
+							.type(Scalars.GraphQLInt)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("universityId")
 							.description("所属大学的ID")
 							.type(Scalars.GraphQLLong)
@@ -96,7 +101,7 @@ public class FixLocationOutdoorSportPointType {
 	                .description("根据学校ID获取关联的固定运动的地点列表")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	int universityId = environment.getArgument("universityId");
+	                	long universityId = environment.getArgument("universityId");
 	                	FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
 	                	example.createCriteria().andUniversityIdEqualTo(universityId);
 	                	List<FixLocationOutdoorSportPoint> pointList = fixLocationOutdoorSportPointMapper.selectByExample(example);

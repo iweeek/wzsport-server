@@ -11,63 +11,61 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wzsport.model.RunningActivityData;
-import com.wzsport.service.RunningActivityDataService;
-import com.wzsport.service.RunningActivityService;
+import com.wzsport.model.AreaActivityData;
+import com.wzsport.service.AreaActivityDataService;
+import com.wzsport.service.AreaActivityService;
+import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-@Api(tags = "RunningActivityData相关接口")
+@Api(tags = "AreaActivityData相关接口")
 @RestController
-@RequestMapping(value="/runningActivityData",produces="application/json;charset=UTF-8")
+@RequestMapping(value="/areaActivityData",produces="application/json;charset=UTF-8")
 public class AreaActivityDataController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AreaActivityDataController.class);
 	
 	@Autowired
-	private RunningActivityDataService runningActivityDataService;
+	private AreaActivityDataService areaActivityDataService;
 	
 	@Autowired
-	private RunningActivityService runningActivityService;
+	private AreaActivityService areaActivityService;
 	
-	@ApiOperation(value = "创建RunningActivityData", notes = "向服务端提交运动的采集数据")
+	/** The res body. */
+	@SuppressWarnings("rawtypes")
+	private ResponseBody resBody;
+	
+	private int status;
+	
+	@ApiOperation(value = "创建AreaActivityData", notes = "向服务端提交运动的采集数据")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(
 								@ApiParam("活动id")
 								@RequestParam long activityId,
-								@ApiParam("运动步数累计")
-								@RequestParam int stepCount,
-								@ApiParam("运动距离(单位:米)")
-								@RequestParam int distance,
 								@ApiParam("当前的经度")
 								@RequestParam double longitude,
 								@ApiParam("当前的纬度")
 								@RequestParam double latitude,
 								@ApiParam("定位类型")
-								@RequestParam int locationType,
-								@ApiParam("数据是否正常")
-								@RequestParam boolean isNormal) {
-		
-		if (!runningActivityService.isActivityExist(activityId)) {
+								@RequestParam int locationType) {
+		if (!areaActivityService.isActivityExist(activityId)) {
 			logger.error("activityId 不存在。");
 			return null;
 		}
 		
-		RunningActivityData runningActivityData = new RunningActivityData();
+		AreaActivityData areaActivityData = new AreaActivityData();
 		
-		runningActivityData.setActivityId(activityId);
-		runningActivityData.setAcquisitionTime(new Date());
-		runningActivityData.setStepCount(stepCount);
-		runningActivityData.setDistance(distance);
-		runningActivityData.setLongitude(longitude);
-		runningActivityData.setLatitude(latitude);
-		runningActivityData.setLocationType(locationType);
-		runningActivityData.setIsNormal(isNormal);
+		areaActivityData.setActivityId(activityId);
+		areaActivityData.setAcquisitionTime(new Date());
+		areaActivityData.setLongitude(longitude);
+		areaActivityData.setLatitude(latitude);
+		areaActivityData.setLocationType(locationType);
 		
-		runningActivityDataService.create(runningActivityData);
+		resBody = new ResponseBody<AreaActivityData>();
+		status = areaActivityDataService.create(areaActivityData, resBody);
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.status(status).body(resBody);
 	}
 }

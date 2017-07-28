@@ -9,5 +9,5 @@ public interface AreaActivityDataService {
 	* 提交运动采集数据
 	*/
 	@SuppressWarnings("rawtypes")
-	int create(AreaActivityData runningActivityData, ResponseBody resBody);
+	int create(AreaActivityData areaActivityData, ResponseBody resBody);
 }

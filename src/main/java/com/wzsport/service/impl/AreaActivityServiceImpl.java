@@ -3,9 +3,12 @@ package com.wzsport.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.mapper.AreaActivityMapper;
@@ -18,7 +21,10 @@ import com.wzsport.model.Term;
 import com.wzsport.service.AreaActivityService;
 import com.wzsport.service.TermService;
 import com.wzsport.util.CalorieUtil;
+import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
+// TODO: Auto-generated Javadoc
 /**
  * AreaActivity Service 实现类.
  *
@@ -27,6 +33,9 @@ import com.wzsport.util.CalorieUtil;
  */
 @Service
 public class AreaActivityServiceImpl implements AreaActivityService {
+	
+	/** The Constant logger. */
+	private static final Logger logger = LoggerFactory.getLogger(AreaSportServiceImpl.class);
 
 	/** The area sport mapper. */
 	@Autowired
@@ -39,6 +48,9 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	/** The term service. */
 	@Autowired
 	private TermService termService;
+	
+	/** The log msg. */
+	private String logMsg = "";
 
 	/*
 	 * (non-Javadoc)
@@ -46,45 +58,82 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 * @see com.wzsport.service.AreaActivityService#create(com.wzsport.model.
 	 * AreaActivity)
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public AreaActivity create(AreaActivity areaActivity) {
-		// 根据学生ID和开始时间来判断数据是否重复
+	public int create(AreaActivity areaActivity, ResponseBody resBody) {
+		// 根据学生ID和开始时间来判断数据是否重复，这个地方有可能可以做到断点，如果在一次运动中意外退出，这个地方就可以进行判断
 		AreaActivityExample sameRecordExample = new AreaActivityExample();
 		sameRecordExample.createCriteria().andStudentIdEqualTo(areaActivity.getStudentId())
 				.andStartTimeEqualTo(areaActivity.getStartTime());
-		List<AreaActivity> sameRecordList = areaActivityMapper.selectByExample(sameRecordExample);
-		if (sameRecordList.size() != 0) {
-			throw new DuplicateKeyException("运动记录重复");
-		}
-
-		// 获取关联的项目
-		AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());
-
-		// 判断是否合格
-		if (areaActivity.getCostTime() > areaSport.getQualifiedCostTime()) {
-			areaActivity.setQualified(true);
+		List<AreaActivity> list = areaActivityMapper.selectByExample(sameRecordExample);
+		if (list.size() > 0) {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_RECORD_EXIST;
+			logger.error(logMsg);
+			
+			resBody.obj = list.get(0);
+			resBody.statusMsg = logMsg; 
+			
+			return HttpServletResponse.SC_CONFLICT;
 		} else {
-			areaActivity.setQualified(false);
+
+	
+			// 插入数据
+			areaActivityMapper.insertSelective(areaActivity);
+	
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			logger.info(logMsg);
+			
+			resBody.obj = areaActivity;
+			resBody.statusMsg = logMsg; 
+			
+			return HttpServletResponse.SC_OK;
 		}
-
-		// 计算卡路里消耗
-		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, areaActivity.getCostTime(),
-				areaSport.getHourlyKcalConsumption());
-		areaActivity.setKcalConsumed(caloriesConsumed);
-
-		// 插入数据
-		areaActivityMapper.insertSelective(areaActivity);
-
-		return areaActivity;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.wzsport.service.AreaActivityService#startAreaActivity(long,
-	 * long, java.util.Date)
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public int update(AreaActivity areaActivity, ResponseBody resBody) {
+		AreaActivityExample example = new AreaActivityExample();
+		example.createCriteria().andIdEqualTo(areaActivity.getId());
+		List<AreaActivity> list = areaActivityMapper.selectByExample(example);
+		if (list.size() > 0) {
+			// 获取关联的项目
+			AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());
+			
+			areaActivity.setQualifiedCostTime(areaSport.getQualifiedCostTime());
+			
+			// 判断是否合格
+			if (areaActivity.getCostTime() > areaSport.getQualifiedCostTime()) {
+				areaActivity.setQualified(true);
+			} else {
+				areaActivity.setQualified(false);
+			}
+	
+			// 计算卡路里消耗
+			int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, areaActivity.getCostTime(),
+					areaSport.getHourlyKcalConsumption());
+			areaActivity.setKcalConsumed(caloriesConsumed);
+			
+			areaActivityMapper.updateByPrimaryKey(areaActivity);
+			
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			logger.info(logMsg);
+			
+			resBody.obj = areaActivity;
+			resBody.statusMsg = logMsg; 
+			
+			return HttpServletResponse.SC_OK;
+		} else {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID;
+			logger.info(logMsg);
+			
+			resBody.obj = areaActivity;
+			resBody.statusMsg = logMsg; 
+			
+			return HttpServletResponse.SC_NOT_FOUND;
+		}
+	}
+	
 	public AreaActivity startAreaActivity(long studentId, long areaSportId, Date startTime) {
 
 		AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaSportId);
@@ -99,6 +148,8 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 		return areaActivity;
 	}
+	
+	
 
 	/*
 	 * (non-Javadoc)

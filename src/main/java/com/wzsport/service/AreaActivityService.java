@@ -3,6 +3,7 @@ package com.wzsport.service;
 import java.util.Date;
 
 import com.wzsport.model.AreaActivity;
+import com.wzsport.util.ResponseBody;
 
 /**
  * The Interface AreaActivityService.
@@ -14,10 +15,13 @@ public interface AreaActivityService {
 	 *
 	 * @param runningActivity
 	 *            the running activity
-	 * @return the area activity
+	 * @return the int
 	 */
-	AreaActivity create(AreaActivity runningActivity);
+	@SuppressWarnings("rawtypes")
+	int create(AreaActivity runningActivity, ResponseBody resBody);
 	
+	@SuppressWarnings("rawtypes")
+	int update(AreaActivity runningActivity, ResponseBody resBody);
 	
 	/**
 	 * Start area activity.

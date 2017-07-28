@@ -1,5 +1,8 @@
 package com.wzsport.service;
 
+import com.wzsport.model.RunningSport;
+import com.wzsport.util.ResponseBody;
+
 /**
 * RunningSport service interface.
 * 
@@ -17,7 +20,7 @@ public interface RunningSportService {
 	* @param minCostTime 最少耗时
 	* @param acquisitionInterval 运动数据采集间隔
 	*/
-	boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime, int acquisitionInterval);
+	boolean updateIndex(long id, int qualifiedDistance, int qualifiedCostTime, int minCostTime, byte acquisitionInterval);
 	
 	/**
 	* 更改指定id的项目的启动状态
@@ -26,4 +29,7 @@ public interface RunningSportService {
 	* @param enabled
 	*/
 	boolean updateEnable(long id, boolean enabled);
+
+	@SuppressWarnings("rawtypes")
+	int create(RunningSport sport, ResponseBody resBody);
 }

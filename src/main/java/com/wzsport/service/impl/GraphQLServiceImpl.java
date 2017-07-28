@@ -5,9 +5,11 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.graphql.AndroidVersionInfoType;
+import com.wzsport.graphql.AreaSportType;
 import com.wzsport.graphql.ClassType;
 import com.wzsport.graphql.CollegeType;
 import com.wzsport.graphql.FitnessCheckDataType;
+import com.wzsport.graphql.FixLocationOutdoorSportPointType;
 import com.wzsport.graphql.MajorType;
 import com.wzsport.graphql.RunningActivityType;
 import com.wzsport.graphql.RunningSportType;
@@ -53,6 +55,10 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(TeacherType.getSingleQueryField())
                 .field(TeacherType.getListTeacherByJobNoAndNameAndSex())
                 .field(TeacherType.getListQueryField())
+                .field(AreaSportType.getSingleQueryField())
+                .field(AreaSportType.getListQueryField())
+                .field(FixLocationOutdoorSportPointType.getSingleQueryField())
+                .field(FixLocationOutdoorSportPointType.getListQueryField())
                 .field(RunningSportType.getSingleQueryField())
                 .field(RunningSportType.getListQueryField())
                 .field(RunningActivityType.getSingleQueryField())

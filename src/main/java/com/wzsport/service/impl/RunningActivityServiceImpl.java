@@ -112,7 +112,6 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setStartTime(new Date());
 		runningActivity.setQualifiedDistance(runningSport.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(runningSport.getQualifiedCostTime());
-		runningActivity.setMinCostTime(runningSport.getMinCostTime());
 
 		runningActivityMapper.insertSelective(runningActivity);
 

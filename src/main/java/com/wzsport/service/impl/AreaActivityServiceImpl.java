@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.http.HttpRange;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.mapper.AreaActivityMapper;
@@ -106,6 +107,12 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		example.createCriteria().andIdEqualTo(areaActivity.getId());
 		List<AreaActivity> list = areaActivityMapper.selectByExample(example);
 		if (list.size() > 0) {
+			if (list.get(0).getEndedAt() != null) {
+				logMsg = "该记录的结束时间已经被更新";
+				logger.error(logMsg);
+				resBody.statusMsg = logMsg;
+				return HttpServletResponse.SC_CONFLICT;
+			}
 			areaActivity = list.get(0);
 			areaActivity.setEndedAt(new Date());
 			// 获取关联的项目
@@ -113,6 +120,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			if (areaSport == null) {
 				logMsg = "没有找到areaSportId是%s的记录".replace("%s", String.valueOf(areaActivity.getAreaSportId()));
 				logger.error(logMsg);
+				resBody.statusMsg = logMsg;
 				return HttpServletResponse.SC_NOT_FOUND;
 			}
 			

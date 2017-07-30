@@ -65,19 +65,18 @@ public class AreaActivityController {
 	*/
 	@ApiOperation(value = "结束运动", notes = "结束运动，更新运动结束时间")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public ResponseEntity<AreaActivity> update(
+	public ResponseEntity<?> update(
 								@ApiParam("活动项目id")
 								@PathVariable long id)
 								{
 		
 		AreaActivity areaActivity = new AreaActivity();
 		areaActivity.setId(id);
-		areaActivity.setEndedAt(new Date());
 		
 		resBody = new ResponseBody<AreaActivity>();
 		
 		status = areaActivityService.update(areaActivity, resBody);
 		
-		return ResponseEntity.ok().body(areaActivity); 
+		return ResponseEntity.status(status).body(resBody); 
 	}
 }

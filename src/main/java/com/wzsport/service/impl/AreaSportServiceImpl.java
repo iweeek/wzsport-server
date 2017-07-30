@@ -75,6 +75,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
+			example.clear();
 			example.createCriteria().andIdEqualTo(sport.getId());
 			list = areaSportMapper.selectByExample(example);
 			if (list.size() > 0) {

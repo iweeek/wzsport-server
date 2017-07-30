@@ -122,6 +122,7 @@ public class AreaSportController {
 		sport.setIsEnable(isEnable);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
+		sport.setHourlyKcalConsumption(200);
 		resBody = new ResponseBody<AreaSport>();
 		status = areaSportService.update(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);

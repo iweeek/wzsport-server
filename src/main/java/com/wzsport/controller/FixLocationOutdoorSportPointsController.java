@@ -61,29 +61,35 @@ public class FixLocationOutdoorSportPointsController {
 	@ApiOperation(value = "创建一个室外定点活动点", notes = "使用POST来创建一个新的室外活动地点，这个时候对父一级目录进行请求，由服务端来分配创建一个新资源")
 	@RequestMapping(value = "", method = RequestMethod.POST) 
 	public ResponseEntity<?> create(
+						@ApiParam("活动点名称")
+						@RequestParam String name,
 							@ApiParam("纬度")
 							@RequestParam BigDecimal latitude,
 							@ApiParam("经度")
 							@RequestParam BigDecimal longitude,
-							@ApiParam("活动点名称")
-							@RequestParam String name,
-							@ApiParam("定点活动区域的地址")
-							@RequestParam String addr,
 							@ApiParam("定点活动区域的半径（米）")
 							@RequestParam byte radius,
+							@ApiParam("达标时间")
+							@RequestParam int qualifiedCostTime,
+							@ApiParam("定点活动区域的地址")
+							@RequestParam String addr,
+							@ApiParam("是否生效")
+							@RequestParam boolean isEnable,
 							@ApiParam("学校Id")
 							@RequestParam long universityId,
 							@ApiParam("对该地点的描述")
-							@RequestParam String desc
+							@RequestParam String description
 							) {
 		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
+		point.setName(name);
 		point.setLatitude(latitude);
 		point.setLongitude(longitude);
-		point.setName(name);
-		point.setAddr(addr);
 		point.setRadius(radius);
+		point.setQualifiedCostTime(qualifiedCostTime);
+		point.setAddr(addr);
+		point.setIsEnable(isEnable);
 		point.setUniversityId(universityId);
-		point.setDescription(desc);
+		point.setDescription(description);
 		
 		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
@@ -110,30 +116,38 @@ public class FixLocationOutdoorSportPointsController {
 	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据Id来更新一个活动点")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST) 
 	public ResponseEntity<?> update(
+								@ApiParam("id")
 								@PathVariable long id,
+								@ApiParam("活动点名称")
+								@RequestParam String name,
 								@ApiParam("纬度")
 								@RequestParam BigDecimal latitude,
 								@ApiParam("经度")
 								@RequestParam BigDecimal longitude,
-								@ApiParam("活动点名称")
-								@RequestParam String name,
-								@ApiParam("定点活动区域的地址")
-								@RequestParam String addr,
 								@ApiParam("定点活动区域的半径（米）")
 								@RequestParam byte radius,
-								@ApiParam("学校Id")
-								@RequestParam long universityId,
+								@ApiParam("达标时间")
+								@RequestParam int qualifiedCostTime,
+								@ApiParam("定点活动区域的地址")
+								@RequestParam String addr,
 								@ApiParam("对该地点的描述")
-								@RequestParam String desc
+								@RequestParam String description,
+								@ApiParam("达标时间")
+								@RequestParam boolean isEnable,
+								@ApiParam("学校Id")
+								@RequestParam long universityId
 							) {
 		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
+		point.setId(id);
+		point.setName(name);
 		point.setLatitude(latitude);
 		point.setLongitude(longitude);
-		point.setName(name);
-		point.setAddr(addr);
 		point.setRadius(radius);
+		point.setQualifiedCostTime(qualifiedCostTime);
+		point.setAddr(addr);
+		point.setDescription(description);
+		point.setIsEnable(isEnable);
 		point.setUniversityId(universityId);
-		point.setDescription(desc);
 		
 		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		

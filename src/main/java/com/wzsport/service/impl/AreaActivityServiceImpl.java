@@ -16,6 +16,7 @@ import com.wzsport.mapper.AreaSportMapper;
 import com.wzsport.model.AreaActivity;
 import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.AreaSport;
+import com.wzsport.model.RunningSport;
 import com.wzsport.model.AreaActivityExample.Criteria;
 import com.wzsport.model.Term;
 import com.wzsport.service.AreaActivityService;
@@ -75,8 +76,16 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
-
-	
+			// 获取关联的项目
+			AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());
+			if (areaSport == null) {
+				logMsg = "没有找到areaSportId是%s的记录".replace("%s", String.valueOf(areaActivity.getAreaSportId()));
+				logger.error(logMsg);
+				return HttpServletResponse.SC_NOT_FOUND;
+			}
+			
+			areaActivity.setQualifiedCostTime(areaSport.getQualifiedCostTime());
+			
 			// 插入数据
 			areaActivityMapper.insertSelective(areaActivity);
 	
@@ -97,13 +106,20 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		example.createCriteria().andIdEqualTo(areaActivity.getId());
 		List<AreaActivity> list = areaActivityMapper.selectByExample(example);
 		if (list.size() > 0) {
+			areaActivity = list.get(0);
+			areaActivity.setEndedAt(new Date());
 			// 获取关联的项目
 			AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());
+			if (areaSport == null) {
+				logMsg = "没有找到areaSportId是%s的记录".replace("%s", String.valueOf(areaActivity.getAreaSportId()));
+				logger.error(logMsg);
+				return HttpServletResponse.SC_NOT_FOUND;
+			}
 			
-			areaActivity.setQualifiedCostTime(areaSport.getQualifiedCostTime());
-			
+			int costTime = (int) ((areaActivity.getEndedAt().getTime() - areaActivity.getStartTime().getTime()) / 1000);
+			areaActivity.setCostTime(costTime);
 			// 判断是否合格
-			if (areaActivity.getCostTime() > areaSport.getQualifiedCostTime()) {
+			if (areaActivity.getCostTime() > list.get(0).getQualifiedCostTime()) {
 				areaActivity.setQualified(true);
 			} else {
 				areaActivity.setQualified(false);

@@ -102,6 +102,7 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
+			example.clear();
 			example.createCriteria().andIdEqualTo(fixLocationOutdoorSportPoint.getId());
 			list = fixLocationOutdoorSportPointMapper.selectByExample(example);
 			if (list.size() > 0) {

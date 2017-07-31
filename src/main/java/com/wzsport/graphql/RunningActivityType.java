@@ -61,7 +61,6 @@ public class RunningActivityType {
 	
 	private RunningActivityType() {}
 	
-	@SuppressWarnings("deprecation")
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()

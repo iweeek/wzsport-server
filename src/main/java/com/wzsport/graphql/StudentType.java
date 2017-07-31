@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.FitnessCheckDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
@@ -176,7 +177,7 @@ public class StudentType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("runningActivities")
-							.description("所有活动记录")
+							.description("所有跑步运动活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
@@ -189,11 +190,17 @@ public class StudentType {
 			                	runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
 			                	runningActivityExample.setOrderByClause("start_time DESC");
 			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	return runningActivityMapper.selectByExample(runningActivityExample);
+			                	List<RunningActivity> list = runningActivityMapper.selectByExample(runningActivityExample);
+			                	
+			                	 // 取分页信息
+			                    PageInfo<RunningActivity> pageInfo = new PageInfo<RunningActivity>(list);
+			                    long total = pageInfo.getTotal(); //获取总记录数
+			                    System.out.println("共有商品信息：" + total);
+			                	return list;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("areaActivities")
-							.description("所有活动记录")
+							.description("所有区域运动活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
@@ -350,6 +357,11 @@ public class StudentType {
 			                	areaActivityExample.setOrderByClause("start_time DESC");
 			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
 			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
+			                	
+			                	// 取分页信息
+			                    PageInfo<AreaActivity> pageInfo = new PageInfo<AreaActivity>(areaActivityList);
+			                    long total = pageInfo.getTotal(); //获取总记录数
+			                    System.out.println("区域运动数目：" + total);
 			                	return areaActivityList;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

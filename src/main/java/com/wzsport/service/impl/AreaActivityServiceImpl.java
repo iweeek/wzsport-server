@@ -269,8 +269,8 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 */
 	@Override
 	public int getStudentKCalConsumption(long studentId) {
-		Integer caloriesConsumption = areaActivityMapper.sumCaloriesConsumedByStudentId(studentId);
-		return caloriesConsumption == null ? 0 : caloriesConsumption;
+		Integer kcal = areaActivityMapper.sumKcalConsumedByStudentId(studentId);
+		return kcal == null ? 0 : kcal;
 	}
 
 	/*
@@ -289,7 +289,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 * @see com.wzsport.service.AreaActivityService#getStudentCaloriesConsumption(long, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public int getStudentCaloriesConsumption(long studentId, Date start, Date end) {
+	public int getStudentKcalConsumption(long studentId, Date start, Date end) {
 		Integer timeCosted = areaActivityMapper.sumKCalConsumedByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
 	}

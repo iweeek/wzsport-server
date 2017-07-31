@@ -25,6 +25,7 @@ import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.StudentExample.Criteria;
 import com.wzsport.model.Term;
+import com.wzsport.service.AreaActivityService;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.TermService;
 import com.wzsport.util.MyDateUtil;
@@ -37,16 +38,15 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 
 /**
-* GraphQL瀛︾敓绫诲瀷鐨勫畾涔夊強鏌ヨ瀛楁瀹氫箟
 * 
-* @author x1ny
-* @date 2017骞�5鏈�25鏃�
 */
 @Component
 public class StudentType {
 	
 	private static TermService termService;
 	private static RunningActivityService runningActivityService;
+	private static AreaActivityService areaActivityService;
+	
 	private static StudentMapper studentMapper;
 	private static FitnessCheckDataMapper fitnessCheckDataMapper;
 	private static RunningActivityMapper runningActivityMapper;
@@ -353,9 +353,9 @@ public class StudentType {
 			                	return areaActivityList;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("caloriesConsumption")
+							.name("runningActivityKcalConsumption")
 							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
-							.description("该学生的累计卡路里消耗")
+							.description("该学生跑步运动累计消耗热量（单位：大卡）")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
@@ -382,16 +382,52 @@ public class StudentType {
 									default:
 										return runningActivityService.getStudentKCalConsumption(student.getId());
 									}
-									return runningActivityService.getStudentCaloriesConsumption(student.getId(),
+									return runningActivityService.getStudentKcalConsumption(student.getId(),
 											start, end);
 								}
 			                	return runningActivityService.getStudentKCalConsumption(student.getId());
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("timeCosted")
+							.name("areaActivityKcalConsumption")
 							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
-							.description("该学生的累计运动时长(单位:秒)")
+							.description("该学生区域运动累计消耗热量（单位：大卡）")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return areaActivityService.getStudentKCalConsumption(student.getId());
+									}
+									return areaActivityService.getStudentKcalConsumption(student.getId(),
+											start, end);
+								}
+			                	return areaActivityService.getStudentKCalConsumption(student.getId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("runningActivityTimeCosted")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生跑步运动累计运动时长(单位:秒)")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
@@ -425,7 +461,44 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentTermActivityCount")
+							.name("areaActivityTimeCosted")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生区域运动累计运动时长(单位:秒)")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return areaActivityService.getStudentTimeCosted(student.getId());
+									}
+									return areaActivityService.getStudentTimeCosted(student.getId(),
+											start, end);
+								}
+			                	return areaActivityService.getStudentTimeCosted(student.getId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermRunningActivityCount")
+							.description("该学生当前学期跑步运动活动次数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
@@ -433,8 +506,17 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentTermQualifiedActivityCount")
-							.description("该学生的当前学期的合格活动次数")
+							.name("currentTermAreaActivityCount")
+							.description("该学生当前学期区域运动活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return areaActivityService.getCurrentTermActivityCount(student.getId(), student.getUniversityId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermQualifiedRunningActivityCount")
+							.description("该学生的当前学期跑步运动合格次数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
@@ -442,9 +524,18 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("qualifiedActivityCount")
+							.name("currentTermQualifiedAreaActivityCount")
+							.description("该学生的当前学期区域运动合格次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+			                	return areaActivityService.getCurrentTermQualifiedActivityCount(student.getId(), student.getUniversityId());
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("qualifiedRunningActivityCount")
 							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
-							.description("该学生的合格活动次数")
+							.description("该学生跑步运动合格活动次数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
 								Student student = environment.getSource();
@@ -475,6 +566,42 @@ public class StudentType {
 											start, end);
 								}
 			                	return runningActivityService.getQualifiedActivityCount(student.getId(), null, null);
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("qualifiedAreaActivityCount")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生区域运动合格活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return areaActivityService.getQualifiedActivityCount(student.getId(), null, null);
+									}
+									return areaActivityService.getQualifiedActivityCount(student.getId(),
+											start, end);
+								}
+			                	return areaActivityService.getQualifiedActivityCount(student.getId(), null, null);
 			                } )
 							.build())
 					.build();
@@ -608,5 +735,10 @@ public class StudentType {
 	@Autowired(required = true)
 	public void setRunningActivityService(RunningActivityService runningActivityService) {
 		StudentType.runningActivityService = runningActivityService;
+	}
+	
+	@Autowired(required = true)
+	public void setAreaActivityService(AreaActivityService areaActivityService) {
+		StudentType.areaActivityService = areaActivityService;
 	}
 }

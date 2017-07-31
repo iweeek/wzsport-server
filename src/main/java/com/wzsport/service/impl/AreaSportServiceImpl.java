@@ -132,7 +132,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 		example.createCriteria().andIdNotEqualTo(0l);
 		List<AreaSport> list = areaSportMapper.selectByExample(example);
 		if (list.size() > 0) {
-			logMsg = "MSG_TEMPLATE_OPERATION_OK";
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
 			
 			resBody.obj = list;

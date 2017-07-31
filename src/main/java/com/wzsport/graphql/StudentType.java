@@ -8,10 +8,13 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.FitnessCheckDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.SportScoreMapper;
 import com.wzsport.mapper.StudentMapper;
+import com.wzsport.model.AreaActivity;
+import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.FitnessCheckData;
 import com.wzsport.model.FitnessCheckDataExample;
 import com.wzsport.model.RunningActivity;
@@ -47,6 +50,8 @@ public class StudentType {
 	private static StudentMapper studentMapper;
 	private static FitnessCheckDataMapper fitnessCheckDataMapper;
 	private static RunningActivityMapper runningActivityMapper;
+	
+	private static AreaActivityMapper areaActivityMapper;
 	private static SportScoreMapper sportScoreMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
@@ -170,12 +175,12 @@ public class StudentType {
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("activities")
+							.name("runningActivities")
 							.description("所有活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("ActivitiesPage")
+																.name("RunningActivitiesPage")
 																.description("跑步活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
@@ -187,13 +192,30 @@ public class StudentType {
 			                	return runningActivityMapper.selectByExample(runningActivityExample);
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentWeekActivities")
-							.description("本周活动记录")
+							.name("areaActivities")
+							.description("所有活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+																.name("AreaActivitiesPage")
+																.description("区域运动活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+			                	areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	areaActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	return areaActivityMapper.selectByExample(areaActivityExample);
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentWeekRunningActivities")
+							.description("本周跑步运动活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("ActivitiesPage")
-																.description("跑步活动记录分页")
+																.name("RunningActivitiesPage")
+																.description("跑步运动活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
 			                	Student student = environment.getSource();
@@ -207,13 +229,33 @@ public class StudentType {
 			                	return runningActivityList;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentMonthActivities")
+							.name("currentWeekAreaActivities")
+							.description("本周区域运动活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+																.name("AreaActivitiesPage")
+																.description("区域运动活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+			                	areaActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(MyDateUtil.getCurrentWeekStartDate(), new Date());
+			                	areaActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
+			                	return areaActivityList;
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentMonthRunningActivities")
 							.description("本月活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("ActivitiesPage")
-																.description("跑步活动记录分页")
+																.name("RunningActivitiesPage")
+																.description("跑步运动活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
 			                	Student student = environment.getSource();
@@ -227,13 +269,33 @@ public class StudentType {
 			                	return runningActivityList;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentTermActivities")
-							.description("本学期活动记录")
+							.name("currentMonthAreaActivities")
+							.description("本月活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+																.name("AreaActivitiesPage")
+																.description("区域运动活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+			                	areaActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(MyDateUtil.getCurrentMonthStartDate(), new Date());
+			                	areaActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
+			                	return areaActivityList;
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermRunningActivities")
+							.description("本学期跑步运动活动记录")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("ActivitiesPage")
-																.description("跑步活动记录分页")
+																.name("RunningActivitiesPage")
+																.description("跑步运动活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
 			                	Student student = environment.getSource();
@@ -255,8 +317,40 @@ public class StudentType {
 			                	
 			                	runningActivityExample.setOrderByClause("start_time DESC");
 			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
-			                	return runningActivityList;
+			                	Page<RunningActivity> areaActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
+			                	return areaActivityList;
+			                } ).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("currentTermAreaActivities")
+							.description("本学期区域运动活动记录")
+							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+																.name("AreaActivitiesPage")
+																.description("区域运动活动记录分页")
+																.build())
+							.dataFetcher(environment -> {
+			                	Student student = environment.getSource();
+			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());     	
+			                	Date startDate = null;
+			                	Date endDate = null;
+			                	if(currentTerm != null) {
+			                		startDate = currentTerm.getStartDate();
+			                		endDate = currentTerm.getEndDate();
+			                	} else {
+			                		startDate = MyDateUtil.getCurrentYearStartDate();
+			                		endDate = new Date();
+			                	}
+			                	
+			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+			                	areaActivityExample.createCriteria()
+			                						.andStudentIdEqualTo(student.getId())
+			                						.andStartTimeBetween(startDate, endDate);
+			                	
+			                	areaActivityExample.setOrderByClause("start_time DESC");
+			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
+			                	return areaActivityList;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("caloriesConsumption")
@@ -489,6 +583,11 @@ public class StudentType {
 	@Autowired(required = true)
 	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
 		StudentType.runningActivityMapper = runningActivityMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setAreaActivityMapper(AreaActivityMapper areaActivityMapper) {
+		StudentType.areaActivityMapper = areaActivityMapper;
 	}
 	
 	@Autowired(required = true)

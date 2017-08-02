@@ -71,6 +71,7 @@ public class RunningActivityTask {
 			runningActivity.setStepCount(stepCount);
 			runningActivity.setCostTime(costTime);
 			runningActivity.setTargetFinishedTime(targetFinishedTime);
+			runningActivity.setEndedBy(true);
 
 			runningActivity = runningActivityService.endRunningActivity(runningActivity);
 		}

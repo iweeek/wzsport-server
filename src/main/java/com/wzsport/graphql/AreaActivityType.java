@@ -2,7 +2,6 @@ package com.wzsport.graphql;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.wzsport.mapper.RunningActivityDataMapper;
-import com.wzsport.mapper.RunningActivityMapper;
-import com.wzsport.mapper.RunningSportMapper;
+import com.wzsport.mapper.AreaActivityDataMapper;
+import com.wzsport.mapper.AreaActivityMapper;
+import com.wzsport.mapper.AreaSportMapper;
 import com.wzsport.mapper.StudentMapper;
-import com.wzsport.model.RunningActivity;
-import com.wzsport.model.RunningActivityDataExample;
-import com.wzsport.model.RunningActivityExample;
-import com.wzsport.model.RunningActivityExample.Criteria;
+import com.wzsport.model.AreaActivity;
+import com.wzsport.model.AreaActivityDataExample;
+import com.wzsport.model.AreaActivityExample;
+import com.wzsport.model.AreaActivityExample.Criteria;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 
@@ -31,17 +30,15 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLTypeReference;
 
 /**
-* GraphQL RunningActivity类型的定义及查询字段定义
+* GraphQL AreaActivity类型的定义及查询字段定义
 * 
-* @author x1ny
-* @date 2017年5月26日
 */
 @Component
-public class RunningActivityType {
+public class AreaActivityType {
 	
-	private static RunningActivityMapper runningActivityMapper;
-	private static RunningActivityDataMapper runningActivityDataMapper;
-	private static RunningSportMapper runningSportMapper;
+	private static AreaActivityMapper areaActivityMapper;
+	private static AreaActivityDataMapper AreaActivityDataMapper;
+	private static AreaSportMapper AreaSportMapper;
 	private static StudentMapper studentMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
@@ -59,46 +56,26 @@ public class RunningActivityType {
 		    .value(Operator.BETWEEN.toString())
 		    .build();
 	
-	private RunningActivityType() {}
+	private AreaActivityType() {}
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("RunningActivity")
-					.description("跑步活动类型")
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("id")
-							.description("唯一主键")
-							.type(Scalars.GraphQLLong)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("runningSportId")
-							.description("该活动关联的项目的ID")
-							.type(Scalars.GraphQLLong)
-							.build())
+					.name("AreaActivity")
+					.description("区域运动活动类型")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("studentId")
-							.description("该活动关联的学生的ID")
+							.description("学生的ID")
 							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("distance")
-							.description("活动距离(单位:米)")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("stepCount")
-							.description("步数")
-							.type(Scalars.GraphQLInt)
+							.name("areaSportId")
+							.description("该活动关联的区域运动的ID")
+							.type(Scalars.GraphQLLong)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("costTime")
-							.description("活动耗时(单位:秒)")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("targetFinishedTime")
-							.description("达到目标距离的时间(单位:秒)")
+							.description("活动消耗时间,时间戳格式(毫秒)")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -106,9 +83,9 @@ public class RunningActivityType {
 							.description("运动日期")
 							.type(Scalars.GraphQLString)
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
+								AreaActivity areaActivity = environment.getSource();
 								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						        return sdf.format(runningActivity.getStartTime());
+						        return sdf.format(areaActivity.getStartTime());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -116,41 +93,31 @@ public class RunningActivityType {
 							.description("活动开始时间,时间戳格式(毫秒)")
 							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
-			                	return runningActivity.getStartTime().getTime();
+								AreaActivity AreaActivity = environment.getSource();
+			                	return AreaActivity.getStartTime().getTime();
 							} )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("kcalConsumed")
+							.description("本次活动的卡路里(大卡)消耗量")
+							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("endedAt")
 							.description("活动结束时间,时间戳格式(毫秒)")
 							.type(Scalars.GraphQLLong)
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
-								if (runningActivity.getEndedAt() != null) {
-									return runningActivity.getEndedAt().getTime();
+								AreaActivity AreaActivity = environment.getSource();
+								if (AreaActivity.getEndedAt() != null) {
+									return AreaActivity.getEndedAt().getTime();
 								} else {
 									return 0;
 								}
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("qualifiedDistance")
-							.description("该次活动的合格距离(单位:米)")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("qualifiedCostTime")
 							.description("该次活动的合格耗时(单位:秒)")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("minCostTime")
-							.description("该次活动的最少耗时(单位:秒)")
-							.type(Scalars.GraphQLInt)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("kcalConsumed")
-							.description("本次活动的卡路里(大卡)消耗量")
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -159,27 +126,12 @@ public class RunningActivityType {
 							.type(Scalars.GraphQLBoolean)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("speed")
-							.description("平均速度")
-							.type(Scalars.GraphQLFloat)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("stepPerSecond")
-							.description("平均每秒步数")
-							.type(Scalars.GraphQLFloat)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("distancePerStep")
-							.description("平均步幅")
-							.type(Scalars.GraphQLFloat)
-							.build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("runningSport")
+							.name("areaSport")
 							.description("该活动所属的运动项目")
-							.type(RunningSportType.getType())
+							.type(AreaSportType.getType())
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
-			                	return runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
+								AreaActivity AreaActivity = environment.getSource();
+			                	return AreaSportMapper.selectByPrimaryKey(AreaActivity.getAreaSportId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -187,19 +139,19 @@ public class RunningActivityType {
 							.description("该活动记录所属的学生")
 							.type(new GraphQLTypeReference("Student"))
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
-			                	return studentMapper.selectByPrimaryKey(runningActivity.getStudentId());
+								AreaActivity AreaActivity = environment.getSource();
+			                	return studentMapper.selectByPrimaryKey(AreaActivity.getStudentId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("data")
 							.description("该活动记录的采集数据")
-							.type(new GraphQLList(RunningActivityDataType.getType()))
+							.type(new GraphQLList(AreaActivityDataType.getType()))
 							.dataFetcher(environment ->  {
-								RunningActivity runningActivity = environment.getSource();
-								RunningActivityDataExample example = new RunningActivityDataExample();
-								example.createCriteria().andActivityIdEqualTo(runningActivity.getId());
-			                	return runningActivityDataMapper.selectByExample(example);
+								AreaActivity AreaActivity = environment.getSource();
+								AreaActivityDataExample example = new AreaActivityDataExample();
+								example.createCriteria().andActivityIdEqualTo(AreaActivity.getId());
+			                	return AreaActivityDataMapper.selectByExample(example);
 							} )
 							.build())
 					.build();
@@ -211,13 +163,13 @@ public class RunningActivityType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
-	                .name("runningActivity")
-	                .description("根据ID获取跑步活动类型")
+	                .name("areaActivity")
+	                .description("根据ID获取区域运动活动类型")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
-	                	RunningActivity runningActivity = runningActivityMapper.selectByPrimaryKey(id);
-	                	return runningActivity;
+	                	AreaActivity areaActivity = areaActivityMapper.selectByPrimaryKey(id);
+	                	return areaActivity;
 	                } ).build();
 		}
         return singleQueryField;
@@ -227,15 +179,15 @@ public class RunningActivityType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("studentId").type(Scalars.GraphQLLong).build())
-	                .name("runningActivities")
-	                .description("根据学生ID获取相关联的所有跑步活动")
+	                .name("Activities")
+	                .description("根据学生ID获取相关联的所有活动")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long studentId = environment.getArgument("studentId");
-	                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-	                	runningActivityExample.createCriteria().andStudentIdEqualTo(studentId);
-	                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
-	                	return runningActivityList;
+	                	AreaActivityExample AreaActivityExample = new AreaActivityExample();
+	                	AreaActivityExample.createCriteria().andStudentIdEqualTo(studentId);
+	                	List<AreaActivity> areaActivityList = areaActivityMapper.selectByExample(AreaActivityExample);
+	                	return areaActivityList;
 	                } ).build();
 		}
         return listQueryField;
@@ -247,7 +199,7 @@ public class RunningActivityType {
 	        		.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
 	        		.argument(GraphQLArgument.newArgument().name("startTime").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("endTime").type(Scalars.GraphQLLong).build())
-	        		.argument(GraphQLArgument.newArgument().name("runningSportId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("areaSportId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("speed").type(Scalars.GraphQLFloat).build())
 	        		.argument(GraphQLArgument.newArgument().name("speedOperator").type(operatorEnumType).build())
 	        		.argument(GraphQLArgument.newArgument().name("anotherSpeed").type(Scalars.GraphQLFloat).build())
@@ -260,13 +212,14 @@ public class RunningActivityType {
 	        		.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 					.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 					.type(PageType.getPageTypeBuidler(getType())
-														.name("RunningActivityPage")
+														.name("AreaActivityPage")
 														.description("活动记录分页")
 														.build())
-	                .name("searchRunningActivities")
+	                .name("searchActivities")
 	                .dataFetcher(environment ->  {
-	                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-	                	Criteria criteria = runningActivityExample.createCriteria();
+	                	
+	                	AreaActivityExample AreaActivityExample = new AreaActivityExample();
+	                	Criteria criteria = AreaActivityExample.createCriteria();
 	                	
 	                	String studentName = environment.getArgument("studentName");
 	                	if(studentName != null) {
@@ -300,9 +253,9 @@ public class RunningActivityType {
 	                		}
 	                	}
 	                	
-	                	Long runningSportId = environment.getArgument("runningSportId");
-	                	if(runningSportId != null) {
-	                		criteria.andRunningSportIdEqualTo(runningSportId);
+	                	Long areaSportId = environment.getArgument("areaSportId");
+	                	if(areaSportId != null) {
+	                		criteria.andAreaSportIdEqualTo(areaSportId);
 	                	}
 	                	
 	                	Long startTime = environment.getArgument("startTime");
@@ -315,95 +268,29 @@ public class RunningActivityType {
 	                		criteria.andStartTimeLessThanOrEqualTo(new Date(endTime));
 	                	}
 	                	
-	                	Double speed = environment.getArgument("speed");
-	                	if(speed != null) {
-	                		
-	                		switch(Operator.valueOf(environment.getArgument("speedOperator"))) {
-							case BETWEEN:
-								double anotherSpeed = environment.getArgument("anotherSpeed");
-								criteria.andSpeedBetween(speed, anotherSpeed);
-								break;
-							case EQUALL:
-								criteria.andSpeedEqualTo(speed);
-								break;
-							case GREATER_THAN:
-								criteria.andSpeedGreaterThanOrEqualTo(speed);
-								break;
-							case LESS_THAN:
-								criteria.andSpeedLessThanOrEqualTo(speed);
-								break;
-							default:
-								break;
-	                		}
-	                	}
-	                	
-	                	Double stepPerSecond = environment.getArgument("stepPerSecond");
-	                	if(stepPerSecond != null) {
-	                		
-	                		switch(Operator.valueOf(environment.getArgument("stepPerSecondOperator"))) {
-							case BETWEEN:
-								double anotherStepPerSecond = environment.getArgument("anotherStepPerSecond");
-								criteria.andStepPerSecondBetween(stepPerSecond, anotherStepPerSecond);
-								break;
-							case EQUALL:
-								criteria.andStepPerSecondEqualTo(stepPerSecond);
-								break;
-							case GREATER_THAN:
-								criteria.andStepPerSecondGreaterThanOrEqualTo(stepPerSecond);
-								break;
-							case LESS_THAN:
-								criteria.andStepPerSecondLessThanOrEqualTo(stepPerSecond);
-								break;
-							default:
-								break;
-	                		}
-	                	}
-	                	
-	                	Double distancePerStep = environment.getArgument("distancePerStep");
-	                	if(distancePerStep != null) {
-	                		
-	                		switch(Operator.valueOf(environment.getArgument("distancePerStepOperator"))) {
-							case BETWEEN:
-								double anotherDistancePerStep = environment.getArgument("anotherDistancePerStep");
-								criteria.andDistancePerStepBetween(distancePerStep, anotherDistancePerStep);
-								break;
-							case EQUALL:
-								criteria.andDistancePerStepEqualTo(distancePerStep);
-								break;
-							case GREATER_THAN:
-								criteria.andDistancePerStepGreaterThanOrEqualTo(distancePerStep);
-								break;
-							case LESS_THAN:
-								criteria.andDistancePerStepLessThanOrEqualTo(distancePerStep);
-								break;
-							default:
-								break;
-	                		}
-	                	}
-	                	
 	                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-	                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
-	                	return runningActivityList;
+	                	List<AreaActivity> areaActivityList = areaActivityMapper.selectByExample(AreaActivityExample);
+	                	return areaActivityList;
 	                } ).build();
     }
 
 	@Autowired(required = true)
-	public void setRunningActivityMapper(RunningActivityMapper runningActivityMapper) {
-		RunningActivityType.runningActivityMapper = runningActivityMapper;
+	public void setAreaActivityMapper(AreaActivityMapper areaActivityMapper) {
+		AreaActivityType.areaActivityMapper = areaActivityMapper;
 	}
 	
 	@Autowired(required = true)
-	public void setRunningSportMapper(RunningSportMapper runningSportMapper) {
-		RunningActivityType.runningSportMapper = runningSportMapper;
+	public void setAreaSportMapper(AreaSportMapper AreaSportMapper) {
+		AreaActivityType.AreaSportMapper = AreaSportMapper;
 	}
 	
 	@Autowired(required = true)
 	public void setStudentMapper(StudentMapper studentMapper) {
-		RunningActivityType.studentMapper = studentMapper;
+		AreaActivityType.studentMapper = studentMapper;
 	}
 	
 	@Autowired(required = true)
-	public void setRunningActivityDataMapper(RunningActivityDataMapper runningActivityDataMapper) {
-		RunningActivityType.runningActivityDataMapper = runningActivityDataMapper;
+	public void setAreaActivityDataMapper(AreaActivityDataMapper AreaActivityDataMapper) {
+		AreaActivityType.AreaActivityDataMapper = AreaActivityDataMapper;
 	}
 }

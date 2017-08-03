@@ -92,7 +92,7 @@ public interface RunningActivityService {
 	 * @param end 结束时期
 	 * @return the student calories consumption
 	 */
-	int getStudentCaloriesConsumption(long studentId, Date start, Date end);
+	int getStudentKcalConsumption(long studentId, Date start, Date end);
 	
 	/**
 	 * 获取学生指定时段的运动时长.

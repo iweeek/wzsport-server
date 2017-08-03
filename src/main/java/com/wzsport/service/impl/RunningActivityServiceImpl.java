@@ -254,7 +254,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	}
 
 	@Override
-	public int getStudentCaloriesConsumption(long studentId, Date start, Date end) {
+	public int getStudentKcalConsumption(long studentId, Date start, Date end) {
 		Integer timeCosted = runningActivityMapper.sumKCalConsumedByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
 	}

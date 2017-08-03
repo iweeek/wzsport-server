@@ -109,7 +109,7 @@ public interface AreaActivityService {
 	 *            the end
 	 * @return the student calories consumption
 	 */
-	int getStudentCaloriesConsumption(long studentId, Date start, Date end);
+	int getStudentKcalConsumption(long studentId, Date start, Date end);
 	
 	/**
 	 * Gets the student time costed.

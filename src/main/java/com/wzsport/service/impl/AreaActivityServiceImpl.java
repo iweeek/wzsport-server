@@ -17,6 +17,7 @@ import com.wzsport.mapper.AreaSportMapper;
 import com.wzsport.model.AreaActivity;
 import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.AreaSport;
+import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningSport;
 import com.wzsport.model.AreaActivityExample.Criteria;
 import com.wzsport.model.Term;
@@ -346,5 +347,12 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Object getAccuActivityCount(long studentId, Date start, Date end) {
+		AreaActivityExample areaActivityExample = new AreaActivityExample();
+		areaActivityExample.createCriteria().andStudentIdEqualTo(studentId).andStartTimeBetween(start, end);
+		return (int) areaActivityMapper.countByExample(areaActivityExample);
 	}
 }

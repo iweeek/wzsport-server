@@ -143,4 +143,6 @@ public interface AreaActivityService {
 	 * @return true, if is activity exist
 	 */
 	boolean isActivityExist(long activityId);
+
+	Object getAccuActivityCount(long studentId, Date start, Date end);
 }

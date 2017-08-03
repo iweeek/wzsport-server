@@ -1,5 +1,7 @@
 package com.wzsport.graphql;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +60,8 @@ public class StudentType {
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
 	private static GraphQLFieldDefinition listQueryByConditionsField;
+	
+	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static enum TimeRange {
 		CURRENT_WEEK, CURRENT_MONTH, CURRENT_TERM
@@ -178,192 +182,270 @@ public class StudentType {
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("runningActivities")
 							.description("所有跑步运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
 							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
 																.name("RunningActivitiesPage")
 																.description("跑步活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
+								List<RunningActivity> list = null;
+								
 			                	Student student = environment.getSource();
+			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+			                	areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	
+			                	Date startDate = null;
+			                	Date endDate = null;
+			                	try {
+									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+								} catch (ParseException e) {
+									e.printStackTrace();
+									return list;
+								}
 			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-			                	runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId()).andStartTimeBetween(startDate, endDate);
+			                	
 			                	runningActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	List<RunningActivity> list = runningActivityMapper.selectByExample(runningActivityExample);
+			                	list = runningActivityMapper.selectByExample(runningActivityExample);
 			                	
 			                	 // 取分页信息
-			                    PageInfo<RunningActivity> pageInfo = new PageInfo<RunningActivity>(list);
-			                    long total = pageInfo.getTotal(); //获取总记录数
-			                    System.out.println("共有商品信息：" + total);
+//			                    PageInfo<RunningActivity> pageInfo = new PageInfo<RunningActivity>(list);
+//			                    long total = pageInfo.getTotal(); //获取总记录数
+//			                    System.out.println("跑步运动获取记录总数：" + total);
 			                	return list;
 			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("areaActivities")
 							.description("所有区域运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
 							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
 																.name("AreaActivitiesPage")
 																.description("区域运动活动记录分页")
 																.build())
 							.dataFetcher(environment -> {
+								List<AreaActivity> list = null;
+										
 			                	Student student = environment.getSource();
 			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
 			                	areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
+			                	
+			                	Date startDate = null;
+			                	Date endDate = null;
+			                	try {
+									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+								} catch (ParseException e) {
+									e.printStackTrace();
+									return list;
+								}
+			                	
+			                	areaActivityExample.createCriteria().andStartTimeBetween(startDate, endDate);
 			                	areaActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
 			                	return areaActivityMapper.selectByExample(areaActivityExample);
 			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentWeekRunningActivities")
-							.description("本周跑步运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("RunningActivitiesPage")
-																.description("跑步运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-			                	runningActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(MyDateUtil.getCurrentWeekStartDate(), new Date());
-			                	runningActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
-			                	return runningActivityList;
-			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentWeekAreaActivities")
-							.description("本周区域运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
-																.name("AreaActivitiesPage")
-																.description("区域运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
-			                	areaActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(MyDateUtil.getCurrentWeekStartDate(), new Date());
-			                	areaActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
-			                	return areaActivityList;
-			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentMonthRunningActivities")
-							.description("本月活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("RunningActivitiesPage")
-																.description("跑步运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-			                	runningActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(MyDateUtil.getCurrentMonthStartDate(), new Date());
-			                	runningActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<RunningActivity> runningActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
-			                	return runningActivityList;
-			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentMonthAreaActivities")
-							.description("本月活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
-																.name("AreaActivitiesPage")
-																.description("区域运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
-			                	areaActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(MyDateUtil.getCurrentMonthStartDate(), new Date());
-			                	areaActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
-			                	return areaActivityList;
-			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentTermRunningActivities")
-							.description("本学期跑步运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
-																.name("RunningActivitiesPage")
-																.description("跑步运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());     	
-			                	Date startDate = null;
-			                	Date endDate = null;
-			                	if(currentTerm != null) {
-			                		startDate = currentTerm.getStartDate();
-			                		endDate = currentTerm.getEndDate();
-			                	} else {
-			                		startDate = MyDateUtil.getCurrentYearStartDate();
-			                		endDate = new Date();
-			                	}
-			                	
-			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
-			                	runningActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(startDate, endDate);
-			                	
-			                	runningActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<RunningActivity> areaActivityList = (Page<RunningActivity>) runningActivityMapper.selectByExample(runningActivityExample);
-			                	return areaActivityList;
-			                } ).build())
-					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("currentTermAreaActivities")
-							.description("本学期区域运动活动记录")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
-																.name("AreaActivitiesPage")
-																.description("区域运动活动记录分页")
-																.build())
-							.dataFetcher(environment -> {
-			                	Student student = environment.getSource();
-			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());     	
-			                	Date startDate = null;
-			                	Date endDate = null;
-			                	if(currentTerm != null) {
-			                		startDate = currentTerm.getStartDate();
-			                		endDate = currentTerm.getEndDate();
-			                	} else {
-			                		startDate = MyDateUtil.getCurrentYearStartDate();
-			                		endDate = new Date();
-			                	}
-			                	
-			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
-			                	areaActivityExample.createCriteria()
-			                						.andStudentIdEqualTo(student.getId())
-			                						.andStartTimeBetween(startDate, endDate);
-			                	
-			                	areaActivityExample.setOrderByClause("start_time DESC");
-			                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	Page<AreaActivity> areaActivityList = (Page<AreaActivity>) areaActivityMapper.selectByExample(areaActivityExample);
-			                	
-			                	// 取分页信息
-			                    PageInfo<AreaActivity> pageInfo = new PageInfo<AreaActivity>(areaActivityList);
-			                    long total = pageInfo.getTotal(); //获取总记录数
-			                    System.out.println("区域运动数目：" + total);
-			                	return areaActivityList;
-			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentWeekRunningActivities")
+//							.description("本周跑步运动活动记录")
+//							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+//							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
+//							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+//																.name("RunningActivitiesPage")
+//																.description("跑步运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//			                	Student student = environment.getSource();
+//			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+//			                	runningActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(MyDateUtil.getCurrentWeekStartDate(), new Date());
+//			                	runningActivityExample.setOrderByClause("start_time DESC");
+//			                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
+//			                	return runningActivityList;
+//			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentWeekAreaActivities")
+//							.description("本周区域运动活动记录")
+//							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+//							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+//							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+//																.name("AreaActivitiesPage")
+//																.description("区域运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//								Date startDate = null;
+//			                	Date endDate = null;
+//			                	try {
+//									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									return null;
+//								}
+//			                	
+//			                	Student student = environment.getSource();
+//			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+//			                	areaActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(startDate, endDate);
+//			                	areaActivityExample.setOrderByClause("start_time DESC");
+//			                	List<AreaActivity> areaActivityList = areaActivityMapper.selectByExample(areaActivityExample);
+//			                	return areaActivityList;
+//			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentMonthRunningActivities")
+//							.description("本月活动记录")
+//							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+//							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
+//							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+//																.name("RunningActivitiesPage")
+//																.description("跑步运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//								Date startDate = null;
+//			                	Date endDate = null;
+//			                	try {
+//									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									return null;
+//								}
+//			                	
+//			                	Student student = environment.getSource();
+//			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+//			                	runningActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(startDate, endDate);
+//			                	runningActivityExample.setOrderByClause("start_time DESC");
+//			                	List<RunningActivity> runningActivityList = runningActivityMapper.selectByExample(runningActivityExample);
+//			                	return runningActivityList;
+//			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentMonthAreaActivities")
+//							.description("本月活动记录")
+//							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+//							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
+//							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+//																.name("AreaActivitiesPage")
+//																.description("区域运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//								Date startDate = null;
+//			                	Date endDate = null;
+//			                	try {
+//									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									return null;
+//								}
+//			                	
+//			                	Student student = environment.getSource();
+//			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+//			                	areaActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(startDate, endDate);
+//			                	areaActivityExample.setOrderByClause("start_time DESC");
+//			                	List<AreaActivity> areaActivityList = areaActivityMapper.selectByExample(areaActivityExample);
+//			                	return areaActivityList;
+//			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentTermRunningActivities")
+//							.description("本学期跑步运动活动记录")
+//							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+//							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
+//							.type(PageType.getPageTypeBuidler(RunningActivityType.getType())
+//																.name("RunningActivitiesPage")
+//																.description("跑步运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//								Date startDate = null;
+//			                	Date endDate = null;
+//			                	try {
+//									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									return null;
+//								}
+//			                	
+//			                	Student student = environment.getSource();
+//			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());   
+//			                	
+//			                	if (startDate.getTime() < currentTerm.getStartDate().getTime()) {
+//			                		startDate = currentTerm.getStartDate();
+//			                	}
+//			                	
+//			                	if (endDate.getTime() > currentTerm.getEndDate().getTime()) {
+//			                		endDate = currentTerm.getEndDate();
+//			                	}
+////			                	Date startDate = null;
+////			                	Date endDate = null;
+////			                	if(currentTerm != null) {
+////			                		startDate = currentTerm.getStartDate();
+////			                		endDate = currentTerm.getEndDate();
+////			                	} else {
+////			                		startDate = MyDateUtil.getCurrentYearStartDate();
+////			                		endDate = new Date();
+////			                	}
+//			                	
+//			                	RunningActivityExample runningActivityExample = new RunningActivityExample();
+//			                	runningActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(startDate, endDate);
+//			                	
+//			                	runningActivityExample.setOrderByClause("start_time DESC");
+//			                	List<RunningActivity> areaActivityList = runningActivityMapper.selectByExample(runningActivityExample);
+//			                	return areaActivityList;
+//			                } ).build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("currentTermAreaActivities")
+//							.description("本学期区域运动活动记录")
+//							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+//							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
+//							.type(PageType.getPageTypeBuidler(AreaActivityType.getType())
+//																.name("AreaActivitiesPage")
+//																.description("区域运动活动记录分页")
+//																.build())
+//							.dataFetcher(environment -> {
+//								Date startDate = null;
+//			                	Date endDate = null;
+//			                	try {
+//									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									return null;
+//								}
+//			                	
+//			                	Student student = environment.getSource();
+//			                	Term currentTerm = termService.getCurrentTerm(student.getUniversityId());   
+//			                	
+//			                	if (startDate.getTime() < currentTerm.getStartDate().getTime()) {
+//			                		startDate = currentTerm.getStartDate();
+//			                	}
+//			                	
+//			                	if (endDate.getTime() > currentTerm.getEndDate().getTime()) {
+//			                		endDate = currentTerm.getEndDate();
+//			                	}
+//			                	
+//			                	AreaActivityExample areaActivityExample = new AreaActivityExample();
+//			                	areaActivityExample.createCriteria()
+//			                						.andStudentIdEqualTo(student.getId())
+//			                						.andStartTimeBetween(startDate, endDate);
+//			                	
+//			                	areaActivityExample.setOrderByClause("start_time DESC");
+//			                	List<AreaActivity> areaActivityList = areaActivityMapper.selectByExample(areaActivityExample);
+//			                	
+//			                	// 取分页信息
+////			                    PageInfo<AreaActivity> pageInfo = new PageInfo<AreaActivity>(areaActivityList);
+////			                    long total = pageInfo.getTotal(); //获取总记录数
+////			                    System.out.println("区域运动数目：" + total);
+//			                	return areaActivityList;
+//			                } ).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("runningActivityKcalConsumption")
 							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
@@ -578,6 +660,78 @@ public class StudentType {
 											start, end);
 								}
 			                	return runningActivityService.getQualifiedActivityCount(student.getId(), null, null);
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("accuRunningActivityCount")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生跑步运动累计活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return runningActivityService.getAccuActivityCount(student.getId(), null, null);
+									}
+									return runningActivityService.getAccuActivityCount(student.getId(),
+											start, end);
+								}
+			                	return runningActivityService.getAccuActivityCount(student.getId(), null, null);
+			                } )
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("accuAreaActivityCount")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生区域运动累计活动次数")
+							.type(Scalars.GraphQLInt)
+							.dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+								
+								if(timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch(TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return areaActivityService.getAccuActivityCount(student.getId(), null, null);
+									}
+									return areaActivityService.getAccuActivityCount(student.getId(),
+											start, end);
+								}
+			                	return areaActivityService.getAccuActivityCount(student.getId(), null, null);
 			                } )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

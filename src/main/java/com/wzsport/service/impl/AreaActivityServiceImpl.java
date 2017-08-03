@@ -17,6 +17,7 @@ import com.wzsport.mapper.AreaSportMapper;
 import com.wzsport.model.AreaActivity;
 import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.AreaSport;
+import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningSport;
 import com.wzsport.model.AreaActivityExample.Criteria;
 import com.wzsport.model.Term;
@@ -269,8 +270,8 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 */
 	@Override
 	public int getStudentKCalConsumption(long studentId) {
-		Integer caloriesConsumption = areaActivityMapper.sumKcalConsumedByStudentId(studentId);
-		return caloriesConsumption == null ? 0 : caloriesConsumption;
+		Integer kcal = areaActivityMapper.sumKcalConsumedByStudentId(studentId);
+		return kcal == null ? 0 : kcal;
 	}
 
 	/*
@@ -289,7 +290,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 * @see com.wzsport.service.AreaActivityService#getStudentCaloriesConsumption(long, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public int getStudentCaloriesConsumption(long studentId, Date start, Date end) {
+	public int getStudentKcalConsumption(long studentId, Date start, Date end) {
 		Integer timeCosted = areaActivityMapper.sumKCalConsumedByStudentIdAndDuration(studentId, start, end);
 		return timeCosted == null ? 0 : timeCosted;
 	}
@@ -346,5 +347,12 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Object getAccuActivityCount(long studentId, Date start, Date end) {
+		AreaActivityExample areaActivityExample = new AreaActivityExample();
+		areaActivityExample.createCriteria().andStudentIdEqualTo(studentId).andStartTimeBetween(start, end);
+		return (int) areaActivityMapper.countByExample(areaActivityExample);
 	}
 }

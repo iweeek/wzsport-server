@@ -102,7 +102,7 @@ public interface AreaActivityMapper {
 	int updateByPrimaryKey(AreaActivity record);
 
 	@Select("SELECT SUM(kcal_consumed) FROM wzsport_area_activity WHERE student_id = #{studentId}")
-	Integer sumCaloriesConsumedByStudentId(long studentId);
+	Integer sumKcalConsumedByStudentId(long studentId);
 	
 	@Select("SELECT SUM(cost_time) FROM wzsport_area_activity WHERE student_id = #{studentId}")
 	Integer sumCostTimeByStudentId(long studentId);

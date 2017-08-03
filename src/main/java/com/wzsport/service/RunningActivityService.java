@@ -60,6 +60,15 @@ public interface RunningActivityService {
 	int getQualifiedActivityCount(long studentId, Date start, Date end);
 	
 	/**
+	 * 获取一名学生指定时期内的累计活动次数.
+	 *
+	 * @param studentId 学生id
+	 * @param start 开始时期
+	 * @param end 结束时期
+	 * @return the qualified activity count
+	 */
+	int getAccuActivityCount(long studentId, Date start, Date end);
+	/**
 	 * 获取一名学生本学期的总活动次数.
 	 *
 	 * @param studentId 学生id
@@ -92,7 +101,7 @@ public interface RunningActivityService {
 	 * @param end 结束时期
 	 * @return the student calories consumption
 	 */
-	int getStudentCaloriesConsumption(long studentId, Date start, Date end);
+	int getStudentKcalConsumption(long studentId, Date start, Date end);
 	
 	/**
 	 * 获取学生指定时段的运动时长.

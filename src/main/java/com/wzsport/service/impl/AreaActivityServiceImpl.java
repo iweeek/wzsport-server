@@ -269,7 +269,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 */
 	@Override
 	public int getStudentKCalConsumption(long studentId) {
-		Integer caloriesConsumption = areaActivityMapper.sumCaloriesConsumedByStudentId(studentId);
+		Integer caloriesConsumption = areaActivityMapper.sumKcalConsumedByStudentId(studentId);
 		return caloriesConsumption == null ? 0 : caloriesConsumption;
 	}
 

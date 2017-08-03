@@ -1,5 +1,9 @@
 package com.wzsport.graphql;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import com.wzsport.model.Term;
 import com.wzsport.model.TermExample;
 import com.wzsport.model.TermSportsTask;
 import com.wzsport.model.TermSportsTaskExample;
+import com.wzsport.util.MyDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -95,13 +100,40 @@ public class TermType {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("date").type(Scalars.GraphQLString).build())
 	                .name("term")
-	                .description("根据ID获取学期")
+	                .description("根据ID或者时间获取学期")
 	                .type(getType())
 	                .dataFetcher(environment -> {
-	                	long id = environment.getArgument("id");
-	                	Term term = termMapper.selectByPrimaryKey(id);
-	                	return term;
+	                	TermExample example = new TermExample();
+	                	Long id = environment.getArgument("id");
+	                	if (id != null) {
+	                		if (id != 0) {
+			                	Term term = termMapper.selectByPrimaryKey(id);
+			                	return term;
+	                		} else {
+	                			Date dt = new Date();
+	                			example.createCriteria().andStartDateLessThan(dt).andEndDateGreaterThan(dt);
+	                			List<Term> list = termMapper.selectByExample(example);
+	                			return list.get(0);
+	                		}
+	                	} else {
+	                		String date = environment.getArgument("date");
+	                		if (date != null) {
+	                			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	                			Date dt = null;
+								try {
+									dt = format.parse(date);
+								} catch (ParseException e) {
+									e.printStackTrace();
+									return null;
+								}
+	                			example.createCriteria().andStartDateLessThan(dt).andEndDateGreaterThan(dt);
+	                			List<Term> list = termMapper.selectByExample(example);
+	                			return list.get(0);
+	                		}
+	                	}
+	                	return null;
 	                } )
 	                .build();
 		}

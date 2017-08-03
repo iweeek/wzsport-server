@@ -104,7 +104,7 @@ public class UniversityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("kcalConsumptionRanking")
-							.description("该校的学生累计卡路里消耗量排行榜")
+							.description("该校的学生累计热量消耗量排行榜")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
 							.type(PageType.getPageTypeBuidler(StudentKcalConsumptionType.getType())
@@ -114,7 +114,7 @@ public class UniversityType {
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
 								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	return universityMapper.getCalorieCostedRanking(university.getId());
+			                	return universityMapper.getKcalCostedRanking(university.getId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

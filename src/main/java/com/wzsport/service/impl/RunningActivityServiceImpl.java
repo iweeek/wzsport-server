@@ -303,4 +303,11 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			return false;
 		}
 	}
+
+	@Override
+	public int getAccuActivityCount(long studentId, Date start, Date end) {
+		RunningActivityExample runningActivityExample = new RunningActivityExample();
+		runningActivityExample.createCriteria().andStudentIdEqualTo(studentId).andStartTimeBetween(start, end);
+		return (int) runningActivityMapper.countByExample(runningActivityExample);
+	}
 }

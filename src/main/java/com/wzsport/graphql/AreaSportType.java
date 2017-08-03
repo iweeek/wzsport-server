@@ -46,7 +46,7 @@ public class AreaSportType {
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("is_enable")
+							.name("isEnable")
 							.description("该项目是否启用")
 							.type(Scalars.GraphQLBoolean)
 							.build())

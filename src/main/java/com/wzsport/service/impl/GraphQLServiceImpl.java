@@ -44,6 +44,7 @@ public class GraphQLServiceImpl implements GraphQLService {
 		GraphQLObjectType queryType = GraphQLObjectType.newObject()
                 .name("root")
                 .field(UniversityType.getSingleQueryField())
+                .field(UniversityType.getListField())
                 .field(CollegeType.getSingleQueryField())
                 .field(CollegeType.getListQueryField())
                 .field(MajorType.getSingleQueryField())

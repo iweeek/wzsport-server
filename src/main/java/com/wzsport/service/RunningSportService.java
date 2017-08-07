@@ -26,9 +26,9 @@ public interface RunningSportService {
 	* 更改指定id的项目的启动状态
 	* 
 	* @param id
-	* @param enabled
+	* @param isEnabled
 	*/
-	boolean updateEnable(long id, boolean enabled);
+	boolean updateEnable(long id, boolean isEnabled);
 
 	@SuppressWarnings("rawtypes")
 	int create(RunningSport sport, ResponseBody resBody);

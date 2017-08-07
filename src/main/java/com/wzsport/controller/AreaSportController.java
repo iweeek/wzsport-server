@@ -47,7 +47,7 @@ public class AreaSportController {
 	 *
 	 * @param name the name
 	 * @param sampleNum the sample num
-	 * @param isEnable the is enable
+	 * @param isEnabled the is enable
 	 * @param addr the addr
 	 * @param type the type
 	 * @param qualifiedCostTime the qualified cost time
@@ -62,7 +62,7 @@ public class AreaSportController {
 							@ApiParam("采样样本数，范围1-120")
 							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
-							@RequestParam boolean isEnable,
+							@RequestParam boolean isEnabled,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
@@ -73,7 +73,7 @@ public class AreaSportController {
 		sport.setSampleNum(sampleNum);
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
-		sport.setIsEnabled(isEnable);
+		sport.setIsEnabled(isEnabled);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		
@@ -88,7 +88,7 @@ public class AreaSportController {
 	 * @param id the id
 	 * @param name the name
 	 * @param sampleNum the sample num
-	 * @param isEnable the is enable
+	 * @param isEnabled the is enabled
 	 * @param addr the addr
 	 * @param type the type
 	 * @param qualifiedCostTime the qualified cost time
@@ -106,7 +106,7 @@ public class AreaSportController {
 							@ApiParam("采样样本数，范围1-120")
 							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
-							@RequestParam boolean isEnable,
+							@RequestParam boolean isEnabled,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
@@ -119,7 +119,7 @@ public class AreaSportController {
 		sport.setSampleNum(sampleNum);
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
-		sport.setIsEnabled(isEnable);
+		sport.setIsEnabled(isEnabled);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		sport.setHourlyKcalConsumption(200);

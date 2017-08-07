@@ -52,7 +52,7 @@ public class TokenServiceImpl implements TokenService {
 		
 		User user = userMapper.selectWithRolesByUsername(username);
 		
-		if (user == null || !user.getUniversityId().equals(universityId)) {
+		if (user == null || !(user.getUniversityId().equals(universityId))) {
 			throw new UnknownAccountException();
 		}
 		

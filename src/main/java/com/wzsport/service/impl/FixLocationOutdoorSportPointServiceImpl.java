@@ -154,4 +154,30 @@ public class FixLocationOutdoorSportPointServiceImpl implements FixLocationOutdo
 			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}
+
+	@Override
+	public int index(long universityId, List<FixLocationOutdoorSportPoint> pointList, ResponseBody resBody) {
+		FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
+		example.createCriteria().andIdNotEqualTo(0l).andUniversityIdEqualTo(universityId);
+		List<FixLocationOutdoorSportPoint> list = fixLocationOutdoorSportPointMapper.selectByExample(example);
+		if (list.size() > 0) {
+			pointList.addAll(list);
+			
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			logger.info(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = pointList;
+			
+			return HttpServletResponse.SC_OK;
+		} else {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID;
+			logger.error(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = pointList;
+			
+			return HttpServletResponse.SC_NOT_FOUND;
+		}
+	}
 }

@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiParam;
 */
 @Api(tags = "定点室外运动点相关接口")
 @RestController
-@RequestMapping(value="/fixLocationOutdoorSportPoints", produces="application/json;charset=UTF-8")
+//@RequestMapping(value="/fixLocationOutdoorSportPoints", produces="application/json;charset=UTF-8")
 public class FixLocationOutdoorSportPointsController {
 	
 	/** The res body. */
@@ -59,7 +59,7 @@ public class FixLocationOutdoorSportPointsController {
 	* @param minCostTime
 	*/
 	@ApiOperation(value = "创建一个室外定点活动点", notes = "使用POST来创建一个新的室外活动地点，这个时候对父一级目录进行请求，由服务端来分配创建一个新资源")
-	@RequestMapping(value = "", method = RequestMethod.POST) 
+	@RequestMapping(value = "/fixLocationOutdoorSportPoints", method = RequestMethod.POST, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> create(
 						@ApiParam("活动点名称")
 						@RequestParam String name,
@@ -74,7 +74,7 @@ public class FixLocationOutdoorSportPointsController {
 							@ApiParam("定点活动区域的地址")
 							@RequestParam String addr,
 							@ApiParam("是否生效")
-							@RequestParam boolean isEnable,
+							@RequestParam boolean isEnabled,
 							@ApiParam("学校Id")
 							@RequestParam long universityId,
 							@ApiParam("对该地点的描述")
@@ -87,7 +87,7 @@ public class FixLocationOutdoorSportPointsController {
 		point.setRadius(radius);
 		point.setQualifiedCostTime(qualifiedCostTime);
 		point.setAddr(addr);
-		point.setIsEnabled(isEnable);
+		point.setIsEnabled(isEnabled);
 		point.setUniversityId(universityId);
 		point.setDescription(description);
 		
@@ -99,7 +99,7 @@ public class FixLocationOutdoorSportPointsController {
 	}
 	
 	@ApiOperation(value = "获取一个室外定点活动点", notes = "根据Id来获取一个活动点")
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET) 
+	@RequestMapping(value = "/fixLocationOutdoorSportPoints/{id}", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> show(
 							@PathVariable long id
 							) {
@@ -114,7 +114,7 @@ public class FixLocationOutdoorSportPointsController {
 	}
 	
 	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据Id来更新一个活动点")
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST) 
+	@RequestMapping(value = "/fixLocationOutdoorSportPoints/{id}", method = RequestMethod.POST, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> update(
 								@ApiParam("id")
 								@PathVariable long id,
@@ -133,7 +133,7 @@ public class FixLocationOutdoorSportPointsController {
 								@ApiParam("对该地点的描述")
 								@RequestParam String description,
 								@ApiParam("达标时间")
-								@RequestParam boolean isEnable,
+								@RequestParam boolean isEnabled,
 								@ApiParam("学校Id")
 								@RequestParam long universityId
 							) {
@@ -146,7 +146,7 @@ public class FixLocationOutdoorSportPointsController {
 		point.setQualifiedCostTime(qualifiedCostTime);
 		point.setAddr(addr);
 		point.setDescription(description);
-		point.setIsEnabled(isEnable);
+		point.setIsEnabled(isEnabled);
 		point.setUniversityId(universityId);
 		
 		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
@@ -157,13 +157,27 @@ public class FixLocationOutdoorSportPointsController {
 	}
 	
 	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
-	@RequestMapping(value = "", method = RequestMethod.GET) 
+	@RequestMapping(value = "/fixLocationOutdoorSportPoints", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> index(HttpServletResponse response) {
 		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
 		
 		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
 		status = fixLocationSportPointService.index(list, resBody);
+		
+		return ResponseEntity.status(status).body(resBody);	
+	}
+	
+	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
+	@RequestMapping(value = "/universities/{id}/FixLocationOutdoorSportPoints", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
+	public ResponseEntity<?> index(
+								@ApiParam("学校Id")
+								@PathVariable long id) {
+		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
+		
+		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		
+		status = fixLocationSportPointService.index(id, list, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);	
 	}

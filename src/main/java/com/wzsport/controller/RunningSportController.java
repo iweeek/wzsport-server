@@ -70,7 +70,7 @@ public class RunningSportController {
 	* 更新项目的启用状态
 	* 
 	* @param id
-	* @param enabled
+	* @param isEnabled
 	*/
 	@ApiOperation(value = "更新项目启用状态", notes = "更改指定id的项目的启动状态，开启或者关闭")
 	@RequestMapping(value="/{id}/updateEnable",method = RequestMethod.POST) 
@@ -78,8 +78,8 @@ public class RunningSportController {
 							@ApiParam("唯一主键id")
 							@PathVariable("id") long id,
 							@ApiParam("该项目的启用状态,true或者false")
-							@RequestParam boolean enabled) {
-		boolean isSuccess = runningSportService.updateEnable(id, enabled);
+							@RequestParam boolean isEnabled) {
+		boolean isSuccess = runningSportService.updateEnable(id, isEnabled);
 		if(isSuccess) {
 			return ResponseEntity.ok().build();
 		} else {
@@ -93,7 +93,7 @@ public class RunningSportController {
 							@ApiParam("项目名称")
 							@RequestParam String name,
 							@ApiParam("是否生效")
-							@RequestParam boolean isEnable,
+							@RequestParam boolean isEnabled,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("该项目达标距离(单位：米)")
@@ -112,7 +112,7 @@ public class RunningSportController {
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setHourlyKcalConsumption(hourlyKcalConsumption);
 		sport.setQualifiedDistance(qualifiedDistance);
-		sport.setIsEnabled(isEnable);
+		sport.setIsEnabled(isEnabled);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<RunningSport>();

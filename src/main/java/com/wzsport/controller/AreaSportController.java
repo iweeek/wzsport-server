@@ -73,7 +73,7 @@ public class AreaSportController {
 		sport.setSampleNum(sampleNum);
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
-		sport.setIsEnable(isEnable);
+		sport.setIsEnabled(isEnable);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		
@@ -119,7 +119,7 @@ public class AreaSportController {
 		sport.setSampleNum(sampleNum);
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
-		sport.setIsEnable(isEnable);
+		sport.setIsEnabled(isEnable);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		sport.setHourlyKcalConsumption(200);

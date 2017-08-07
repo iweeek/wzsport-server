@@ -42,10 +42,10 @@ public class RunningSportServiceImpl implements RunningSportService {
 	}
 
 	@Override
-	public boolean updateEnable(long id, boolean enabled) {
+	public boolean updateEnable(long id, boolean isEnabled) {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
-		runningSport.setIsEnable(enabled);
+		runningSport.setIsEnabled(isEnabled);
 		
 		int affectedCount = runningSportMapper.updateByPrimaryKeySelective(runningSport);
 		if(affectedCount > 0) {

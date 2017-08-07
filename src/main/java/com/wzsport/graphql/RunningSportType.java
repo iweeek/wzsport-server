@@ -59,7 +59,7 @@ public class RunningSportType {
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("isEnable")
+							.name("isEnabled")
 							.description("该项目是否启用")
 							.type(Scalars.GraphQLBoolean)
 							.build())
@@ -122,19 +122,19 @@ public class RunningSportType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
-	        		.argument(GraphQLArgument.newArgument().name("isEnable").type(Scalars.GraphQLBoolean).build())
+	        		.argument(GraphQLArgument.newArgument().name("isEnabled").type(Scalars.GraphQLBoolean).build())
 	                .name("runningSports")
 	                .description("根据大学ID获取关联的所有跑步项目")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long universityId = environment.getArgument("universityId");
 	                	
-	                	boolean isEnable = true;
-	                	if (environment.getArgument("isEnable") != null) {
-	                		isEnable = environment.getArgument("isEnable");
+	                	boolean isEnabled = true;
+	                	if (environment.getArgument("isEnabled") != null) {
+	                		isEnabled = environment.getArgument("isEnabled");
 	                	}
 	                	RunningSportExample runningSportExample = new RunningSportExample();
-	                	runningSportExample.createCriteria().andUniversityIdEqualTo(universityId).andIsEnableEqualTo(isEnable);
+	                	runningSportExample.createCriteria().andUniversityIdEqualTo(universityId).andIsEnabledEqualTo(isEnabled);
 	                	List<RunningSport> runningSportList = runningSportMapper.selectByExample(runningSportExample);
 	                	return runningSportList;
 	                } ).build();

@@ -18,7 +18,7 @@ public interface TokenService {
 	* @param expiredHour 过期时间(小时)
 	* @return token传输对象
 	*/
-	TokenDTO create(String username, String password, int expiredHour);
+	TokenDTO create(long universityId, String username, String password, int expiredHour);
 	
 	/**
 	* 验证用户名和密码，生成默认时限token.
@@ -27,6 +27,6 @@ public interface TokenService {
 	* @param password 密码
 	* @return token传输对象
 	*/
-	TokenDTO create(String username, String password);
+	TokenDTO create(long universityId, String username, String password);
 
 }

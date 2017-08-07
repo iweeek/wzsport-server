@@ -116,7 +116,7 @@ public class MockDataServiceImpl implements MockDataService {
 					for (int x = 1; x <= 50; x++) {
 						String studentNo = faker.idNumber().valid();
 						User user = new User();
-						user.setUsername(studentNo);
+						user.setUserName(studentNo);
 						user.setPassword("123456");
 						userMapper.insertSelective(user);
 						faker.name().fullName();

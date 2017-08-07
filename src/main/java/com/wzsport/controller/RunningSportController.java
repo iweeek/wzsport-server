@@ -112,7 +112,7 @@ public class RunningSportController {
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setHourlyKcalConsumption(hourlyKcalConsumption);
 		sport.setQualifiedDistance(qualifiedDistance);
-		sport.setIsEnable(isEnable);
+		sport.setIsEnabled(isEnable);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<RunningSport>();

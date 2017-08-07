@@ -87,7 +87,7 @@ public class FixLocationOutdoorSportPointsController {
 		point.setRadius(radius);
 		point.setQualifiedCostTime(qualifiedCostTime);
 		point.setAddr(addr);
-		point.setIsEnable(isEnable);
+		point.setIsEnabled(isEnable);
 		point.setUniversityId(universityId);
 		point.setDescription(description);
 		
@@ -146,7 +146,7 @@ public class FixLocationOutdoorSportPointsController {
 		point.setQualifiedCostTime(qualifiedCostTime);
 		point.setAddr(addr);
 		point.setDescription(description);
-		point.setIsEnable(isEnable);
+		point.setIsEnabled(isEnable);
 		point.setUniversityId(universityId);
 		
 		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();

@@ -47,6 +47,11 @@ public class FixLocationOutdoorSportPointType {
 							.type(Scalars.GraphQLString)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("isEnabled")
+							.description("是否生效")
+							.type(Scalars.GraphQLBoolean)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("latitude")
 							.description("纬度")
 							.type(Scalars.GraphQLFloat)
@@ -102,20 +107,20 @@ public class FixLocationOutdoorSportPointType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
-	        		.argument(GraphQLArgument.newArgument().name("isEnable").type(Scalars.GraphQLBoolean).build())
+	        		.argument(GraphQLArgument.newArgument().name("isEnabled").type(Scalars.GraphQLBoolean).build())
 	                .name("fixLocationOutdoorSportPoints")
 	                .description("根据学校ID获取关联的固定运动的地点列表")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long universityId = environment.getArgument("universityId");
 	                	
-	                	boolean isEnable = true;
-	                	if (environment.getArgument("isEnable") != null) {
-	                		isEnable = environment.getArgument("isEnable");
+	                	boolean isEnabled = true;
+	                	if (environment.getArgument("isEnabled") != null) {
+	                		isEnabled = environment.getArgument("isEnabled");
 	                	}
 	                	
 	                	FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-	                	example.createCriteria().andUniversityIdEqualTo(universityId).andIsEnableEqualTo(isEnable);
+	                	example.createCriteria().andUniversityIdEqualTo(universityId).andIsEnabledEqualTo(isEnabled);
 	                	List<FixLocationOutdoorSportPoint> pointList = fixLocationOutdoorSportPointMapper.selectByExample(example);
 	                	return pointList;
 	                } ).build();

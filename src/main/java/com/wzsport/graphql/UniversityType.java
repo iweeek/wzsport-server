@@ -11,8 +11,11 @@ import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
 import com.wzsport.model.College;
 import com.wzsport.model.CollegeExample;
+import com.wzsport.model.Student;
+import com.wzsport.model.StudentExample;
 import com.wzsport.model.TeacherExample;
 import com.wzsport.model.University;
+import com.wzsport.model.UniversityExample;
 import com.wzsport.service.TermService;
 
 import graphql.Scalars;
@@ -36,6 +39,7 @@ public class UniversityType {
 	private static TermService termService;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
+	private static GraphQLFieldDefinition listField;
 
 	private UniversityType() {}
 	
@@ -149,7 +153,6 @@ public class UniversityType {
 	public static GraphQLFieldDefinition getSingleQueryField() {
 		if(singleQueryField == null) {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("university")
 	                .description("根据ID获取大学")
 	                .type(getType())
@@ -161,6 +164,22 @@ public class UniversityType {
 		}
         return singleQueryField;
     }
+	
+	public static GraphQLFieldDefinition getListField() {
+		if (listField == null) {
+			listField = GraphQLFieldDefinition.newFieldDefinition()
+					.name("universities")
+	                .description("获取大学列表")
+	                .type(new GraphQLList(getType()))
+					.dataFetcher(environment -> {
+						UniversityExample example = new UniversityExample();
+						example.createCriteria().andIdGreaterThan(0L);
+						List<University> list = universityMapper.selectByExample(example);
+						return list;
+					}).build();
+		}
+		return listField;
+	}
 
 	@Autowired(required = true)
 	public void setCollegeMapper(CollegeMapper collegeMapper) {

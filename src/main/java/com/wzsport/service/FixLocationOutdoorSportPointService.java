@@ -14,5 +14,7 @@ public interface FixLocationOutdoorSportPointService {
 	public int update(FixLocationOutdoorSportPoint point, ResponseBody resBody);
 
 	public int index(List<FixLocationOutdoorSportPoint> list, ResponseBody resBody);
+	
+	public int index(long universityId, List<FixLocationOutdoorSportPoint> list, ResponseBody resBody);
 
 }

@@ -102,13 +102,20 @@ public class FixLocationOutdoorSportPointType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("isEnable").type(Scalars.GraphQLBoolean).build())
 	                .name("fixLocationOutdoorSportPoints")
 	                .description("根据学校ID获取关联的固定运动的地点列表")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
 	                	long universityId = environment.getArgument("universityId");
+	                	
+	                	boolean isEnable = true;
+	                	if (environment.getArgument("isEnable") != null) {
+	                		isEnable = environment.getArgument("isEnable");
+	                	}
+	                	
 	                	FixLocationOutdoorSportPointExample example = new FixLocationOutdoorSportPointExample();
-	                	example.createCriteria().andUniversityIdEqualTo(universityId);
+	                	example.createCriteria().andUniversityIdEqualTo(universityId).andIsEnableEqualTo(isEnable);
 	                	List<FixLocationOutdoorSportPoint> pointList = fixLocationOutdoorSportPointMapper.selectByExample(example);
 	                	return pointList;
 	                } ).build();

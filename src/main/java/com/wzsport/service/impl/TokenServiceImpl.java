@@ -48,11 +48,11 @@ public class TokenServiceImpl implements TokenService {
 	 * @see com.wzsport.service.TokenService#create(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public TokenDTO create(String username, String password, int expiredHour) {
+	public TokenDTO create(long universityId, String username, String password, int expiredHour) {
 		
 		User user = userMapper.selectWithRolesByUsername(username);
 		
-		if(user == null) {
+		if (user == null || !user.getUniversityId().equals(universityId)) {
 			throw new UnknownAccountException();
 		}
 		
@@ -82,7 +82,7 @@ public class TokenServiceImpl implements TokenService {
 	 * @see com.wzsport.service.TokenService#create(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public TokenDTO create(String username, String password) {
-		return create(username, password, DEFAULT_EXPIRED_HOUR);
+	public TokenDTO create(long universityId, String username, String password) {
+		return create(universityId, username, password, DEFAULT_EXPIRED_HOUR);
 	}
 }

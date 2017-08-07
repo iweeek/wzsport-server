@@ -99,13 +99,20 @@ public class AreaSportType {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
+	        		.argument(GraphQLArgument.newArgument().name("isEnable").type(Scalars.GraphQLBoolean).build())
 	                .name("areaSports")
 	                .description("根据大学ID获取关联的所有区域运动项目")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
 	                	long universityId = environment.getArgument("universityId");
+	                	
+	                	boolean isEnable = true;
+	                	if (environment.getArgument("isEnable") != null) {
+	                		isEnable = environment.getArgument("isEnable");
+	                	}
+	                	
 	                	AreaSportExample areaSportExample = new AreaSportExample();
-	                	areaSportExample.createCriteria().andUniversityIdEqualTo(universityId);
+	                	areaSportExample.createCriteria().andUniversityIdEqualTo(universityId).andIsEnableEqualTo(isEnable);
 	                	List<AreaSport> runningSportList = areaSportMapper.selectByExample(areaSportExample);
 	                	return runningSportList;
 	                } ).build();

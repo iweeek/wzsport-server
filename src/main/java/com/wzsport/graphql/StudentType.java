@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -166,6 +167,11 @@ public class StudentType {
 									e.printStackTrace();
 									return list;
 								}
+								
+								LocalDate ld = new LocalDate(endDate);
+								ld = ld.plusDays(1);
+								endDate = ld.toDate();
+								
 								RunningActivityExample runningActivityExample = new RunningActivityExample();
 								runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId())
 										.andStartTimeBetween(startDate, endDate).andEndedAtIsNotNull();

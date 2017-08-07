@@ -155,6 +155,7 @@ public class UniversityType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	                .name("university")
 	                .description("根据ID获取大学")
+	                .argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");

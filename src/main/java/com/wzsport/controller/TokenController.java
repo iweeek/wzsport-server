@@ -39,6 +39,8 @@ public class TokenController {
 	@ApiOperation(value = "创建token", notes = "验证用户名与密码，为用户创建一个用于鉴权的Token")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<TokenDTO> create(
+								@ApiParam("学校Id")
+								@RequestParam long universityId,
 								@ApiParam("用户名")
 								@RequestParam String username,
 								@ApiParam("密码")
@@ -48,9 +50,9 @@ public class TokenController {
 								) {
 		TokenDTO token = null;
 		if(expiredHour == null) {
-			token =  tokenService.create(username, password);
+			token =  tokenService.create(universityId, username, password);
 		} else {
-			token =  tokenService.create(username, password, expiredHour);
+			token =  tokenService.create(universityId, username, password, expiredHour);
 		}
 		
 		if(token != null) {

@@ -203,6 +203,10 @@ public class StudentType {
 									return list;
 								}
 								
+								LocalDate ld = new LocalDate(endDate);
+								ld = ld.plusDays(1);
+								endDate = ld.toDate();
+								
 								Student student = environment.getSource();
 								AreaActivityExample areaActivityExample = new AreaActivityExample();
 								areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId()).andStartTimeBetween(startDate, endDate);

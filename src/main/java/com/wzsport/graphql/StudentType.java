@@ -155,8 +155,6 @@ public class StudentType {
 								List<RunningActivity> list = null;
 
 								Student student = environment.getSource();
-								AreaActivityExample areaActivityExample = new AreaActivityExample();
-								areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
 
 								Date startDate = null;
 								Date endDate = null;
@@ -174,7 +172,7 @@ public class StudentType {
 								
 								RunningActivityExample runningActivityExample = new RunningActivityExample();
 								runningActivityExample.createCriteria().andStudentIdEqualTo(student.getId())
-										.andStartTimeBetween(startDate, endDate).andEndedAtIsNotNull();
+										.andStartTimeBetween(startDate, endDate);
 
 								runningActivityExample.setOrderByClause("start_time DESC");
 								list = runningActivityMapper.selectByExample(runningActivityExample);
@@ -195,10 +193,6 @@ public class StudentType {
 							.dataFetcher(environment -> {
 								List<AreaActivity> list = null;
 
-								Student student = environment.getSource();
-								AreaActivityExample areaActivityExample = new AreaActivityExample();
-								areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId());
-
 								Date startDate = null;
 								Date endDate = null;
 								try {
@@ -209,7 +203,9 @@ public class StudentType {
 									return list;
 								}
 								
-								areaActivityExample.createCriteria().andStartTimeBetween(startDate, endDate).andEndedAtIsNotNull();
+								Student student = environment.getSource();
+								AreaActivityExample areaActivityExample = new AreaActivityExample();
+								areaActivityExample.createCriteria().andStudentIdEqualTo(student.getId()).andStartTimeBetween(startDate, endDate);
 								areaActivityExample.setOrderByClause("start_time DESC");
 								list = areaActivityMapper.selectByExample(areaActivityExample);
 								return list;

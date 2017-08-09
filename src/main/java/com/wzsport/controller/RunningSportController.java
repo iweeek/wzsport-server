@@ -101,7 +101,7 @@ public class RunningSportController {
 							@ApiParam("每小时消耗热量(单位：大卡)")
 							@RequestParam int hourlyKcalConsumption,
 							@ApiParam("采样样本数，范围1-120")
-							@RequestParam byte sampleNum,
+							@RequestParam int sampleNum,
 							@ApiParam("学校Id")
 							@RequestParam long universityId
 							) {

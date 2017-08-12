@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wzsport.model.AreaSport;
 import com.wzsport.model.RunningSport;
 import com.wzsport.service.RunningSportService;
 import com.wzsport.util.ResponseBody;
@@ -44,26 +45,37 @@ public class RunningSportController {
 	* @param qualifiedCostTime
 	* @param minCostTime
 	*/
-	@ApiOperation(value = "更新项目指标", notes = "更改指定id的项目的运动指标:达标距离、达标时间和最少耗时")
-	@RequestMapping(value="/{id}/updateIndex",method = RequestMethod.POST) 
-	public ResponseEntity<?> updateIndex(
+	@ApiOperation(value = "更新项目指标", notes = "更改指定id的项目的指标")
+	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
+	public ResponseEntity<?> update(
 							@ApiParam("唯一主键id")
 							@PathVariable("id") long id,
+							@ApiParam("该项目的名称")
+							@RequestParam String name,
+							@ApiParam("该项目是否生效")
+							@RequestParam boolean isEnabled,
 							@ApiParam("该项目达标的行动距离(单位：米)")
 							@RequestParam int qualifiedDistance,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
-							@ApiParam("该项目的最少耗时(单位：秒)")
-							@RequestParam int minCostTime,
-							@ApiParam("该项目的运动数据采集间隔(单位：秒)")
-							@RequestParam byte acquisitionInterval
+							@ApiParam("该项目的运动数据采样数")
+							@RequestParam int sampleNum
 							) {
-		boolean isSuccess = runningSportService.updateIndex(id, qualifiedDistance, qualifiedCostTime, minCostTime, acquisitionInterval);
-		if(isSuccess) {
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		RunningSport runningSport = new RunningSport();
+		runningSport.setId(id);
+		runningSport.setName(name);
+		runningSport.setIsEnabled(isEnabled);
+		runningSport.setQualifiedDistance(qualifiedDistance);
+		runningSport.setQualifiedCostTime(qualifiedCostTime);
+		runningSport.setSampleNum(sampleNum);
+		
+		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
+		runningSport.setAcquisitionInterval(acquisitionInterval);
+		
+		resBody = new ResponseBody<AreaSport>();
+		status = runningSportService.update(runningSport, resBody);
+		return ResponseEntity.status(status).body(resBody);
+	
 	}
 	
 	/**

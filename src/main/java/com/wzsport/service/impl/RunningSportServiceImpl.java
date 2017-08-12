@@ -61,7 +61,7 @@ public class RunningSportServiceImpl implements RunningSportService {
 			example.createCriteria().andIdEqualTo(runningSport.getId());
 			list = runningSportMapper.selectByExample(example);
 			if (list.size() > 0) {
-				runningSportMapper.updateByPrimaryKey(runningSport);
+				runningSportMapper.updateByPrimaryKeySelective(runningSport);
 				
 				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);

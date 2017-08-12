@@ -53,24 +53,34 @@ public class RunningSportController {
 							@ApiParam("该项目的名称")
 							@RequestParam String name,
 							@ApiParam("该项目是否生效")
-							@RequestParam boolean isEnabled,
+							@RequestParam(required=false) Boolean isEnabled,
 							@ApiParam("该项目达标的行动距离(单位：米)")
-							@RequestParam int qualifiedDistance,
+							@RequestParam(required=false) Integer qualifiedDistance,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
-							@RequestParam int qualifiedCostTime,
+							@RequestParam(required=false) Integer qualifiedCostTime,
 							@ApiParam("该项目的运动数据采样数")
-							@RequestParam int sampleNum
+							@RequestParam(required=false) Integer sampleNum
 							) {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
 		runningSport.setName(name);
-		runningSport.setIsEnabled(isEnabled);
-		runningSport.setQualifiedDistance(qualifiedDistance);
-		runningSport.setQualifiedCostTime(qualifiedCostTime);
-		runningSport.setSampleNum(sampleNum);
+		if (isEnabled != null) {
+			runningSport.setIsEnabled(isEnabled);
+		}
 		
-		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
-		runningSport.setAcquisitionInterval(acquisitionInterval);
+		if (qualifiedDistance != null) {
+			runningSport.setQualifiedDistance(qualifiedDistance);
+		}
+		
+		if (qualifiedCostTime != null) { 
+			runningSport.setQualifiedCostTime(qualifiedCostTime);
+		}
+		
+		if (sampleNum != null) {
+			runningSport.setSampleNum(sampleNum);
+			byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
+			runningSport.setAcquisitionInterval(acquisitionInterval);
+		}
 		
 		resBody = new ResponseBody<AreaSport>();
 		status = runningSportService.update(runningSport, resBody);

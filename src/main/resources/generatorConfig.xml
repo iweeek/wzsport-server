@@ -133,6 +133,7 @@
     <table schema="wzpsort" tableName="wzsport_android_version_info" domainObjectName ="AndroidVersionInfo" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_forced" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_published" javaType="java.lang.Boolean"/>
     </table>
     
     <table schema="wzpsort" tableName="wzsport_fix_location_outdoor_sport_point" domainObjectName ="FixLocationOutdoorSportPoint" >

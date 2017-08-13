@@ -44,7 +44,7 @@ public class AndroidVersionInfoServiceImpl implements AndroidVersionInfoService 
 			
 			return HttpServletResponse.SC_CREATED;
 		} else {
-			//TODO 如何获得错误？
+			//TODO 如何获得错误？返回什么？
 //			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 //			logger.info(logMsg);
 //			

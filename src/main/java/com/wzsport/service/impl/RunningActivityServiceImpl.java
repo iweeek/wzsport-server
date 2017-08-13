@@ -291,7 +291,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	@Override
 	public int getParticipantNum(long runningSportId) {
 		RunningActivityExample runningActivityExample = new RunningActivityExample();
-		runningActivityExample.or().andRunningSportIdEqualTo(runningSportId).andEndedAtIsNull();
+		runningActivityExample.createCriteria().andRunningSportIdEqualTo(runningSportId).andEndedAtIsNull();
 		return (int) runningActivityMapper.countByExample(runningActivityExample);
 	}
 

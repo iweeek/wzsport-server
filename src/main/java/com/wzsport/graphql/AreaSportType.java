@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.wzsport.mapper.AreaSportMapper;
+import com.wzsport.mapper.RunningSportMapper;
 import com.wzsport.model.AreaSport;
 import com.wzsport.model.AreaSportExample;
 import com.wzsport.service.AreaActivityService;
@@ -25,7 +26,7 @@ public class AreaSportType {
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
 	
-	@Autowired
+//	@Autowired
 	private static AreaActivityService areaActivityService;
 	
 	private AreaSportType() {}
@@ -65,8 +66,8 @@ public class AreaSportType {
 							.description("参加人数")
 							.type(Scalars.GraphQLInt)
 							.dataFetcher(environment -> {
-								AreaSport runningSport = environment.getSource();
-								return areaActivityService.getParticipantNum(runningSport.getId());
+								AreaSport areaSport = environment.getSource();
+								return areaActivityService.getParticipantNum(areaSport.getId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -123,5 +124,10 @@ public class AreaSportType {
 	@Autowired(required = true)
 	public void setRunningSportMapper(AreaSportMapper areaSportMapper) {
 		AreaSportType.areaSportMapper = areaSportMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setAreaActivityService(AreaActivityService areaActivityService) {
+		AreaSportType.areaActivityService = areaActivityService;
 	}
 }

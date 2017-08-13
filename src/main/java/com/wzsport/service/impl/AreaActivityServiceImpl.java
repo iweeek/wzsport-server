@@ -332,9 +332,9 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	 */
 	@Override
 	public int getParticipantNum(long areaSportId) {
-		AreaActivityExample areaActivityExample = new AreaActivityExample();
-		areaActivityExample.or().andAreaSportIdEqualTo(areaSportId).andEndedAtIsNull();
-		return (int) areaActivityMapper.countByExample(areaActivityExample);
+		AreaActivityExample totalCountExampl = new AreaActivityExample();
+		totalCountExampl.createCriteria().andAreaSportIdEqualTo(areaSportId).andEndedAtIsNull();
+		return (int) areaActivityMapper.countByExample(totalCountExampl);
 	}
 
 	/* (non-Javadoc)

@@ -1,22 +1,13 @@
 package com.wzsport.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wzsport.model.AndroidVersionInfo;
-import com.wzsport.model.AreaActivity;
 import com.wzsport.model.User;
-import com.wzsport.service.AndroidVersionInfoService;
-import com.wzsport.service.AreaActivityService;
 import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
 

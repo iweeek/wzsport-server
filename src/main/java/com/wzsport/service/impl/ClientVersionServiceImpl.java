@@ -9,32 +9,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wzsport.mapper.AndroidVersionInfoMapper;
-import com.wzsport.model.AndroidVersionInfo;
-import com.wzsport.model.AndroidVersionInfoExample;
-import com.wzsport.service.AndroidVersionInfoService;
+import com.wzsport.mapper.ClientVersionMapper;
+import com.wzsport.model.ClientVersion;
+import com.wzsport.model.ClientVersionExample;
+import com.wzsport.service.ClientVersionService;
 import com.wzsport.util.ResponseBody;
 import com.wzsport.util.RetMsgTemplate;
 
 @Service
-public class AndroidVersionInfoServiceImpl implements AndroidVersionInfoService {
+public class ClientVersionServiceImpl implements ClientVersionService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(AndroidVersionInfoServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClientVersionServiceImpl.class);
 	
 	String logMsg = "";
 
 	@Autowired
-	private AndroidVersionInfoMapper androidVersionInfoMapper;
+	private ClientVersionMapper clientVersionMapper;
 	
 	@Override
-	public AndroidVersionInfo getLatestVersionInfo() {
-		return androidVersionInfoMapper.getLasetVersionInfo();
+	public ClientVersion getLatestVersionInfo(byte platformId) {
+		return clientVersionMapper.getLasetVersionInfo(platformId);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public int create(AndroidVersionInfo info, ResponseBody resBody) {
-		int count = androidVersionInfoMapper.insertSelective(info);
+	public int create(ClientVersion info, ResponseBody resBody) {
+		int count = clientVersionMapper.insertSelective(info);
 		if (count > 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
@@ -57,8 +57,8 @@ public class AndroidVersionInfoServiceImpl implements AndroidVersionInfoService 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int update(AndroidVersionInfo info, ResponseBody resBody) {
-		int count = androidVersionInfoMapper.updateByPrimaryKeySelective(info);
+	public int update(ClientVersion info, ResponseBody resBody) {
+		int count = clientVersionMapper.updateByPrimaryKeySelective(info);
 		if (count > 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
@@ -80,12 +80,12 @@ public class AndroidVersionInfoServiceImpl implements AndroidVersionInfoService 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public int index(List<AndroidVersionInfo> list, ResponseBody resBody) {
-		AndroidVersionInfoExample example = new AndroidVersionInfoExample();
+	public int index(List<ClientVersion> list, ResponseBody resBody) {
+		ClientVersionExample example = new ClientVersionExample();
 		example.createCriteria().andIdGreaterThan(0L);
 		example.setOrderByClause("version_code desc");
 		
-		list = androidVersionInfoMapper.selectByExample(example);
+		list = clientVersionMapper.selectByExample(example);
 		
 		logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 		logger.info(logMsg);

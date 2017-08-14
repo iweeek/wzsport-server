@@ -1,8 +1,9 @@
 package com.wzsport.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wzsport.model.AndroidVersionInfo;
+import com.wzsport.model.ClientVersion;
 import com.wzsport.model.AreaActivity;
-import com.wzsport.service.AndroidVersionInfoService;
-import com.wzsport.service.AreaActivityService;
+import com.wzsport.service.ClientVersionService;
 import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
@@ -23,18 +23,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
-* AreaActivity Controller.
+* Version Controller.
 * 
 * @author x1ny
 * @date 2017年5月26日
 */
-@Api(tags = "AndroidVersion相关接口")
+@Api(tags = "Version相关接口")
 @RestController()
-@RequestMapping(value = "/androidVersions",produces = "application/json;charset=UTF-8")
-public class AndroidVersion {
+@RequestMapping(value = "/versions",produces = "application/json;charset=UTF-8")
+public class ClientVersionController {
 
 	@Autowired
-	private AndroidVersionInfoService androidVersionInfoService;
+	private ClientVersionService clientVersionService;
 	
 	/** The res body. */
 	@SuppressWarnings("rawtypes")
@@ -45,7 +45,7 @@ public class AndroidVersion {
 	/**
 	* 创建AndroidVersion接口
 	*/
-	@ApiOperation(value = "创建AndroidVersion", notes = "创建一条新的安卓版本信息。")
+	@ApiOperation(value = "创建版本信息", notes = "创建一条新的版本信息。")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> create(
 								@ApiParam("版本名称")
@@ -56,19 +56,27 @@ public class AndroidVersion {
 								@RequestParam String changeLog,
 								@ApiParam("是否强制")
 								@RequestParam Boolean isForced,
-								@ApiParam("apk下载地址")
-								@RequestParam String apkUrl)
+								@ApiParam("平台Id")
+								@RequestParam Byte platformId,
+								@ApiParam("下载地址")
+								@RequestParam String downloadUrl)
 								{
-		AndroidVersionInfo info = new AndroidVersionInfo();
+		if (platformId != 0 && platformId != 1) {
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		}
+		
+		ClientVersion info = new ClientVersion();
 		info.setVersionName(versionName);
 		info.setVersionCode(versionCode);
 		info.setChangeLog(changeLog);
 		info.setIsForced(isForced);
-		info.setApkUrl(apkUrl);
+		
+		info.setPlatformId(platformId);
+		info.setDownloadUrl(downloadUrl);
 		
 		resBody = new ResponseBody<AreaActivity>();
 		
-		status = androidVersionInfoService.create(info, resBody);
+		status = clientVersionService.create(info, resBody);
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
@@ -88,13 +96,18 @@ public class AndroidVersion {
 								@RequestParam(required=false) String changeLog,
 								@ApiParam("是否强制")
 								@RequestParam(required=false) Boolean isForced,
+								@ApiParam("平台Id")
+								@RequestParam(required=false) Byte platformId,
 								@ApiParam("是否发布")
 								@RequestParam(required=false) Boolean isPublished,
 								@ApiParam("apk下载地址")
-								@RequestParam(required=false) String apkUrl)
+								@RequestParam(required=false) String downloadUrl)
 								{
+		if (platformId != 0 && platformId != 1) {
+			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		}
 		
-		AndroidVersionInfo info = new AndroidVersionInfo();
+		ClientVersion info = new ClientVersion();
 		info.setId(id);
 		
 		if (versionName != null) {
@@ -117,13 +130,17 @@ public class AndroidVersion {
 			info.setIsPublished(isPublished);
 		}
 		
-		if (apkUrl != null) {
-			info.setApkUrl(apkUrl);
+		if (platformId != null) {
+			info.setPlatformId(platformId);
+		}
+		
+		if (downloadUrl != null) {
+			info.setDownloadUrl(downloadUrl);
 		}
 		
 		resBody = new ResponseBody<AreaActivity>();
 		
-		status = androidVersionInfoService.update(info, resBody);
+		status = clientVersionService.update(info, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}
@@ -131,11 +148,11 @@ public class AndroidVersion {
 	@ApiOperation(value = "获取版本信息列表", notes = "获取版本信息列表")
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<?> index() {
-		List<AndroidVersionInfo> list = new ArrayList<AndroidVersionInfo>();
+		List<ClientVersion> list = new ArrayList<ClientVersion>();
 		
-		resBody = new ResponseBody<List<AndroidVersionInfo>>();
+		resBody = new ResponseBody<List<ClientVersion>>();
 		
-		status = androidVersionInfoService.index(list, resBody);
+		status = clientVersionService.index(list, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}

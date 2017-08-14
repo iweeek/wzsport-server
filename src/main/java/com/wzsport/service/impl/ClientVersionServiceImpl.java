@@ -34,24 +34,33 @@ public class ClientVersionServiceImpl implements ClientVersionService {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public int create(ClientVersion info, ResponseBody resBody) {
-		int count = clientVersionMapper.insertSelective(info);
-		if (count > 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
-			logger.info(logMsg);
-			
+		try {
+			int count = clientVersionMapper.insertSelective(info);
+			if (count > 0) {
+				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+				logger.info(logMsg);
+				
+				resBody.obj = info;
+				resBody.statusMsg = logMsg;
+				
+				return HttpServletResponse.SC_CREATED;
+			} else {
+				//TODO 如何获得错误？返回什么？
+	//			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+	//			logger.info(logMsg);
+	//			
+	//			resBody.obj = info;
+	//			resBody.statusMsg = logMsg;
+	//			
+				return HttpServletResponse.SC_OK;
+			}
+		} catch (Exception e) {
 			resBody.obj = info;
-			resBody.statusMsg = logMsg;
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_RECORD_EXIST;
 			
-			return HttpServletResponse.SC_CREATED;
-		} else {
-			//TODO 如何获得错误？返回什么？
-//			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
-//			logger.info(logMsg);
-//			
-//			resBody.obj = info;
-//			resBody.statusMsg = logMsg;
-//			
-			return HttpServletResponse.SC_OK;
+			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
+			return HttpServletResponse.SC_CONFLICT;
 		}
 	}
 

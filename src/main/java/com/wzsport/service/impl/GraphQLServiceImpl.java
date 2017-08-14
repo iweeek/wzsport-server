@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.wzsport.graphql.AndroidVersionInfoType;
+import com.wzsport.graphql.ClientVersionType;
 import com.wzsport.graphql.AreaActivityType;
 import com.wzsport.graphql.AreaSportType;
 import com.wzsport.graphql.ClassType;
@@ -76,7 +76,7 @@ public class GraphQLServiceImpl implements GraphQLService {
                 .field(SportScoreType.getListQueryField())
                 .field(SportScoreType.getSingleQueryField())
                 .field(TermSportsTaskType.getSingleQueryField())
-                .field(AndroidVersionInfoType.getLatestVerisonQueryField())
+                .field(ClientVersionType.getLatestVerisonQueryField())
                 .build();
 		
 		GraphQLSchema schema = GraphQLSchema.newSchema()

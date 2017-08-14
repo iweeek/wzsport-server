@@ -3,24 +3,25 @@ package com.wzsport.graphql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wzsport.service.AndroidVersionInfoService;
+import com.wzsport.service.ClientVersionService;
 
 import graphql.Scalars;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 
 @Component
-public class AndroidVersionInfoType {
+public class ClientVersionType {
 
-	private static AndroidVersionInfoService androidVersionInfoService;
+	private static ClientVersionService clientVersionService;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition latestVerisonQueryField;
 	
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
-					.name("AndroidVersionInfo")
-					.description("安卓版本信息")
+					.name("ClientVersion")
+					.description("客户端版本信息")
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("id")
 							.type(Scalars.GraphQLLong)
@@ -42,7 +43,7 @@ public class AndroidVersionInfoType {
 							.description("版本更新信息")
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("apkUrl")
+							.name("downloadUrl")
 							.type(Scalars.GraphQLString)
 							.description("安装包下载地址")
 							.build())
@@ -50,6 +51,11 @@ public class AndroidVersionInfoType {
 							.name("isForced")
 							.type(Scalars.GraphQLBoolean)
 							.description("是否强制安装")
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("platformId")
+							.type(Scalars.GraphQLByte)
+							.description("客户端平台Id，0：安卓；1：iOS")
 							.build())
 					.build();
 		}
@@ -60,18 +66,20 @@ public class AndroidVersionInfoType {
 	public static GraphQLFieldDefinition getLatestVerisonQueryField() {
 		if(latestVerisonQueryField == null) {
 			latestVerisonQueryField = GraphQLFieldDefinition.newFieldDefinition()
-	                .name("latestAndroidVerisonInfo")
-	                .description("获取安卓最新版本信息")
+					.argument(GraphQLArgument.newArgument().name("platformId").type(Scalars.GraphQLByte).build())
+	                .name("latestVerison")
+	                .description("获取客户端最新版本信息")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
-	                	return androidVersionInfoService.getLatestVersionInfo();
+	                	byte platformId = environment.getArgument("platformId");
+	                	return clientVersionService.getLatestVersionInfo(platformId);
 	                } ).build();
 		}
         return latestVerisonQueryField;
     }
 	
 	@Autowired(required = true) 
-	public void setAndroidVersionInfoService(AndroidVersionInfoService androidVersionInfoService) {
-		AndroidVersionInfoType.androidVersionInfoService = androidVersionInfoService;
+	public void setAndroidVersionInfoService(ClientVersionService androidVersionInfoService) {
+		ClientVersionType.clientVersionService = androidVersionInfoService;
 	}
 }

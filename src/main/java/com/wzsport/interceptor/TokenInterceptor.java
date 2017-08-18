@@ -50,11 +50,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 		if (token != null) {
 //			SecurityUtils.getSubject().login(new UsernamePasswordToken(token, ""));
 			Claims claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
-			Date date = new Date();
-			if (claims.getExpiration().getTime() < date.getTime()) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				return false;
-			}
 			logger.info(claims.toString());
 		} else {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

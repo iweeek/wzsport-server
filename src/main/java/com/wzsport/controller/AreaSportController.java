@@ -63,6 +63,8 @@ public class AreaSportController {
 							@RequestParam byte sampleNum,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnabled,
+							@ApiParam("性别")
+							@RequestParam boolean isMan,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("学校Id")
@@ -74,6 +76,7 @@ public class AreaSportController {
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setIsEnabled(isEnabled);
+		sport.setIsMan(isMan);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		
@@ -104,25 +107,45 @@ public class AreaSportController {
 							@ApiParam("项目名称")
 							@RequestParam String name,
 							@ApiParam("采样样本数，范围1-120")
-							@RequestParam byte sampleNum,
+							@RequestParam(required=false) Byte sampleNum,
 							@ApiParam("是否生效")
-							@RequestParam boolean isEnabled,
+							@RequestParam(required=false) Boolean isEnabled,
+							@ApiParam("性别")
+							@RequestParam(required=false) Boolean isMan,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
-							@RequestParam int qualifiedCostTime,
+							@RequestParam(required=false) Integer qualifiedCostTime,
 							@ApiParam("学校Id")
-							@RequestParam long universityId,
-							HttpServletResponse response
-							) {
+							@RequestParam(required=false) Long universityId) {
 		AreaSport sport = new AreaSport();
 		sport.setId(id);
-		sport.setName(name);
-		sport.setSampleNum(sampleNum);
-		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
-		sport.setAcquisitionInterval(acquisitionInterval);
-		sport.setIsEnabled(isEnabled);
-		sport.setQualifiedCostTime(qualifiedCostTime);
-		sport.setUniversityId(universityId);
-		sport.setHourlyKcalConsumption(200);
+		
+		if (name != null) {
+			sport.setName(name);
+		}
+		
+		if (sampleNum != null) {
+			sport.setSampleNum(sampleNum);
+			byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
+			sport.setAcquisitionInterval(acquisitionInterval);
+		}
+		
+		if (isEnabled != null) {
+			sport.setIsEnabled(isEnabled);
+		}
+		
+		if (isMan != null) {
+			sport.setIsMan(isMan);
+		}
+		
+		if (qualifiedCostTime != null) {
+			sport.setQualifiedCostTime(qualifiedCostTime);
+		}
+		
+		if (universityId != null) {
+			sport.setUniversityId(universityId);
+		}
+		
+//		sport.setHourlyKcalConsumption(200);
 		resBody = new ResponseBody<AreaSport>();
 		status = areaSportService.update(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);
@@ -137,7 +160,7 @@ public class AreaSportController {
 	 */
 	@ApiOperation(value = "根据id来获取定点运动项目", notes = "根据id来获取定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
-	public ResponseEntity<?> show(
+	public ResponseEntity<?> read(
 							@ApiParam("项目id")
 							@PathVariable long id,
 							HttpServletResponse response

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.mapper.RunningSportMapper;
-import com.wzsport.model.AreaSport;
 import com.wzsport.model.RunningSport;
 import com.wzsport.model.RunningSportExample;
 import com.wzsport.service.RunningSportService;
@@ -42,7 +41,7 @@ public class RunningSportServiceImpl implements RunningSportService {
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public int update(RunningSport runningSport, ResponseBody resBody) {
 		RunningSportExample example = new RunningSportExample();
@@ -57,12 +56,8 @@ public class RunningSportServiceImpl implements RunningSportService {
 			
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
-			example.clear();
-			example.createCriteria().andIdEqualTo(runningSport.getId());
-			list = runningSportMapper.selectByExample(example);
-			if (list.size() > 0) {
-				runningSportMapper.updateByPrimaryKeySelective(runningSport);
-				
+			int result = runningSportMapper.updateByPrimaryKeySelective(runningSport);
+			if (result > 0) {	
 				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 				logger.info(logMsg);
 				

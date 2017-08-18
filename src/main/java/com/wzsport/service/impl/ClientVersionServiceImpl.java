@@ -105,4 +105,31 @@ public class ClientVersionServiceImpl implements ClientVersionService {
 		return HttpServletResponse.SC_OK;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public int read(ClientVersion info, ResponseBody resBody) {
+		ClientVersionExample example = new ClientVersionExample();
+		example.createCriteria().andIdEqualTo(info.getId());
+		
+		List<ClientVersion> list = clientVersionMapper.selectByExample(example);
+		if (list.size() == 0) {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(info.getId()));
+			logger.info(logMsg);
+			
+			resBody.obj = null;
+			resBody.statusMsg = logMsg;
+			
+			return HttpServletResponse.SC_NOT_FOUND;
+		} else {
+		
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			logger.info(logMsg);
+			
+			resBody.obj = list.get(0);
+			resBody.statusMsg = logMsg;
+			
+			return HttpServletResponse.SC_OK;
+		}
+	}
+
 }

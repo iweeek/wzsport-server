@@ -1,6 +1,6 @@
 package com.wzsport.service;
 
-import com.wzsport.dto.TokenDTO;
+import com.wzsport.util.ResponseBody;
 
 /**
 * token service interface.
@@ -18,15 +18,8 @@ public interface TokenService {
 	* @param expiredHour 过期时间(小时)
 	* @return token传输对象
 	*/
-	TokenDTO create(long universityId, String username, String password, int expiredHour);
+	@SuppressWarnings("rawtypes")
+	int create(long universityId, String username, String password, int expiredHour, String deviceId, String userAgent, ResponseBody resBody);
 	
-	/**
-	* 验证用户名和密码，生成默认时限token.
-	* 
-	* @param username 用户名
-	* @param password 密码
-	* @return token传输对象
-	*/
-	TokenDTO create(long universityId, String username, String password);
 
 }

@@ -18,4 +18,7 @@ public interface ClientVersionService {
 	@SuppressWarnings("rawtypes")
 	int index(List<ClientVersion> list, ResponseBody resBody);
 
+	@SuppressWarnings("rawtypes")
+	int read(ClientVersion info, ResponseBody resBody);
+
 }

@@ -1,18 +1,30 @@
 package com.wzsport.service.impl;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.dto.TokenDTO;
+import com.wzsport.mapper.ClientWechatInfoMapper;
+import com.wzsport.mapper.DeviceLoginLogMapper;
+import com.wzsport.mapper.DeviceMapper;
 import com.wzsport.mapper.UserMapper;
+import com.wzsport.model.ClientWechatInfo;
+import com.wzsport.model.ClientWechatInfoExample;
+import com.wzsport.model.Device;
+import com.wzsport.model.DeviceExample;
+import com.wzsport.model.DeviceLoginLog;
 import com.wzsport.model.User;
 import com.wzsport.service.TokenService;
+import com.wzsport.util.ResponseBody;
 
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
@@ -27,37 +39,89 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class TokenServiceImpl implements TokenService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
+	
+	String logMsg = "";
+	
 	/**
 	 * jwt加密、解密的密匙
 	 */
 	private final String KEY;
 	
-	/**
-	 * 默认token的有效时间(小时).
-	 */
-	private final int DEFAULT_EXPIRED_HOUR = 1;
-
+	@Autowired
+	private ClientWechatInfoMapper clientWechatInfoMapper;
+	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private DeviceMapper deviceMapper;
+	
+	@Autowired
+	private DeviceLoginLogMapper deviceLoginLogMapper;
 	
 	public TokenServiceImpl(@Value("${jwt.key}") String key) {		
 		KEY = key;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.wzsport.service.TokenService#create(java.lang.String, java.lang.String)
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public TokenDTO create(long universityId, String username, String password, int expiredHour) {
+	public int create(long universityId, String username, String password, int expiredHour, String deviceId, String userAgent, ResponseBody resBody) {
 		
 		User user = userMapper.selectWithRolesByUsername(username);
 		
-		if (user == null || !(user.getUniversityId().equals(universityId))) {
-			throw new UnknownAccountException();
+		if (user == null || !(user.getUniversityId().equals(universityId)) || !user.getPassword().equals(password)) {
+			logMsg = "登录失败";
+			logger.error(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = null;
+			
+			return HttpServletResponse.SC_UNAUTHORIZED;
 		}
 		
-		if (!user.getPassword().equals(password)) {
-			throw new IncorrectCredentialsException();
+		ClientWechatInfoExample clientWechatInfoExample = new ClientWechatInfoExample();
+		clientWechatInfoExample.createCriteria().andUserIdEqualTo(user.getId());
+		List<ClientWechatInfo> clientWechatInfoList = clientWechatInfoMapper.selectByExample(clientWechatInfoExample);
+		if (clientWechatInfoList.size() == 0) {
+			logMsg = "微信公众号未绑定";
+			logger.error(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = null;
+			
+			return HttpServletResponse.SC_UNAUTHORIZED;
+		}
+		
+//		if (!user.getPassword().equals(password)) {
+//			throw new IncorrectCredentialsException();
+//		}
+		
+		Device device;
+		DeviceExample example = new DeviceExample();
+		example.createCriteria().andUserIdEqualTo(user.getId());
+		List<Device> list = deviceMapper.selectByExample(example);
+		if (list.size() == 0) {//第一次登录，还没有保存设备信息
+			device = new Device();
+			device.setUserId(user.getId());
+			device.setDeviceId(deviceId);
+			deviceMapper.insert(device);
+			
+			DeviceLoginLog log = new DeviceLoginLog();
+			log.setDeviceId(deviceId);
+			log.setUserAgent(userAgent);
+			deviceLoginLogMapper.insert(log);
+		} else {//第二次登录，验证设备信息
+			device = list.get(0);
+			if (!device.getDeviceId().equals(deviceId)) {
+				logMsg = "设备Id不匹配";
+				logger.error(logMsg);
+				
+				resBody.statusMsg = logMsg;
+				resBody.obj = null;
+				
+				return HttpServletResponse.SC_BAD_REQUEST;
+			}
 		}
 		
 		//创建token
@@ -75,14 +139,12 @@ public class TokenServiceImpl implements TokenService {
 				.signWith(SignatureAlgorithm.HS512, KEY)
 				.compact();
 		
-		return new TokenDTO(userId, roles, token, expiredDate);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.wzsport.service.TokenService#create(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public TokenDTO create(long universityId, String username, String password) {
-		return create(universityId, username, password, DEFAULT_EXPIRED_HOUR);
+		logMsg = "登录成功";
+		logger.info(logMsg);
+		
+		resBody.statusMsg = logMsg;
+		resBody.obj = new TokenDTO(userId, roles, token, expiredDate);
+		
+		return HttpServletResponse.SC_CREATED;
 	}
 }

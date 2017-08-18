@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.wzsport.mapper.RunningSportMapper;
 import com.wzsport.model.RunningSport;
 import com.wzsport.model.RunningSportExample;
+import com.wzsport.model.RunningSportExample.Criteria;
 import com.wzsport.service.RunningActivityService;
 
 import graphql.Scalars;
@@ -64,6 +65,11 @@ public class RunningSportType {
 							.type(Scalars.GraphQLBoolean)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("isMan")
+							.description("性别")
+							.type(Scalars.GraphQLBoolean)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("qualifiedDistance")
 							.description("该项目的合格距离(单位:米)")
 							.type(Scalars.GraphQLInt)
@@ -107,7 +113,7 @@ public class RunningSportType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 	                .name("runningSport")
-	                .description("根据ID获取跑步项目")
+	                .description("根据Id获取跑步项目")
 	                .type(getType())
 	                .dataFetcher(environment ->  {
 	                	long id = environment.getArgument("id");
@@ -123,18 +129,31 @@ public class RunningSportType {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
 	        		.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("isEnabled").type(Scalars.GraphQLBoolean).build())
+	        		.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
 	                .name("runningSports")
-	                .description("根据大学ID获取关联的所有跑步项目")
+	                .description("根据大学Id获取关联的所有跑步项目")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment ->  {
-	                	long universityId = environment.getArgument("universityId");
-	                	
-	                	boolean isEnabled = true;
-	                	if (environment.getArgument("isEnabled") != null) {
-	                		isEnabled = environment.getArgument("isEnabled");
-	                	}
 	                	RunningSportExample runningSportExample = new RunningSportExample();
-	                	runningSportExample.createCriteria().andUniversityIdEqualTo(universityId).andIsEnabledEqualTo(isEnabled);
+	                	Criteria criteria = runningSportExample.createCriteria();
+	                	
+	                	Long universityId;
+	                	if ((universityId= environment.getArgument("universityId")) == null) {
+	                		return null;
+	                	} else {
+	                		criteria.andUniversityIdEqualTo(universityId);
+	                	}
+	                	
+	                	Boolean isEnabled;
+	                	if ((isEnabled = environment.getArgument("isEnabled")) != null) {
+	                		criteria.andIsEnabledEqualTo(isEnabled);
+	                	}
+	                	
+	                	Boolean isMan;
+	                	if ((isMan = environment.getArgument("isMan")) != null) {
+	                		criteria.andIsManEqualTo(isMan);
+	                	}
+	                	
 	                	List<RunningSport> runningSportList = runningSportMapper.selectByExample(runningSportExample);
 	                	return runningSportList;
 	                } ).build();

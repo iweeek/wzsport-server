@@ -91,6 +91,7 @@
     <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_enabled" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_man" javaType="java.lang.Boolean"/>
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
       <!-- <columnOverride column="acquisition_interval" javaType="java.lang.Integer"/> -->
@@ -146,6 +147,25 @@
     <table schema="wzpsort" tableName="wzsport_area_sport" domainObjectName ="AreaSport" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_enabled" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_man" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_device" domainObjectName ="Device" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    
+     <table schema="wzpsort" tableName="wzsport_device_login_log" domainObjectName ="DeviceLoginLog" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_client_wechat_info" domainObjectName ="ClientWechatInfo" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
     </table>

@@ -63,7 +63,7 @@ public class RunningActivityTask {
 	    		logger.info("job stepCount: " + stepCount);
 	    		logger.info("job costTime: " + costTime);
 	    		logger.info("job targetFinishedTime: " + targetFinishedTime);
-			}
+		}
 
 			RunningActivity runningActivity = new RunningActivity();
 			runningActivity.setId(act.getId());

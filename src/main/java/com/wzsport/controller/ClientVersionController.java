@@ -56,7 +56,7 @@ public class ClientVersionController {
 								@RequestParam String changeLog,
 								@ApiParam("是否强制")
 								@RequestParam Boolean isForced,
-								@ApiParam("平台Id")
+								@ApiParam("客户端平台Id，0：Android，1：iOS")
 								@RequestParam Byte platformId,
 								@ApiParam("下载地址")
 								@RequestParam String downloadUrl)
@@ -83,6 +83,25 @@ public class ClientVersionController {
 	/**
 	* 
 	*/
+	@ApiOperation(value = "根据Id获取某一版本信息", notes = "根据Id获取某一版本信息")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> read(
+								@ApiParam("版本的id")
+								@PathVariable long id)
+								{
+		ClientVersion info = new ClientVersion();
+		info.setId(id);
+		
+		resBody = new ResponseBody<AreaActivity>();
+		
+		status = clientVersionService.read(info, resBody);
+		
+		return ResponseEntity.status(status).body(resBody); 
+	}
+	
+	/**
+	* 
+	*/
 	@ApiOperation(value = "更新版本信息", notes = "更新版本信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(
@@ -96,14 +115,14 @@ public class ClientVersionController {
 								@RequestParam(required=false) String changeLog,
 								@ApiParam("是否强制")
 								@RequestParam(required=false) Boolean isForced,
-								@ApiParam("平台Id")
+								@ApiParam("客户端平台Id，0：Android，1：iOS")
 								@RequestParam(required=false) Byte platformId,
 								@ApiParam("是否发布")
 								@RequestParam(required=false) Boolean isPublished,
-								@ApiParam("apk下载地址")
+								@ApiParam("下载地址")
 								@RequestParam(required=false) String downloadUrl)
 								{
-		if (platformId != 0 && platformId != 1) {
+		if (platformId != null && platformId != 0 && platformId != 1) {
 			return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 		

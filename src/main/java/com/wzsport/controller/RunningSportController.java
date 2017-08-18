@@ -65,7 +65,10 @@ public class RunningSportController {
 							) {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
-		runningSport.setName(name);
+		
+		if (name != null) {
+			runningSport.setName(name);
+		}
 		
 		if (isEnabled != null) {
 			runningSport.setIsEnabled(isEnabled);

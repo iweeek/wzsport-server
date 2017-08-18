@@ -54,6 +54,8 @@ public class RunningSportController {
 							@RequestParam String name,
 							@ApiParam("该项目是否生效")
 							@RequestParam(required=false) Boolean isEnabled,
+							@ApiParam("性别")
+							@RequestParam(required=false) Boolean isMan,
 							@ApiParam("该项目达标的行动距离(单位：米)")
 							@RequestParam(required=false) Integer qualifiedDistance,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
@@ -64,8 +66,13 @@ public class RunningSportController {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
 		runningSport.setName(name);
+		
 		if (isEnabled != null) {
 			runningSport.setIsEnabled(isEnabled);
+		}
+		
+		if (isMan != null) {
+			runningSport.setIsMan(isMan);
 		}
 		
 		if (qualifiedDistance != null) {
@@ -116,6 +123,8 @@ public class RunningSportController {
 							@RequestParam String name,
 							@ApiParam("是否生效")
 							@RequestParam boolean isEnabled,
+							@ApiParam("性别")
+							@RequestParam boolean isMan,
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("该项目达标距离(单位：米)")
@@ -135,6 +144,7 @@ public class RunningSportController {
 		sport.setHourlyKcalConsumption(hourlyKcalConsumption);
 		sport.setQualifiedDistance(qualifiedDistance);
 		sport.setIsEnabled(isEnabled);
+		sport.setIsMan(isMan);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		resBody = new ResponseBody<RunningSport>();

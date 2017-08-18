@@ -163,5 +163,11 @@
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
     </table>
+    
+    <table schema="wzpsort" tableName="wzsport_client_wechat_info" domainObjectName ="ClientWechatInfo" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
   </context>
 </generatorConfiguration>

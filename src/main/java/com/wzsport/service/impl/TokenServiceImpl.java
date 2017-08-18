@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.dto.TokenDTO;
+import com.wzsport.mapper.ClientWechatInfoMapper;
 import com.wzsport.mapper.DeviceLoginLogMapper;
 import com.wzsport.mapper.DeviceMapper;
 import com.wzsport.mapper.UserMapper;
+import com.wzsport.model.ClientWechatInfo;
+import com.wzsport.model.ClientWechatInfoExample;
 import com.wzsport.model.Device;
 import com.wzsport.model.DeviceExample;
 import com.wzsport.model.DeviceLoginLog;
@@ -46,6 +49,9 @@ public class TokenServiceImpl implements TokenService {
 	private final String KEY;
 	
 	@Autowired
+	private ClientWechatInfoMapper clientWechatInfoMapper;
+	
+	@Autowired
 	private UserMapper userMapper;
 	
 	@Autowired
@@ -66,6 +72,19 @@ public class TokenServiceImpl implements TokenService {
 		
 		if (user == null || !(user.getUniversityId().equals(universityId)) || !user.getPassword().equals(password)) {
 			logMsg = "登录失败";
+			logger.error(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = null;
+			
+			return HttpServletResponse.SC_UNAUTHORIZED;
+		}
+		
+		ClientWechatInfoExample clientWechatInfoExample = new ClientWechatInfoExample();
+		clientWechatInfoExample.createCriteria().andUserIdEqualTo(user.getId());
+		List<ClientWechatInfo> clientWechatInfoList = clientWechatInfoMapper.selectByExample(clientWechatInfoExample);
+		if (clientWechatInfoList.size() == 0) {
+			logMsg = "微信公众号未绑定";
 			logger.error(logMsg);
 			
 			resBody.statusMsg = logMsg;

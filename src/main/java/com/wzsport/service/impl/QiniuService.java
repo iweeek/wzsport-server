@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class QiniuService implements CloudStorageService {
 
+    private String domain;
     /**
      *
      */
@@ -48,11 +49,10 @@ public class QiniuService implements CloudStorageService {
      */
     private int zoneIndex;
 
-    public QiniuService(@Value("${qiniu.accessKey}") String accessKey, @Value("${qiniu.secretKey}") String secretKey) {
+    public QiniuService(@Value("${qiniu.url}") String domain, @Value("${qiniu.accessKey}") String accessKey, @Value("${qiniu.secretKey}") String secretKey) {
+        this.domain = domain;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
-
-        this.bucket = "wzsport-head-image";
 
         this.init();
     }
@@ -90,5 +90,10 @@ public class QiniuService implements CloudStorageService {
                 //ignore
             }
         }
+    }
+
+    @Override
+    public String generageUrl(String fileName) {
+        return this.auth.privateDownloadUrl(this.domain + "/" + fileName);
     }
 }

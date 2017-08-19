@@ -3,6 +3,8 @@ package com.wzsport.controller;
 import com.wzsport.model.AreaActivityData;
 import com.wzsport.service.CloudStorageService;
 import com.wzsport.service.impl.QiniuService;
+import com.wzsport.util.PathUtil;
+import com.wzsport.util.PropertyUtil;
 import com.wzsport.util.ResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +47,7 @@ public class QiniuController {
         logger.info("进来啦");
 
         String fileName = mfile.getOriginalFilename();
-        String filePath = "/Users/kouga/Development/java/chaige/wzsport-server/src/main/webapp/WEB-INF/image/" + fileName;
+        String filePath = PathUtil.getImages() + fileName;
         File file = new File(filePath);
 
         if (!file.getParentFile().exists()) {
@@ -59,7 +61,10 @@ public class QiniuController {
         mfile.transferTo(file);
 
 
+        this.qiniuService.setBucket(PropertyUtil.getProperty("qiniu.wzsport_head_image_bucket"));
         this.qiniuService.uploadImage(filePath, fileName);
+
+        file.delete();
 
         ResponseBody resBody = new ResponseBody<AreaActivityData>();
         int status = 200;

@@ -74,6 +74,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.8.RELEASE'
+
+    compile group: 'com.liferay', name: 'org.apache.commons.fileupload', version: '1.2.2.LIFERAY-PATCHED-1'
 }
 def env = System.getProperty("env") ?: "dev"
 

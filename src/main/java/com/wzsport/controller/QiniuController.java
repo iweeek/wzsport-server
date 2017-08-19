@@ -1,6 +1,7 @@
 package com.wzsport.controller;
 
 import com.wzsport.model.AreaActivityData;
+import com.wzsport.service.CloudStorageService;
 import com.wzsport.service.impl.QiniuService;
 import com.wzsport.util.ResponseBody;
 import io.swagger.annotations.Api;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,21 +31,22 @@ public class QiniuController {
 
     private static final Logger logger = LoggerFactory.getLogger(QiniuController.class);
 
-    private QiniuService qiniuService = new QiniuService(System.getProperty("qiniu.accessKey"), System.getProperty("qiniu.secretKey"));
+    @Autowired
+    private CloudStorageService qiniuService;
 
-    /**
-     * The res body.
-     */
-    @SuppressWarnings("rawtypes")
-    private ResponseBody resBody;
-
-    private int status;
 
     @ApiOperation(value = "七牛上传文件", notes = "七牛上传文件")
-    @RequestMapping(value = "/upload", method = RequestMethod.PUT)
-    public ResponseEntity<?> upload(@ApiParam("图片") @RequestParam MultipartFile multipartFile) throws IOException {
-        String fileName = multipartFile.getOriginalFilename();
-        File file = new File("/Users/kouga/Development/java/chaige/wzsport-server/src/main/webapp/WEB-INF/image/" + fileName);
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ResponseEntity<?> upload(
+            @ApiParam("图片")
+            @RequestParam("mfile") MultipartFile mfile
+    ) throws IOException {
+
+        logger.info("进来啦");
+
+        String fileName = mfile.getOriginalFilename();
+        String filePath = "/Users/kouga/Development/java/chaige/wzsport-server/src/main/webapp/WEB-INF/image/" + fileName;
+        File file = new File(filePath);
 
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
@@ -53,10 +56,13 @@ public class QiniuController {
             file.createNewFile();
         }
 
-        multipartFile.transferTo(file);
+        mfile.transferTo(file);
 
-        resBody = new ResponseBody<AreaActivityData>();
-        status = 200;
+
+        this.qiniuService.uploadImage(filePath, fileName);
+
+        ResponseBody resBody = new ResponseBody<AreaActivityData>();
+        int status = 200;
 
         return ResponseEntity.status(status).body(resBody);
 

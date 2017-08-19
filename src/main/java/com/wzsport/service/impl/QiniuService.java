@@ -10,10 +10,13 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.wzsport.service.CloudStorageService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by kouga on 2017/8/17.
  */
+
+@Service
 public class QiniuService implements CloudStorageService {
 
     /**
@@ -45,10 +48,16 @@ public class QiniuService implements CloudStorageService {
      */
     private int zoneIndex;
 
-    public QiniuService(@Value("qiniu.accessKey") String accessKey, @Value("qiniu.secretKey") String secretKey) {
+    public QiniuService(@Value("${qiniu.accessKey}") String accessKey, @Value("${qiniu.secretKey}") String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
 
+        this.bucket = "wzsport-head-image";
+
+        this.init();
+    }
+
+    private void init() {
         this.auth = Auth.create(this.accessKey, this.secretKey);
     }
 
@@ -65,8 +74,7 @@ public class QiniuService implements CloudStorageService {
         UploadManager uploadManager = new UploadManager(cfg);
 
         //默认不指定key的情况下，以文件内容的hash值作为文件名
-        Auth auth = Auth.create(this.accessKey, this.secretKey);
-        String upToken = auth.uploadToken(this.bucket);
+        String upToken = this.auth.uploadToken(this.bucket);
         try {
             Response response = uploadManager.put(localFilePath, key, upToken);
             //解析上传成功的结果

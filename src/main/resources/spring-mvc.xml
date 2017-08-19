@@ -31,10 +31,15 @@
 		</property>
 	</bean>
 
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+
 	<!-- 配置拦截器 -->
 	<mvc:interceptors>
-		<mvc:interceptor>  
-        <mvc:mapping path="/**"/>  
+		<mvc:interceptor>
+			<mvc:mapping path="/s**"/>
         <mvc:exclude-mapping path="/tokens/**"/>
 	        <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->  
 	        <bean class="com.wzsport.interceptor.TokenInterceptor"></bean> 

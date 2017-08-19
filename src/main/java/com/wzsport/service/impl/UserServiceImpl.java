@@ -72,6 +72,8 @@ public class UserServiceImpl implements UserService {
             throw new ObjectNotFoundException("找不到该学生信息哦！");
         }
 
+		userList.set(0, this.generateAvatarUrl(userList.get(0)));
+
         return userList.get(0);
     }
 

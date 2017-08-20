@@ -36,6 +36,8 @@
 		<mvc:interceptor>  
         <mvc:mapping path="/**"/>  
         <mvc:exclude-mapping path="/tokens/**"/>
+        <mvc:exclude-mapping path="/graphql/**"/>
+        <mvc:exclude-mapping path="/swagger/**"/>
 	        <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->  
 	        <bean class="com.wzsport.interceptor.TokenInterceptor"></bean> 
     	</mvc:interceptor> 
@@ -60,7 +62,7 @@
 	<!-- 跨域配置 -->
 	<mvc:cors>
     	<mvc:mapping path="/**" 
-    		allowed-methods="GET, PUT, POST, DELETE"/>
+    		allowed-methods="GET, PUT, POST, DELETE, OPTIONS"/>
 	</mvc:cors>
 	
 	<context:annotation-config />  

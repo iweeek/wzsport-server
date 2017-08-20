@@ -83,15 +83,15 @@ public class TokenServiceImpl implements TokenService {
 		ClientWechatInfoExample clientWechatInfoExample = new ClientWechatInfoExample();
 		clientWechatInfoExample.createCriteria().andUserIdEqualTo(user.getId());
 		List<ClientWechatInfo> clientWechatInfoList = clientWechatInfoMapper.selectByExample(clientWechatInfoExample);
-		if (clientWechatInfoList.size() == 0) {
-			logMsg = "微信公众号未绑定";
-			logger.error(logMsg);
-			
-			resBody.statusMsg = logMsg;
-			resBody.obj = null;
-			
-			return HttpServletResponse.SC_UNAUTHORIZED;
-		}
+//		if (clientWechatInfoList.size() == 0) {
+//			logMsg = "微信公众号未绑定";
+//			logger.error(logMsg);
+//			
+//			resBody.statusMsg = logMsg;
+//			resBody.obj = null;
+//			
+//			return HttpServletResponse.SC_UNAUTHORIZED;
+//		}
 		
 //		if (!user.getPassword().equals(password)) {
 //			throw new IncorrectCredentialsException();

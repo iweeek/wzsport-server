@@ -1,6 +1,5 @@
 package com.wzsport.service;
 
-import com.wzsport.dto.TokenDTO;
 import com.wzsport.model.User;
 import com.wzsport.util.ResponseBody;
 
@@ -14,5 +13,8 @@ public interface UserService {
 
 	@SuppressWarnings("rawtypes")
 	int search(User user, ResponseBody resBody);
+
+	@SuppressWarnings("rawtypes")
+	int update(User user, ResponseBody resBody);
 
 }

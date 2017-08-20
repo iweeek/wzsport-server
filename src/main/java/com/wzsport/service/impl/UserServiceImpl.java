@@ -61,6 +61,25 @@ public class UserServiceImpl implements UserService {
 			return HttpServletResponse.SC_OK;
 		}
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public int update(User user, ResponseBody resBody) {
+		int result = userMapper.updateByPrimaryKeySelective(user);
+		if (result == 0) {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logger.info(logMsg);
+			return HttpServletResponse.SC_NOT_FOUND;
+		} else {
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			logger.info(logMsg);
+			
+			resBody.obj = user;
+			resBody.statusMsg = logMsg; 
+			
+			return HttpServletResponse.SC_OK;
+		}
+	}
 	
 
 }

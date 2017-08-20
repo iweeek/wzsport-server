@@ -1,9 +1,8 @@
 package com.wzsport.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,20 +41,12 @@ public class UserController {
 	*/
 	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息")
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ResponseEntity<?> update(
+	public ResponseEntity<?> show(
 								@ApiParam("学校Id")
 								@RequestParam Long universityId,
 								@ApiParam("学号")
-								@RequestParam(required = false) String studentId,
-								@ApiParam("姓名")
-								@RequestParam(required = false) String name
-								)
-								{
-		if (studentId == null && name == null) {
-			status = HttpServletResponse.SC_BAD_REQUEST;
-			return ResponseEntity.status(status).body(null);
-		}
-		
+								@RequestParam String studentId) 
+	{
 		User user = new User();
 		user.setUniversityId(universityId);
 		
@@ -66,6 +57,27 @@ public class UserController {
 		resBody = new ResponseBody<User>();
 		
 		status = userService.search(user, resBody);
+		
+		return ResponseEntity.status(status).body(resBody); 
+	}
+	
+	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public ResponseEntity<?> update(
+								@ApiParam("用户Id")
+								@PathVariable Long id,
+								@ApiParam("密码")
+								@RequestParam String password)
+	{
+		//TODO 这个地方要判断open id，去数据库检查，匹配用户，才可以修改
+		User user = new User();
+		user.setId(id);
+		
+		user.setPassword(password);
+		
+		resBody = new ResponseBody<User>();
+		
+		status = userService.update(user, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}

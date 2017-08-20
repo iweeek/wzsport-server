@@ -1,8 +1,11 @@
 package com.wzsport.controller.exhandler;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.omg.IOP.ExceptionDetailMessage;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wzsport.exception.RunningActivityAlreadyEndException;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 /**
 * @ClassName: GlobalExceptionHandler
@@ -107,14 +112,20 @@ public class GlobalExceptionHandler {
 	* @return
 	* @throws
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<RestError> handler(Exception exception) {
-		RestError restError = new RestError();
-		restError.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		restError.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		restError.setMessage("服务器发生了未知错误");
-		restError.setDeveloperMessages(new String[]{exception.getMessage()});
-		logger.error(exception);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(restError);
+	public ResponseEntity<?> handler(Exception exception) {
+		com.wzsport.util.ResponseBody resBody =  new com.wzsport.util.ResponseBody();
+		if (exception instanceof ExpiredJwtException) {
+			resBody.statusMsg = "Token过期，请重新登录";
+			resBody.obj = new String[]{exception.getMessage()};
+			logger.error(exception);
+			return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+		} else {
+			resBody.statusMsg = "服务器发生了未知错误";
+			resBody.obj = new String[]{exception.getMessage()};
+			logger.error(exception);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resBody);
+		}
 	}
 }

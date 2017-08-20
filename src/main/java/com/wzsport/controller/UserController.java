@@ -1,5 +1,7 @@
 package com.wzsport.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,16 +43,26 @@ public class UserController {
 	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息")
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
 	public ResponseEntity<?> update(
-								@ApiParam("用户名")
-								@RequestParam String username,
 								@ApiParam("学校Id")
-								@RequestParam Long universityId)
+								@RequestParam Long universityId,
+								@ApiParam("学号")
+								@RequestParam(required = false) String studentId,
+								@ApiParam("姓名")
+								@RequestParam(required = false) String name
+								)
 								{
+		if (studentId == null && name == null) {
+			status = HttpServletResponse.SC_BAD_REQUEST;
+			return ResponseEntity.status(status).body(null);
+		}
 		
 		User user = new User();
-		user.setUsername(username);
 		user.setUniversityId(universityId);
-
+		
+		if (studentId != null) {
+			user.setUsername(studentId);
+		}
+		
 		resBody = new ResponseBody<User>();
 		
 		status = userService.search(user, resBody);

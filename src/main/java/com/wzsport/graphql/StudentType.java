@@ -734,17 +734,40 @@ public class StudentType {
 			singleQueryField = GraphQLFieldDefinition.newFieldDefinition()
 					.argument(GraphQLArgument.newArgument().name("id").type(Scalars.GraphQLLong).build())
 					.argument(GraphQLArgument.newArgument().name("userId").type(Scalars.GraphQLLong).build())
-					.name("student").description("根据ID或者user的ID来获取学生").type(getType()).dataFetcher(environment -> {
+					.argument(GraphQLArgument.newArgument().name("universityId").type(Scalars.GraphQLLong).build())
+					.argument(GraphQLArgument.newArgument().name("studentNo").type(Scalars.GraphQLString).build())
+					.argument(GraphQLArgument.newArgument().name("name").type(Scalars.GraphQLString).build())
+					.name("student")
+					.description("根据条件来获取学生")
+					.type(getType())
+					.dataFetcher(environment -> {
 						Student student = null;
 						Long id = environment.getArgument("id");
+						StudentExample studentExample = new StudentExample();
 						if (id != null) {
 							student = studentMapper.selectByPrimaryKey(id);
-						} else if (environment.containsArgument("userId")) {
+						} else if (environment.getArgument("universityId") != null) {
+							Long universityId = environment.getArgument("universityId");
+							String studentNo = environment.getArgument("studentNo");
+							if (studentNo == null) {
+								return null;
+							}
+							
+							String name = environment.getArgument("name");
+							if (name == null) {
+								studentExample.createCriteria().andStudentNoEqualTo(studentNo).andUniversityIdEqualTo(universityId);
+								student = studentMapper.selectByExample(studentExample).get(0);
+							} else {
+								studentExample.createCriteria().andStudentNoEqualTo(studentNo).andUniversityIdEqualTo(universityId)
+								.andNameEqualTo(name);
+								student = studentMapper.selectByExample(studentExample).get(0);
+							}
+						} else if (environment.getArgument("userId") != null) {
 							long userId = environment.getArgument("userId");
-							StudentExample studentExample = new StudentExample();
+							 
 							studentExample.createCriteria().andUserIdEqualTo(userId);
 							student = studentMapper.selectByExample(studentExample).get(0);
-						}
+						} 
 
 						return student;
 					}).build();

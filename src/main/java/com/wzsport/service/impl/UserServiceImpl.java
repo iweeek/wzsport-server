@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.wzsport.mapper.UserMapper;
 import com.wzsport.model.User;
 import com.wzsport.model.UserExample;
+import com.wzsport.model.UserExample.Criteria;
 import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
 import com.wzsport.util.RetMsgTemplate;
@@ -38,11 +39,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int search(User user, ResponseBody resBody) {
 		UserExample example = new UserExample();
-		example.createCriteria().andUsernameEqualTo(user.getUsername()).andUniversityIdEqualTo(user.getUniversityId());
+		Criteria criteria = example.createCriteria();
+		criteria.andUniversityIdEqualTo(user.getUniversityId());
+		
+		if (user.getUsername() == null) {
+			criteria.andUsernameEqualTo(user.getUsername());
+		}
+		
 		List<User> list = userMapper.selectByExample(example);
 		if (list.size() == 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
-			logger.error(logMsg);
+			logger.info(logMsg);
 			return HttpServletResponse.SC_NOT_FOUND;
 		} else {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;

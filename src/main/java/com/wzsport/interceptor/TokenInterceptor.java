@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -27,7 +27,7 @@ import io.jsonwebtoken.Jwts;
 */
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
+	private static final Logger logger = LogManager.getLogger(TokenInterceptor.class);
 	
 	String logMsg = "";
 	
@@ -46,14 +46,18 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		String token = request.getHeader("Authorization");
-		if (token != null) {
-//			SecurityUtils.getSubject().login(new UsernamePasswordToken(token, ""));
-			Claims claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
-			logger.info(claims.toString());
+		if (request.getMethod().equals("OPTIONS")) {
+			
 		} else {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			return false;
+			String token = request.getHeader("Authorization");
+			if (token != null) {
+	//			SecurityUtils.getSubject().login(new UsernamePasswordToken(token, ""));
+				Claims claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
+				logger.info(claims.toString());
+			} else {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return false;
+			}
 		}
 		return super.preHandle(request, response, handler);
 	}

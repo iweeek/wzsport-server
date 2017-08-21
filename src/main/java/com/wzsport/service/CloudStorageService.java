@@ -7,7 +7,7 @@ public interface CloudStorageService {
 
     void uploadImage(String localFilePath, String key);
 
-    String generageUrl(String fileName);
+    String generateUrl(String fileName);
 
     void setBucket(String bucket);
 }

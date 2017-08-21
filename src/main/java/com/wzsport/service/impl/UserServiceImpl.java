@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User generateAvatarUrl(User user) {
-        user.setAvatarUrl(this.cloudStorageService.generageUrl(user.getAvatarUrl()));
+		user.setAvatarUrl(this.cloudStorageService.generateUrl(user.getAvatarUrl()));
 
         return user;
     }

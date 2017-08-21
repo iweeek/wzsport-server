@@ -93,7 +93,7 @@ public class QiniuService implements CloudStorageService {
     }
 
     @Override
-    public String generageUrl(String fileName) {
+    public String generateUrl(String fileName) {
         return this.auth.privateDownloadUrl(this.domain + "/" + fileName);
     }
 }

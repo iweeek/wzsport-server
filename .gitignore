@@ -6,3 +6,4 @@
 /bin
 .DS_Store
 /.idea
+/src/main/webapp/WEB-INF/images

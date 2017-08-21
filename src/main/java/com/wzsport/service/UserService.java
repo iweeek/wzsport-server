@@ -16,5 +16,10 @@ public interface UserService {
 
 	@SuppressWarnings("rawtypes")
 	int update(User user, ResponseBody resBody);
+    User getUserById(long id);
+
+    int update(User user);
+
+    User generateAvatarUrl(User user);
 
 }

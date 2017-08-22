@@ -41,9 +41,9 @@ public class FixLocationOutdoorSportPointsController {
 	
 	/** The res body. */
 	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	private ResponseBody resBody;
+//	
+//	private int status;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
@@ -58,6 +58,7 @@ public class FixLocationOutdoorSportPointsController {
 	* @param qualifiedCostTime
 	* @param minCostTime
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建一个室外定点活动点", notes = "使用POST来创建一个新的室外活动地点，这个时候对父一级目录进行请求，由服务端来分配创建一个新资源")
 	@RequestMapping(value = "/fixLocationOutdoorSportPoints", method = RequestMethod.POST, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> create(
@@ -91,13 +92,14 @@ public class FixLocationOutdoorSportPointsController {
 		point.setUniversityId(universityId);
 		point.setDescription(description);
 		
-		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		ResponseBody resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
-		status = fixLocationSportPointService.create(point, resBody);
+		int status = fixLocationSportPointService.create(point, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "获取一个室外定点活动点", notes = "根据Id来获取一个活动点")
 	@RequestMapping(value = "/fixLocationOutdoorSportPoints/{id}", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> show(
@@ -106,13 +108,14 @@ public class FixLocationOutdoorSportPointsController {
 		FixLocationOutdoorSportPoint point = new FixLocationOutdoorSportPoint();
 		point.setId(id);
 		
-		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		ResponseBody resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
-		status = fixLocationSportPointService.show(point, resBody);
+		int status = fixLocationSportPointService.show(point, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新一个室外定点活动点", notes = "根据Id来更新一个活动点")
 	@RequestMapping(value = "/fixLocationOutdoorSportPoints/{id}", method = RequestMethod.POST, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> update(
@@ -149,25 +152,27 @@ public class FixLocationOutdoorSportPointsController {
 		point.setIsEnabled(isEnabled);
 		point.setUniversityId(universityId);
 		
-		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		ResponseBody resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
-		status = fixLocationSportPointService.update(point, resBody);
+		int status = fixLocationSportPointService.update(point, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
 	@RequestMapping(value = "/fixLocationOutdoorSportPoints", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> index(HttpServletResponse response) {
 		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
 		
-		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		ResponseBody resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
-		status = fixLocationSportPointService.index(list, resBody);
+		int status = fixLocationSportPointService.index(list, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "获取室外定点活动点列表", notes = "")
 	@RequestMapping(value = "/universities/{id}/FixLocationOutdoorSportPoints", method = RequestMethod.GET, produces="application/json;charset=UTF-8") 
 	public ResponseEntity<?> index(
@@ -175,9 +180,9 @@ public class FixLocationOutdoorSportPointsController {
 								@PathVariable long id) {
 		List<FixLocationOutdoorSportPoint> list = new ArrayList<FixLocationOutdoorSportPoint>();
 		
-		resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
+		ResponseBody resBody = new ResponseBody<FixLocationOutdoorSportPoint>();
 		
-		status = fixLocationSportPointService.index(id, list, resBody);
+		int status = fixLocationSportPointService.index(id, list, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);	
 	}

@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/tokens",produces="application/json;charset=UTF-8")
 public class TokenController {
 	
-	private int status = 0;
+//	private int status = 0;
 
 	@Autowired
 	private TokenService tokenService;
@@ -57,7 +57,7 @@ public class TokenController {
 		System.out.println(userAgent);
 		
 		ResponseBody resBody = new ResponseBody();
-		status = tokenService.create(universityId, username, password, expiredHour, deviceId, userAgent, resBody);
+		int status = tokenService.create(universityId, username, password, expiredHour, deviceId, userAgent, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);
 	}

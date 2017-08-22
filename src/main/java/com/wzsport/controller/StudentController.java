@@ -30,13 +30,13 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    private int status = 0;
+//    private int status = 0;
 
     /**
      * The res body.
      */
-    @SuppressWarnings("rawtypes")
-    private ResponseBody resBody;
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+//    private ResponseBody resBody;
 
 
     @ApiOperation(value = "验证学生学籍信息", notes = "验证指定学校的学生学籍信息")
@@ -53,25 +53,25 @@ public class StudentController {
         List<Student> studentList = studentService.getStudentByUniversityIdAndStudentNo(universityId, studentNo);
 
         if (studentList.size() == 0) {
-            this.resBody = new ResponseBody<Integer>();
-            this.resBody.statusMsg = "该学号不存在哦！";
-            this.resBody.obj = 1000;
-            this.status = 404;
-            return ResponseEntity.status(this.status).body(this.resBody);
+        	ResponseBody resBody = new ResponseBody<Integer>();
+            resBody.statusMsg = "该学号不存在哦！";
+            resBody.obj = 1000;
+            int status = 404;
+            return ResponseEntity.status(status).body(resBody);
         }
 
         Student student = studentList.get(0);
         if (!student.getName().equals(studentName)) {
-            this.resBody = new ResponseBody<Integer>();
-            this.resBody.statusMsg = "该学生姓名和学号不符合哦！";
-            this.resBody.obj = 1001;
-            this.status = 404;
-            return ResponseEntity.status(this.status).body(this.resBody);
+        	ResponseBody resBody = new ResponseBody<Integer>();
+            resBody.statusMsg = "该学生姓名和学号不符合哦！";
+            resBody.obj = 1001;
+            int status = 404;
+            return ResponseEntity.status(status).body(resBody);
         }
 
-        this.status = 200;
-        this.resBody = new ResponseBody<Student>();
-        this.resBody.obj = student;
-        return ResponseEntity.status(this.status).body(this.resBody);
+        int status = 200;
+        ResponseBody resBody = new ResponseBody<Student>();
+        resBody.obj = student;
+        return ResponseEntity.status(status).body(resBody);
     }
 }

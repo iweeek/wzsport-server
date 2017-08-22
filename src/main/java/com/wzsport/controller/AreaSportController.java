@@ -32,11 +32,11 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/areaSports",produces="application/json;charset=UTF-8")
 public class AreaSportController {
 	
-	private int status = 0;
-	
-	/** The res body. */
-	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
+//	private int status = 0;
+//	
+//	/** The res body. */
+//	@SuppressWarnings("rawtypes")
+//	private ResponseBody resBody;
 
 	/** The area sport service. */
 	@Autowired
@@ -54,6 +54,7 @@ public class AreaSportController {
 	 * @param universityId the university id
 	 * @return the area sport
 	 */
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建一个定点运动项目", notes = "创建一个定点运动项目")
 	@RequestMapping(value="",method = RequestMethod.POST) 
 	public ResponseEntity<?> create(
@@ -80,8 +81,8 @@ public class AreaSportController {
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
 		
-		resBody = new ResponseBody<AreaSport>();
-		status = areaSportService.create(sport, resBody);
+		ResponseBody resBody = new ResponseBody<AreaSport>();
+		int status = areaSportService.create(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);
 	}
 	
@@ -99,6 +100,7 @@ public class AreaSportController {
 	 * @param response the response
 	 * @return the area sport
 	 */
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "根据id来更新一个定点运动项目", notes = "根据id来更新一个定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
 	public ResponseEntity<?> update(
@@ -146,8 +148,8 @@ public class AreaSportController {
 		}
 		
 //		sport.setHourlyKcalConsumption(200);
-		resBody = new ResponseBody<AreaSport>();
-		status = areaSportService.update(sport, resBody);
+		ResponseBody resBody = new ResponseBody<AreaSport>();
+		int status = areaSportService.update(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);
 	}
 	
@@ -158,6 +160,7 @@ public class AreaSportController {
 	 * @param response the response
 	 * @return the area sport
 	 */
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "根据id来获取定点运动项目", notes = "根据id来获取定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.GET) 
 	public ResponseEntity<?> read(
@@ -167,8 +170,8 @@ public class AreaSportController {
 							) {
 		AreaSport sport = new AreaSport();
 		sport.setId(id);
-		resBody = new ResponseBody<AreaSport>();
-		status = areaSportService.show(sport, resBody);
+		ResponseBody resBody = new ResponseBody<AreaSport>();
+		int status = areaSportService.show(sport, resBody);
 		return ResponseEntity.status(status).body(resBody);
 	}
 	
@@ -178,14 +181,15 @@ public class AreaSportController {
 	 * @param response the response
 	 * @return the list
 	 */
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "获取定点运动项目列表", notes = "获取定点运动项目列表")
 	@RequestMapping(value="",method = RequestMethod.GET) 
 	public ResponseEntity<?> index(
 							HttpServletResponse response
 							) {
 		List<AreaSport> list = new ArrayList<AreaSport>();
-		resBody = new ResponseBody<AreaSport>();
-		status = areaSportService.index(list, resBody);
+		ResponseBody resBody = new ResponseBody<AreaSport>();
+		int status = areaSportService.index(list, resBody);
 		return ResponseEntity.status(status).body(resBody);
 	}
 	

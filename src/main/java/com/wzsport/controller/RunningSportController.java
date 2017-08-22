@@ -32,10 +32,10 @@ public class RunningSportController {
 	@Autowired
 	private RunningSportService runningSportService;
 	
-	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	@SuppressWarnings("rawtypes")
+//	private ResponseBody resBody;
+//	
+//	private int status;
 	
 	/**
 	* 更新项目指标
@@ -45,6 +45,7 @@ public class RunningSportController {
 	* @param qualifiedCostTime
 	* @param minCostTime
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新项目指标", notes = "更改指定id的项目的指标")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
 	public ResponseEntity<?> update(
@@ -92,8 +93,8 @@ public class RunningSportController {
 			runningSport.setAcquisitionInterval(acquisitionInterval);
 		}
 		
-		resBody = new ResponseBody<AreaSport>();
-		status = runningSportService.update(runningSport, resBody);
+		ResponseBody resBody = new ResponseBody<AreaSport>();
+		int status = runningSportService.update(runningSport, resBody);
 		return ResponseEntity.status(status).body(resBody);
 	
 	}
@@ -119,6 +120,7 @@ public class RunningSportController {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建一个跑步运动项目", notes = "创建一个定点运动项目")
 	@RequestMapping(value="",method = RequestMethod.POST) 
 	public ResponseEntity<?> create(
@@ -150,8 +152,10 @@ public class RunningSportController {
 		sport.setIsMan(isMan);
 		sport.setQualifiedCostTime(qualifiedCostTime);
 		sport.setUniversityId(universityId);
-		resBody = new ResponseBody<RunningSport>();
-		status = runningSportService.create(sport, resBody);
+		
+		ResponseBody resBody = new ResponseBody<RunningSport>();
+		int status = runningSportService.create(sport, resBody);
+		
 		return ResponseEntity.status(status).body(resBody);
 	}
 }

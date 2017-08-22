@@ -35,9 +35,9 @@ public class AreaActivityDataController {
 	
 	/** The res body. */
 	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	private ResponseBody resBody;
+//	
+//	private int status;
 	
 	@ApiOperation(value = "创建AreaActivityData", notes = "向服务端提交运动的采集数据")
 	@RequestMapping(method = RequestMethod.POST)
@@ -63,8 +63,8 @@ public class AreaActivityDataController {
 		areaActivityData.setLatitude(latitude);
 		areaActivityData.setLocationType(locationType);
 		
-		resBody = new ResponseBody<AreaActivityData>();
-		status = areaActivityDataService.create(areaActivityData, resBody);
+		ResponseBody resBody = new ResponseBody<AreaActivityData>();
+		int status = areaActivityDataService.create(areaActivityData, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);
 	}

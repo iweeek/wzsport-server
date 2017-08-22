@@ -38,9 +38,9 @@ public class ClientVersionController {
 	
 	/** The res body. */
 	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	private ResponseBody resBody;
+//	
+//	private int status;
 	
 	/**
 	* 创建AndroidVersion接口
@@ -74,15 +74,16 @@ public class ClientVersionController {
 		info.setPlatformId(platformId);
 		info.setDownloadUrl(downloadUrl);
 		
-		resBody = new ResponseBody<AreaActivity>();
+		ResponseBody resBody = new ResponseBody<AreaActivity>();
 		
-		status = clientVersionService.create(info, resBody);
+		int status = clientVersionService.create(info, resBody);
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
 	/**
 	* 
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "根据Id获取某一版本信息", notes = "根据Id获取某一版本信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> read(
@@ -92,9 +93,9 @@ public class ClientVersionController {
 		ClientVersion info = new ClientVersion();
 		info.setId(id);
 		
-		resBody = new ResponseBody<AreaActivity>();
+		ResponseBody resBody = new ResponseBody<AreaActivity>();
 		
-		status = clientVersionService.read(info, resBody);
+		int status = clientVersionService.read(info, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}
@@ -157,9 +158,10 @@ public class ClientVersionController {
 			info.setDownloadUrl(downloadUrl);
 		}
 		
-		resBody = new ResponseBody<AreaActivity>();
+		@SuppressWarnings("rawtypes")
+		ResponseBody resBody = new ResponseBody<AreaActivity>();
 		
-		status = clientVersionService.update(info, resBody);
+		int status = clientVersionService.update(info, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}
@@ -169,9 +171,10 @@ public class ClientVersionController {
 	public ResponseEntity<?> index() {
 		List<ClientVersion> list = new ArrayList<ClientVersion>();
 		
-		resBody = new ResponseBody<List<ClientVersion>>();
+		@SuppressWarnings("rawtypes")
+		ResponseBody resBody = new ResponseBody<List<ClientVersion>>();
 		
-		status = clientVersionService.index(list, resBody);
+		int status = clientVersionService.index(list, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}

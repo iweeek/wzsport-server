@@ -41,10 +41,10 @@ public class UserController {
 	private UserService userService;
 	
 	/** The res body. */
-	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	@SuppressWarnings("rawtypes")
+//	private ResponseBody resBody;
+//	
+//	private int status;
 
 	@Autowired
 	private CloudStorageService qiniuService;
@@ -52,6 +52,7 @@ public class UserController {
 	/**
 	* 
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息")
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
 	public ResponseEntity<?> show(
@@ -67,13 +68,14 @@ public class UserController {
 			user.setUsername(studentId);
 		}
 		
-		resBody = new ResponseBody<User>();
+		ResponseBody resBody = new ResponseBody<User>();
 		
-		status = userService.search(user, resBody);
+		int status = userService.search(user, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(
@@ -88,9 +90,9 @@ public class UserController {
 		
 		user.setPassword(password);
 		
-		resBody = new ResponseBody<User>();
+		ResponseBody resBody = new ResponseBody<User>();
 		
-		status = userService.update(user, resBody);
+		int status = userService.update(user, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}
@@ -125,6 +127,7 @@ public class UserController {
 //
 //	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "上传用户头像", notes = "上传用户头像")
 	@RequestMapping(value = "/upload/avatar", method = RequestMethod.POST)
 	public ResponseEntity<?> uploadAvatar(
@@ -138,10 +141,10 @@ public class UserController {
 		try {
 			user = this.userService.getUserById(userId);
 		} catch (ObjectNotFoundException e) {
-			this.resBody = new ResponseBody<Integer>();
-			this.resBody.statusMsg = e.getMessage();
-			this.resBody.obj = 1000;
-			this.status = 404;
+			ResponseBody resBody = new ResponseBody<Integer>();
+			resBody.statusMsg = e.getMessage();
+			resBody.obj = 1000;
+			int status = 404;
 			return ResponseEntity.status(status).body(resBody);
 		}
 
@@ -168,10 +171,10 @@ public class UserController {
 
 		user = this.userService.generateAvatarUrl(user);
 
-		this.resBody = new ResponseBody<User>();
-		this.resBody.statusMsg = "头像上传成功了！";
-		this.resBody.obj = user;
-		this.status = 200;
+		ResponseBody resBody = new ResponseBody<User>();
+		resBody.statusMsg = "头像上传成功了！";
+		resBody.obj = user;
+		int status = 200;
 		return ResponseEntity.status(status).body(resBody);
 
 	}

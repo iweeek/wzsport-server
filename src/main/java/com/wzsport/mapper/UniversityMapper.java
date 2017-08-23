@@ -95,31 +95,40 @@ public interface UniversityMapper {
 
 	/**
 	* 获取指定大学的学生热量消耗的排名列表
-	* 
+	*
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(runningAct.kcal_consumed) "
-			+ "+ SUM(areaAct.kcal_consumed) AS kcal_consumption "
+	@Select("SELECT student.id AS student_id, student.name AS student_name , "
+			+ "		(runningAct.kcal_consumed + areaAct.kcal_consumed) AS kcal_consumption "
 			+ "FROM wzsport_student AS student "
-			+ "JOIN wzsport_running_activity AS runningAct ON student.id = runningAct.student_id "
-			+ "JOIN wzsport_area_activity AS areaAct ON student.id = areaAct.student_id "
+			+ "JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed "
+			+ "		 FROM wzsport_running_activity "
+			+ "	 GROUP BY student_id) runningAct "
+			+ "ON student.id = runningAct.student_id "
+			+ "JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed "
+			+ "		 FROM wzsport_area_activity "
+			+ "	 GROUP BY student_id) areaAct "
+			+ "ON student.id = areaAct.student_id "
 			+ "WHERE student.university_id = #{universityId} "
-			+ "GROUP BY student.id "
 			+ "ORDER BY kcal_consumption DESC")
 	List<StudentKcalConsumptionDTO> getKcalCostedRanking(@Param("universityId") long universityId);
-	
+
 	/**
 	* 获取指定大学的学生运动时长的排名列表
-	* 
+	*
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student.id AS student_id, student.name AS student_name, SUM(runningAct.cost_time)"
-			+ " + SUM(areaAct.cost_time) AS time_costed "
+	@Select("SELECT student.id AS student_id, student.name AS student_name ,(runningAct.cost_time + areaAct.cost_time) AS time_costed "
 			+ "FROM wzsport_student AS student "
-			+ "JOIN wzsport_running_activity AS runningAct ON student.id = runningAct.student_id "
-			+ "JOIN wzsport_area_activity AS areaAct ON student.id = runningAct.student_id "
+			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time "
+			+ "		   FROM wzsport_running_activity "
+			+ "	   GROUP BY student_id) runningAct "
+			+ "ON student.id = runningAct.student_id "
+			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time "
+			+ "		   FROM wzsport_area_activity "
+			+ "	   GROUP BY student_id) areaAct "
+			+ "ON student.id = areaAct.student_id "
 			+ "WHERE student.university_id = #{universityId} "
-			+ "GROUP BY student.id "
 			+ "ORDER BY time_costed DESC")
 	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId);
 }

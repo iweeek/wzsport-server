@@ -47,7 +47,7 @@ public class QiniuService implements CloudStorageService {
      * 华南	Zone.zone2()     3
      * 北美	Zone.zoneNa0()   4
      */
-    private int zoneIndex;
+//    private int zoneIndex;
 
     public QiniuService(@Value("${qiniu.url}") String domain, @Value("${qiniu.accessKey}") String accessKey, @Value("${qiniu.secretKey}") String secretKey) {
         this.domain = domain;

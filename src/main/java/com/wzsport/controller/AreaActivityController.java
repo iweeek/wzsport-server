@@ -33,14 +33,15 @@ public class AreaActivityController {
 	private AreaActivityService areaActivityService;
 	
 	/** The res body. */
-	@SuppressWarnings("rawtypes")
-	private ResponseBody resBody;
-	
-	private int status;
+//	@SuppressWarnings("rawtypes")
+//	private ResponseBody resBody;
+//	
+//	private int status;
 	
 	/**
 	* 创建AreaActivity接口
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建AreaActivity", notes = "向服务端提交一条活动结果数据，服务端对其进行验证后存储至数据库并返回数据。")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> create(
@@ -54,15 +55,16 @@ public class AreaActivityController {
 		areaActivity.setStudentId(studentId);
 		areaActivity.setStartTime(new Date());
 		
-		resBody = new ResponseBody<AreaActivity>();
+		ResponseBody resBody = new ResponseBody<AreaActivity>();
 		
-		status = areaActivityService.create(areaActivity, resBody);
+		int status = areaActivityService.create(areaActivity, resBody);
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
 	/**
 	* 
 	*/
+	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "结束运动", notes = "结束运动，更新运动结束时间")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(
@@ -73,9 +75,9 @@ public class AreaActivityController {
 		AreaActivity areaActivity = new AreaActivity();
 		areaActivity.setId(id);
 		
-		resBody = new ResponseBody<AreaActivity>();
+		ResponseBody resBody = new ResponseBody<AreaActivity>();
 		
-		status = areaActivityService.update(areaActivity, resBody);
+		int status = areaActivityService.update(areaActivity, resBody);
 		
 		return ResponseEntity.status(status).body(resBody); 
 	}

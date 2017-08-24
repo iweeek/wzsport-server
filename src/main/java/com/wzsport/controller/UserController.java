@@ -54,7 +54,6 @@ public class UserController {
 	/** The res body. */
 //	@SuppressWarnings("rawtypes")
 //	private ResponseBody resBody;
-//
 //	private int status;
 
 	@Autowired
@@ -78,14 +77,14 @@ public class UserController {
 		if (studentId != null) {
 			user.setUsername(studentId);
 		}
-
+		
 		ResponseBody resBody = new ResponseBody<User>();
-
+		
 		int status = userService.search(user, resBody);
-
-		return ResponseEntity.status(status).body(resBody);
+		
+		return ResponseEntity.status(status).body(resBody); 
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
@@ -265,7 +264,6 @@ public class UserController {
 			}
 
 		}
-
 	}
 
 	

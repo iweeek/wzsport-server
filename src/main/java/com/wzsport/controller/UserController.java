@@ -111,7 +111,7 @@ public class UserController {
 
 		int status = userService.update(user, resBody);
 		
-		user.setAvatarUrl(userService.getAvatarUrl(user));
+		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
 
 		return ResponseEntity.status(status).body(resBody);
 	}
@@ -132,7 +132,7 @@ public class UserController {
 
 		mFile.transferTo(file);
 
-		this.qiniuService.setBucket(PropertyUtil.getProperty("qiniu.wzsport_head_image_bucket"));
+		this.qiniuService.setBucket(PropertyUtil.getProperty("qiniu.wzsport_avatar_bucket"));
 		this.qiniuService.uploadImage(filePath, fileName);
 		file.delete();
 		

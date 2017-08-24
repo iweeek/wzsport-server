@@ -24,6 +24,7 @@ import com.wzsport.model.DeviceExample;
 import com.wzsport.model.DeviceLoginLog;
 import com.wzsport.model.User;
 import com.wzsport.service.TokenService;
+import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
 
 import io.jsonwebtoken.CompressionCodecs;
@@ -53,6 +54,9 @@ public class TokenServiceImpl implements TokenService {
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private DeviceMapper deviceMapper;
@@ -112,16 +116,16 @@ public class TokenServiceImpl implements TokenService {
 			log.setUserAgent(userAgent);
 			deviceLoginLogMapper.insert(log);
 		} else {//第二次登录，验证设备信息
-			device = list.get(0);
-			if (!device.getDeviceId().equals(deviceId)) {
-				logMsg = "设备Id不匹配";
-				logger.error(logMsg);
-				
-				resBody.statusMsg = logMsg;
-				resBody.obj = null;
-				
-				return HttpServletResponse.SC_BAD_REQUEST;
-			}
+//			device = list.get(0);
+//			if (!device.getDeviceId().equals(deviceId)) {
+//				logMsg = "设备Id不匹配";
+//				logger.error(logMsg);
+//				
+//				resBody.statusMsg = logMsg;
+//				resBody.obj = null;
+//				
+//				return HttpServletResponse.SC_BAD_REQUEST;
+//			}
 		}
 		
 		//创建token
@@ -139,11 +143,13 @@ public class TokenServiceImpl implements TokenService {
 				.signWith(SignatureAlgorithm.HS512, KEY)
 				.compact();
 		
+		String avatarUrl = userService.getAvatarUrl(user.getAvatarUrl());
+		
 		logMsg = "登录成功";
 		logger.info(logMsg);
 		
 		resBody.statusMsg = logMsg;
-		resBody.obj = new TokenDTO(userId, roles, token, expiredDate);
+		resBody.obj = new TokenDTO(userId, avatarUrl, roles, token, expiredDate);
 		
 		return HttpServletResponse.SC_CREATED;
 	}

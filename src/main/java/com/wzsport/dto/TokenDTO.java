@@ -14,17 +14,27 @@ public class TokenDTO {
 	private String[] roles;
 	private Date expiredDate;
 	private String token;
+	private String avatarUrl;
 
 	public TokenDTO() {
 		
 	}
 	
-	public TokenDTO(Long userId, String[] roles, String token, Date expiredDate) {
+	public TokenDTO(Long userId, String avatarUrl, String[] roles, String token, Date expiredDate) {
 		super();
 		this.userId = userId;
+		this.avatarUrl = avatarUrl;
 		this.roles = roles;
 		this.token = token;
 		this.expiredDate = expiredDate;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 
 	public Long getUserId() {

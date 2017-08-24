@@ -19,6 +19,6 @@ public interface UserService {
 	
 //    int update(User user);
 
-    String getAvatarUrl(User user);
+    String getAvatarUrl(String fileName);
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.wzsport.exception.ObjectNotFoundException;
 import com.wzsport.service.CloudStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +106,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public String getAvatarUrl(User user) {
-		return this.cloudStorageService.generateUrl(user.getAvatarUrl());
+    public String getAvatarUrl(String fileName) {
+		return this.cloudStorageService.generateUrl(fileName);
     }
 }

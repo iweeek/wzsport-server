@@ -2,7 +2,6 @@ package com.wzsport.service.impl;
 
 import java.util.List;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wzsport.exception.ObjectNotFoundException;
@@ -87,30 +86,28 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-    public User getUserById(long id) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andIdEqualTo(id);
-
-        List<User> userList = userMapper.selectByExample(userExample);
-
-        if (userList.size() == 0) {
-            throw new ObjectNotFoundException("找不到该学生信息哦！");
-        }
-
-		userList.set(0, this.generateAvatarUrl(userList.get(0)));
-
-        return userList.get(0);
-    }
+//    public User getUserById(long id) {
+//        UserExample userExample = new UserExample();
+//        userExample.createCriteria().andIdEqualTo(id);
+//
+//        List<User> userList = userMapper.selectByExample(userExample);
+//
+//        if (userList.size() == 0) {
+//            throw new ObjectNotFoundException("找不到该学生信息哦！");
+//        }
+//
+//		userList.set(0, this.getAvatarUrl(userList.get(0)));
+//
+//        return userList.get(0);
+//    }
+//
+//    @Override
+//    public int update(User user) {
+//        return userMapper.updateByPrimaryKey(user);
+//    }
 
     @Override
-    public int update(User user) {
-        return userMapper.updateByPrimaryKey(user);
-    }
-
-    @Override
-    public User generateAvatarUrl(User user) {
-		user.setAvatarUrl(this.cloudStorageService.generateUrl(user.getAvatarUrl()));
-
-        return user;
+    public String getAvatarUrl(User user) {
+		return this.cloudStorageService.generateUrl(user.getAvatarUrl());
     }
 }

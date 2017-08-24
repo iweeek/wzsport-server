@@ -1,10 +1,17 @@
 package com.wzsport.controller;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.wzsport.exception.ObjectNotFoundException;
+import com.wzsport.interceptor.TokenInterceptor;
 import com.wzsport.model.AreaActivityData;
 import com.wzsport.service.CloudStorageService;
+import com.wzsport.util.HttpRequestUtil;
 import com.wzsport.util.PathUtil;
 import com.wzsport.util.PropertyUtil;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +32,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * User Controller.
@@ -36,6 +48,8 @@ import java.util.Calendar;
 @RestController()
 @RequestMapping(value = "/users",produces = "application/json;charset=UTF-8")
 public class UserController {
+	
+	private static final Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
@@ -48,6 +62,10 @@ public class UserController {
 
 	@Autowired
 	private CloudStorageService qiniuService;
+
+	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";
+
+	static final private String APP_ID = "wx2c8f990778df47a3";
 	
 	/**
 	* 
@@ -124,6 +142,88 @@ public class UserController {
 //		return ResponseEntity.status(status).body(resBody);
 //
 //	}
+	
+	//	将路径解析成键值对数组
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Map<String, String> parseQueryString(String str) {
+		String[] paramArr = str.split("&");
+		Map map = new HashMap();
+		for(String param : paramArr) {
+			String[] arr = param.split("=");
+			if(arr.length > 1){
+				map.put(arr[0], arr[1]);
+			}
+		}
+		return map;
+	}
+	
+	//参考：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842。
+	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@ApiOperation(value = "微信回调接口", notes = "微信回调接口")
+	@RequestMapping(value = "/wechatAuth", method = RequestMethod.GET)
+	//redirect_uri/?code=CODE&state=STATE
+	public void wechatAuth(
+			@ApiParam("微信code")
+			@RequestParam String code,
+			HttpServletRequest request,
+			HttpServletResponse response) {
+			String page = "";
+			
+			String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
+			
+			String params = "appid=";
+			params += APP_ID + "&secret=";
+			params += APP_SECRET  + "&code=";
+			params += code + "&grant_type=authorization_code";
+			
+			JsonParser parser = new JsonParser();
+			String result = HttpRequestUtil.sendGet(url, params);
+			if (result == null) {
+				logger.error("获取openid失败");
+				return;
+			} else {
+				JsonObject object = parser.parse(result).getAsJsonObject();
+				String openid = object.get("openid").getAsString();
+				if (openid == null) {
+					logger.error("获取openid失败");
+					return;
+				}
+				
+				Map map = parseQueryString(request.getQueryString());
+				String[] arr = java.net.URLDecoder.decode(map.get("page").toString()).split("[?]");
+			    System.out.println("getWechatToken arr:" + arr);
+			    if (arr.length > 1) {
+			        page += arr[0];
+			        page += "?openid=" + openid;
+			        if (arr[1].split("#")[0] != "") {
+			        	page += "&";
+			        }
+			        page += arr[1];
+			    } else {
+			    	if (arr[0].split("#").length > 1) {
+			    		page += arr[0].split("#")[0];
+				    	page += "?openid=" + openid;
+				    	page += "#";
+				    	page += arr[0].split("#")[1];
+			    	} else {
+				    	page += arr[0];
+				    	page += "?openid=" + openid;
+			    	}
+			    }
+			    
+			    page = page.replace("&#", "#");
+			    System.out.println("getWechatToken page:" + page);
+			    
+			    try {
+					response.sendRedirect(page);	
+				} catch (IOException e) {
+					e.printStackTrace();
+					return;
+				}
+				
+			}
+	
+	}
 
 	@ApiOperation(value = "上传用户头像", notes = "上传用户头像")
 	@RequestMapping(value = "/upload/avatar", method = RequestMethod.POST)

@@ -74,8 +74,16 @@ public class TokenServiceImpl implements TokenService {
 		
 		User user = userMapper.selectWithRolesByUsername(username);
 		
-		if (user == null || !(user.getUniversityId().equals(universityId)) || !user.getPassword().equals(password)) {
-			logMsg = "登录失败";
+		if (user == null || (!(user.getUniversityId().equals(universityId)))) {
+			logMsg = "没有找到这个用户";
+			logger.error(logMsg);
+			
+			resBody.statusMsg = logMsg;
+			resBody.obj = null;
+			
+			return HttpServletResponse.SC_NOT_FOUND;
+		} else if (!user.getPassword().equals(password)) {
+			logMsg = "用户名和密码不匹配";
 			logger.error(logMsg);
 			
 			resBody.statusMsg = logMsg;
@@ -101,31 +109,39 @@ public class TokenServiceImpl implements TokenService {
 //			throw new IncorrectCredentialsException();
 //		}
 		
+		//判断用户Id是否已经存在
 		Device device;
 		DeviceExample example = new DeviceExample();
-		example.createCriteria().andUserIdEqualTo(user.getId());
+		example.or().andUserIdEqualTo(user.getId());
 		List<Device> list = deviceMapper.selectByExample(example);
-		if (list.size() == 0) {//第一次登录，还没有保存设备信息
-			device = new Device();
-			device.setUserId(user.getId());
-			device.setDeviceId(deviceId);
-			deviceMapper.insert(device);
+		if (list.size() > 0) {//第二次登录，验证设备信息
+			device = list.get(0);
+			if (!device.getDeviceId().equals(deviceId)) {
+				logMsg = "设备Id不匹配";
+				logger.error(logMsg);
+				
+				resBody.statusMsg = logMsg;
+				resBody.obj = null;
+				
+				return HttpServletResponse.SC_BAD_REQUEST;
+			}
+		}
 			
-			DeviceLoginLog log = new DeviceLoginLog();
-			log.setDeviceId(deviceId);
-			log.setUserAgent(userAgent);
-			deviceLoginLogMapper.insert(log);
-		} else {//第二次登录，验证设备信息
-//			device = list.get(0);
-//			if (!device.getDeviceId().equals(deviceId)) {
-//				logMsg = "设备Id不匹配";
-//				logger.error(logMsg);
-//				
-//				resBody.statusMsg = logMsg;
-//				resBody.obj = null;
-//				
-//				return HttpServletResponse.SC_BAD_REQUEST;
-//			}
+		//判断设备Id是否已经存在
+		example.clear();
+		example.or().andDeviceIdEqualTo(deviceId);
+		list = deviceMapper.selectByExample(example);
+		if (list.size() > 0) {//第二次登录，验证用户信息
+			device = list.get(0);
+			if (!device.getUserId().equals(user.getId())) {
+				logMsg = "用户Id不匹配";
+				logger.error(logMsg);
+				
+				resBody.statusMsg = logMsg;
+				resBody.obj = null;
+				
+				return HttpServletResponse.SC_BAD_REQUEST;
+			}
 		}
 		
 		//创建token

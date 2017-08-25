@@ -4,8 +4,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value="/runningActivityData",produces="application/json;charset=UTF-8")
 public class RunningActivityDataController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RunningActivityDataController.class);
+	private static final Logger logger = LogManager.getLogger(RunningActivityDataController.class);
 	
 	@Autowired
 	private RunningActivityDataService runningActivityDataService;

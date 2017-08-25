@@ -1,5 +1,6 @@
 package com.wzsport.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,10 +50,10 @@ public class RunningActivityDataController {
 								@RequestParam double longitude,
 								@ApiParam("当前的纬度")
 								@RequestParam double latitude,
-								@ApiParam("步幅（单位：厘米）")
-								@RequestParam Byte stride,
+								@ApiParam("步幅（单位：米）")
+								@RequestParam BigDecimal stride,
 								@ApiParam("每秒的步数")
-								@RequestParam Byte stepsPerSecond,
+								@RequestParam BigDecimal stepsPerSecond,
 								@ApiParam("定位类型")
 								@RequestParam int locationType,
 								@ApiParam("数据是否正常")

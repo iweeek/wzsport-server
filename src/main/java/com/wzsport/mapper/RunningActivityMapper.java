@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
@@ -116,17 +117,26 @@ public interface RunningActivityMapper {
 
 	@Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
 	Integer sumCaloriesConsumedByStudentId(long studentId);
-	
+
 	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId}")
 	Integer sumCostTimeByStudentId(long studentId);
-	
+
 	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
 	Integer sumKCalConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
-	
+
 	@Select("SELECT SUM(cost_time) "
 			+ "FROM wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
 	Integer sumCostTimeByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
+
+	@Select("SELECT count(*) from ( "
+			+ "SELECT count(*) from wzsport_running_activity "
+			+ "WHERE student_id = #{studentId} "
+			+ "and qualified = 1 "
+			+ "and start_time BETWEEN #{start} AND #{end} "
+			+ "GROUP BY date_format(created_at,'%y-%m-%d') "
+			+ ") act")
+	Integer currentTermQualifiedActivityCount(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
 }

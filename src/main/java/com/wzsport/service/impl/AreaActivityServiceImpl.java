@@ -36,28 +36,28 @@ import com.wzsport.util.RetMsgTemplate;
  */
 @Service
 public class AreaActivityServiceImpl implements AreaActivityService {
-	
+
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(AreaSportServiceImpl.class);
 
 	/** The area sport mapper. */
 	@Autowired
 	private AreaSportMapper areaSportMapper;
-	
+
 	/** The area activity mapper. */
 	@Autowired
 	private AreaActivityMapper areaActivityMapper;
-	
+
 	/** The term service. */
 	@Autowired
 	private TermService termService;
-	
+
 	/** The log msg. */
 	private String logMsg = "";
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.wzsport.service.AreaActivityService#create(com.wzsport.model.
 	 * AreaActivity)
 	 */
@@ -72,10 +72,10 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		if (list.size() > 0) {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_RECORD_EXIST;
 			logger.error(logMsg);
-			
+
 			resBody.obj = list.get(0);
-			resBody.statusMsg = logMsg; 
-			
+			resBody.statusMsg = logMsg;
+
 			return HttpServletResponse.SC_CONFLICT;
 		} else {
 			// 获取关联的项目
@@ -85,18 +85,18 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 				logger.error(logMsg);
 				return HttpServletResponse.SC_NOT_FOUND;
 			}
-			
+
 			areaActivity.setQualifiedCostTime(areaSport.getQualifiedCostTime());
-			
+
 			// 插入数据
 			areaActivityMapper.insertSelective(areaActivity);
-	
+
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
-			
+
 			resBody.obj = areaActivity;
-			resBody.statusMsg = logMsg; 
-			
+			resBody.statusMsg = logMsg;
+
 			return HttpServletResponse.SC_OK;
 		}
 	}
@@ -124,7 +124,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 				resBody.statusMsg = logMsg;
 				return HttpServletResponse.SC_NOT_FOUND;
 			}
-			
+
 			int costTime = (int) ((areaActivity.getEndedAt().getTime() - areaActivity.getStartTime().getTime()) / 1000);
 			areaActivity.setCostTime(costTime);
 			// 判断是否合格
@@ -133,32 +133,32 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			} else {
 				areaActivity.setQualified(false);
 			}
-	
+
 			// 计算卡路里消耗
 			int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, areaActivity.getCostTime(),
 					areaSport.getHourlyKcalConsumption());
 			areaActivity.setKcalConsumed(caloriesConsumed);
-			
+
 			areaActivityMapper.updateByPrimaryKey(areaActivity);
-			
+
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 			logger.info(logMsg);
-			
+
 			resBody.obj = areaActivity;
-			resBody.statusMsg = logMsg; 
-			
+			resBody.statusMsg = logMsg;
+
 			return HttpServletResponse.SC_OK;
 		} else {
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID;
 			logger.info(logMsg);
-			
+
 			resBody.obj = areaActivity;
-			resBody.statusMsg = logMsg; 
-			
+			resBody.statusMsg = logMsg;
+
 			return HttpServletResponse.SC_NOT_FOUND;
 		}
 	}
-	
+
 	public AreaActivity startAreaActivity(long studentId, long areaSportId, Date startTime) {
 
 		AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaSportId);
@@ -173,12 +173,12 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 		return areaActivity;
 	}
-	
-	
+
+
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.AreaActivityService#endAreaActivity(com.wzsport
 	 * .model.AreaActivity)
@@ -224,7 +224,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.wzsport.service.AreaActivityService#
 	 * getCurrentTermQualifiedActivityCount(long)
 	 */
@@ -232,18 +232,19 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 	public int getCurrentTermQualifiedActivityCount(long studentId, long universityId) {
 		Term term = termService.getCurrentTerm(universityId);
 		if (term != null) {
-			AreaActivityExample areaActivityExample = new AreaActivityExample();
-			areaActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
-					.andStudentIdEqualTo(studentId).andQualifiedEqualTo(true);
-
-			return (int) areaActivityMapper.countByExample(areaActivityExample);
+//			AreaActivityExample areaActivityExample = new AreaActivityExample();
+//			areaActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
+//					.andStudentIdEqualTo(studentId).andQualifiedEqualTo(true);
+//
+//			return (int) areaActivityMapper.countByExample(areaActivityExample);
+			return (int) areaActivityMapper.currentTermQualifiedActivityCount(studentId, term.getStartDate(), term.getEndDate());
 		}
 		return 0;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.AreaActivityService#getCurrentTermActivityCount(
 	 * long, long)
@@ -263,7 +264,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.AreaActivityService#getStudentCaloriesConsumption(
 	 * long)
@@ -276,7 +277,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.AreaActivityService#getStudentTimeCosted(long)
 	 */
@@ -306,7 +307,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.AreaActivityService#getQualifiedActivityCount(
 	 * long, java.util.Date, java.util.Date)

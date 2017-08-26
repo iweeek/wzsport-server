@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.DuplicateKeyException;
@@ -40,7 +41,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.wzsport.service.RunningActivityService#create(com.wzsport.model.
 	 * RunningActivity)
 	 */
@@ -97,7 +98,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#startRunningActivity(long,
 	 * long, java.util.Date)
@@ -120,7 +121,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#endRunningActivity(com.wzsport
 	 * .model.RunningActivity)
@@ -191,7 +192,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.wzsport.service.RunningActivityService#
 	 * getCurrentTermQualifiedActivityCount(long)
 	 */
@@ -199,18 +200,19 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	public int getCurrentTermQualifiedActivityCount(long studentId, long universityId) {
 		Term term = termService.getCurrentTerm(universityId);
 		if (term != null) {
-			RunningActivityExample runningActivityExample = new RunningActivityExample();
-			runningActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
-					.andStudentIdEqualTo(studentId).andQualifiedEqualTo(true);
-
-			return (int) runningActivityMapper.countByExample(runningActivityExample);
+//			RunningActivityExample runningActivityExample = new RunningActivityExample();
+//			runningActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
+//					.andStudentIdEqualTo(studentId).andQualifiedEqualTo(true);
+//
+//			return (int) runningActivityMapper.countByExample(runningActivityExample);
+			return (int) runningActivityMapper.currentTermQualifiedActivityCount(studentId, term.getStartDate(), term.getEndDate());
 		}
 		return 0;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#getCurrentTermActivityCount(
 	 * long, long)
@@ -224,13 +226,14 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 					.andStudentIdEqualTo(studentId);
 
 			return (int) runningActivityMapper.countByExample(runningActivityExample);
+//			return (int) runningActivityMapper.currentTermActivityCount(studentId, term.getStartDate(), term.getEndDate());
 		}
 		return 0;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#getStudentCaloriesConsumption(
 	 * long)
@@ -243,7 +246,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#getStudentTimeCosted(long)
 	 */
@@ -267,7 +270,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.wzsport.service.RunningActivityService#getQualifiedActivityCount(
 	 * long, java.util.Date, java.util.Date)

@@ -103,17 +103,26 @@ public interface AreaActivityMapper {
 
 	@Select("SELECT SUM(kcal_consumed) FROM wzsport_area_activity WHERE student_id = #{studentId}")
 	Integer sumKcalConsumedByStudentId(long studentId);
-	
+
 	@Select("SELECT SUM(cost_time) FROM wzsport_area_activity WHERE student_id = #{studentId}")
 	Integer sumCostTimeByStudentId(long studentId);
-	
+
 	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_area_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
 	Integer sumKCalConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
-	
+
 	@Select("SELECT SUM(cost_time) "
 			+ "FROM wzsport_area_activity "
 			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
 	Integer sumCostTimeByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
+
+	@Select("SELECT count(*) from ( "
+			+ "SELECT count(*) from wzsport_area_activity "
+			+ "WHERE student_id = #{studentId} "
+			+ "and qualified = 1 "
+			+ "and start_time BETWEEN #{start} AND #{end} "
+			+ "GROUP BY date_format(created_at,'%y-%m-%d') "
+			+ ") act")
+	Integer currentTermQualifiedActivityCount(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
 }

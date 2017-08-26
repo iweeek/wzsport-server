@@ -94,7 +94,7 @@ public class TokenServiceImpl implements TokenService {
 		
 		ClientWechatInfoExample clientWechatInfoExample = new ClientWechatInfoExample();
 		clientWechatInfoExample.createCriteria().andUserIdEqualTo(user.getId());
-		List<ClientWechatInfo> clientWechatInfoList = clientWechatInfoMapper.selectByExample(clientWechatInfoExample);
+//		List<ClientWechatInfo> clientWechatInfoList = clientWechatInfoMapper.selectByExample(clientWechatInfoExample);
 //		if (clientWechatInfoList.size() == 0) {
 //			logMsg = "微信公众号未绑定";
 //			logger.error(logMsg);
@@ -143,6 +143,11 @@ public class TokenServiceImpl implements TokenService {
 				return HttpServletResponse.SC_BAD_REQUEST;
 			}
 		}
+		
+		DeviceLoginLog log = new DeviceLoginLog();
+		log.setDeviceId(deviceId);
+		log.setUserAgent(userAgent);
+		deviceLoginLogMapper.insertSelective(log);
 		
 		//创建token
 		long userId = user.getId();

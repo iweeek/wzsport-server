@@ -14,17 +14,21 @@ import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.service.RunningActivityService;
+import com.wzsport.service.SportDataValidateService;
 
 import java.util.List;
 
 @Component
 public class RunningActivityTask {
+	
 	@Autowired
 	private RunningActivityDataMapper runningActivityDataMapper;
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
 	@Autowired
 	private RunningActivityService runningActivityService;
+	@Autowired
+	private SportDataValidateService sportDataValidateService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
 	
@@ -72,6 +76,10 @@ public class RunningActivityTask {
 			runningActivity.setCostTime(costTime);
 			runningActivity.setTargetFinishedTime(targetFinishedTime);
 			runningActivity.setEndedBy(true);
+			
+			//判断数据是否正常
+			boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
+			runningActivity.setIsValid(isValid);
 
 			runningActivity = runningActivityService.endRunningActivity(runningActivity);
 		}

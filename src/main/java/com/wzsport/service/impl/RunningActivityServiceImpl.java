@@ -5,7 +5,6 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,6 +19,7 @@ import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.RunningSport;
 import com.wzsport.model.Term;
 import com.wzsport.service.RunningActivityService;
+import com.wzsport.service.SportDataValidateService;
 import com.wzsport.service.TermService;
 import com.wzsport.util.CalorieUtil;
 
@@ -38,6 +38,8 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	private RunningActivityMapper runningActivityMapper;
 	@Autowired
 	private TermService termService;
+	@Autowired
+	private SportDataValidateService sportDataValidateService;
 
 	/*
 	 * (non-Javadoc)
@@ -58,7 +60,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 		// 获取关联的项目
 		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
-
+		
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningSport.getQualifiedDistance()
 				&& runningActivity.getTargetFinishedTime() != null
@@ -78,7 +80,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			runningActivity.setStepCount(1);
 		}
 
-		// 计算速度、步幅和步频
+		// 计算平均速度、步幅和步频
 		BigDecimal speed = new BigDecimal((double) runningActivity.getDistance() / runningActivity.getCostTime());
 		runningActivity.setSpeed(speed.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
@@ -143,10 +145,10 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(oldRecord.getQualifiedCostTime());
 		runningActivity.setMinCostTime(oldRecord.getMinCostTime());
-
+		
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningActivity.getQualifiedDistance()
-				&& runningActivity.getTargetFinishedTime() != null
+				&& runningActivity.getTargetFinishedTime() != 0
 				&& runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
 			runningActivity.setQualified(true);
 		} else {
@@ -182,9 +184,13 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			runningActivity.setDistancePerStep((double) 0);
 		}
 
+		//判断数据是否正常
+		boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
+		runningActivity.setIsValid(isValid);
+		
 		runningActivity.setEndedAt(new Date());
 
-		// 插入数据
+		// 更新数据
 		runningActivityMapper.updateByPrimaryKeySelective(runningActivity);
 
 		return runningActivity;

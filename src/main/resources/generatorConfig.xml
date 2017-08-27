@@ -75,6 +75,7 @@
     <table schema="wzpsort" tableName="wzsport_running_activity" domainObjectName ="RunningActivity" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
       <columnOverride column="step_count" javaType="java.lang.Integer"/>
       <columnOverride column="speed" javaType="java.lang.Double"/>
       <columnOverride column="step_per_second" javaType="java.lang.Double"/>
@@ -166,6 +167,15 @@
     
     <table schema="wzpsort" tableName="wzsport_client_wechat_info" domainObjectName ="ClientWechatInfo" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    
+    <table schema="wzpsort" tableName="wzsport_sport_data_validate_rule" domainObjectName ="SportDataValidateRule" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="speed" javaType="java.lang.Double"/>
+      <columnOverride column="step_per_second" javaType="java.lang.Double"/>
+      <columnOverride column="distance_per_step" javaType="java.lang.Double"/>
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
     </table>

@@ -159,9 +159,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
 
 		// 计算卡路里消耗
-		int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
+		int kcalConsumed = CalorieUtil.calculateCalorieConsumption(68, runningActivity.getCostTime(),
 				runningSport.getHourlyKcalConsumption());
-		runningActivity.setKcalConsumed(caloriesConsumed);
+		runningActivity.setKcalConsumed(kcalConsumed);
 
 		// 步数至少为1
 //		if (runningActivity.getStepCount() == 0) {

@@ -1,6 +1,5 @@
 package com.wzsport.graphql;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,9 +9,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.FitnessCheckDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
@@ -628,6 +625,39 @@ public class StudentType {
 											end);
 								}
 								return runningActivityService.getQualifiedActivityCount(student.getId(), null, null);
+							}).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition().name("signInCount")
+							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+							.description("该学生打卡次数").type(Scalars.GraphQLInt).dataFetcher(environment -> {
+								Student student = environment.getSource();
+								String timeRange = environment.getArgument("timeRange");
+
+								if (timeRange != null) {
+									Date start = null;
+									Date end = new Date();
+									switch (TimeRange.valueOf(timeRange)) {
+									case CURRENT_WEEK:
+										start = MyDateUtil.getCurrentWeekStartDate();
+										break;
+									case CURRENT_MONTH:
+										start = MyDateUtil.getCurrentMonthStartDate();
+										break;
+									case CURRENT_TERM:
+										Term currentTerm = termService.getCurrentTerm(student.getUniversityId());
+										if (currentTerm == null) {
+											return 0;
+										} else {
+											start = currentTerm.getStartDate();
+										}
+										break;
+									default:
+										return runningActivityService.getSignInCount(student.getId(), null,
+												null);
+									}
+									return runningActivityService.getSignInCount(student.getId(), start,
+											end);
+								}
+								return runningActivityService.getSignInCount(student.getId(), null, null);
 							}).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition().name("accuRunningActivityCount")
 							.argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())

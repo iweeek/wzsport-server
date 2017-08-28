@@ -2,7 +2,6 @@ package com.wzsport.graphql;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -156,6 +155,11 @@ public class RunningActivityType {
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("qualified")
 							.description("本次活动是否达标")
+							.type(Scalars.GraphQLBoolean)
+							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+							.name("isValid")
+							.description("本次活动数据是否正常")
 							.type(Scalars.GraphQLBoolean)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

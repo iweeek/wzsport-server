@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import com.wzsport.exception.RunningActivityAlreadyEndException;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.mapper.RunningSportMapper;
+import com.wzsport.mapper.SignInMapper;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.model.RunningActivityExample.Criteria;
 import com.wzsport.model.RunningSport;
+import com.wzsport.model.SignInExample;
 import com.wzsport.model.Term;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.SportDataValidateService;
@@ -34,10 +36,16 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	@Autowired
 	private RunningSportMapper runningSportMapper;
+	
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
+	
+	@Autowired
+	private SignInMapper signInMapper;
+	
 	@Autowired
 	private TermService termService;
+	
 	@Autowired
 	private SportDataValidateService sportDataValidateService;
 
@@ -318,5 +326,23 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		RunningActivityExample runningActivityExample = new RunningActivityExample();
 		runningActivityExample.createCriteria().andStudentIdEqualTo(studentId).andStartTimeBetween(start, end);
 		return (int) runningActivityMapper.countByExample(runningActivityExample);
+	}
+
+	@Override
+	public int getSignInCount(long studentId, Date start, Date end) {
+		SignInExample example = new SignInExample();
+		SignInExample.Criteria criteria = example.createCriteria().andStudentIdEqualTo(studentId);
+		
+		if (start != null) {
+			criteria.andSignInTimeGreaterThanOrEqualTo(start);
+		}
+
+		if (end != null) {
+			criteria.andSignInTimeLessThanOrEqualTo(end);
+		}
+		
+		int count = (int) signInMapper.countByExample(example);
+		
+		return count;
 	}
 }

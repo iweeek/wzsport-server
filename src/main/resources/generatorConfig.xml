@@ -119,6 +119,8 @@
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="step_count" javaType="java.lang.Integer"/>
       <columnOverride column="distance" javaType="java.lang.Integer"/>
+      <columnOverride column="step_per_second" javaType="java.lang.Double"/>
+      <columnOverride column="distance_per_step" javaType="java.lang.Double"/>
       <columnOverride column="longitude" javaType="java.lang.Double"/>
       <columnOverride column="latitude" javaType="java.lang.Double"/>
       <columnOverride column="location_type" javaType="java.lang.Integer"/>

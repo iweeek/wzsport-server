@@ -144,6 +144,11 @@ public class TokenServiceImpl implements TokenService {
 			}
 		}
 		
+		device = new Device();
+		device.setDeviceId(deviceId);
+		device.setUserId(user.getId());
+		deviceMapper.insertSelective(device);
+		
 		DeviceLoginLog log = new DeviceLoginLog();
 		log.setDeviceId(deviceId);
 		log.setUserAgent(userAgent);

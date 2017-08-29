@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -97,21 +98,37 @@ public class UserController {
 			@ApiParam("头像") @RequestParam(required = false) MultipartFile mFile,
 			@ApiParam("openid") @RequestParam(required = false) String openid) throws IOException {
 		// TODO 这个地方要判断open id，去数据库检查，匹配用户，才可以修改
+		int result = -1;
+		
 		ResponseBody resBody = new ResponseBody<User>();
+		
+		WechatUser wUser = new WechatUser();
 		
 		User user = userService.read(id);
 		if (user == null) {
 			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			resBody.obj = null;
 			return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(resBody);
-		}
+		}		
 		
 		//openid如果是空的话，不允许修改
 		if (user.getOpenId().equals("")) {
 			if (openid == null) {
-				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
-			} else {
+				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+			} else {//未绑定状态
+				wUser.setOpenId(openid);
+				wUser = userService.search(wUser).get(0);
+				
 				user.setOpenId(openid);
+				user.setAvatarUrl(wUser.getHeadimgurl());
+				
+				wUser.setUserId(user.getId());
+				result = userService.update(wUser);
+				logger.error("没有成功更新用户微信信息， wUser: " + wUser);//TODO test
+				if (result == 0) {
+					logger.error("没有成功更新用户微信信息， wUser: " + wUser);
+					return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+				}
 			}
 		} else {
 			if (!user.getOpenId().equals(openid)) {
@@ -130,14 +147,13 @@ public class UserController {
 			}
 		}
 		
-		
 		if (mFile != null) {
 			String avatar = null;		
 			avatar = uploadFile(mFile);
 			user.setAvatarUrl(avatar);
 		}
-
-		int result = userService.update(user, resBody);
+		
+		result = userService.update(user, resBody);
 		
 //		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
 
@@ -275,7 +291,8 @@ public class UserController {
 			try {
 				user.setOpenId(obj.getString("openid"));
 				
-				if (userService.read(user) == 0) {
+				List<WechatUser> list = userService.search(user);
+				if (list == null) {
 					user.setCity(obj.getString("city"));
 					user.setHeadimgurl(obj.getString("headimgurl"));
 					user.setNickname(obj.getString("nickname"));
@@ -288,6 +305,7 @@ public class UserController {
 					//存入数据库
 					userService.create(user);
 				} else {
+					user.setId(list.get(0).getId());
 					user.setCity(obj.getString("city"));
 					user.setHeadimgurl(obj.getString("headimgurl"));
 					user.setNickname(obj.getString("nickname"));

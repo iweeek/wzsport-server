@@ -1,5 +1,7 @@
 package com.wzsport.service;
 
+import java.util.List;
+
 import com.wzsport.model.User;
 import com.wzsport.model.WechatUser;
 import com.wzsport.util.ResponseBody;
@@ -26,8 +28,8 @@ public interface UserService {
     
     int create(WechatUser user);
     
-    int read(WechatUser user);
-    
     int update(WechatUser user);
+
+    List<WechatUser> search(WechatUser user);
 
 }

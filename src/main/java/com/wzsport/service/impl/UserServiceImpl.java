@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int read(WechatUser user) {
+	public List<WechatUser> search(WechatUser user) {
 		WechatUserExample example = new WechatUserExample();
 		WechatUserExample.Criteria criteria = example.createCriteria();
 		
@@ -164,12 +164,7 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		List<WechatUser> list = wechatUserMapper.selectByExample(example);
-		if (list.size() > 0) {
-			user = list.get(0);
-			return list.size();
-		}
-		
-		return 0;
+		return list;
 	}
 
 	@Override

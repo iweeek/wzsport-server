@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 		
 		List<User> list = userMapper.selectByExample(example);
 		if (list.size() == 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			logger.info(logMsg);
 			return HttpServletResponse.SC_NOT_FOUND;
 		} else {
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	public int update(User user, ResponseBody resBody) {
 		int result = userMapper.updateByPrimaryKeySelective(user);
 		if (result == 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			logger.info(logMsg);
 			return HttpServletResponse.SC_NOT_FOUND;
 		} else {
@@ -177,5 +177,11 @@ public class UserServiceImpl implements UserService {
 		int result = wechatUserMapper.updateByPrimaryKeySelective(user);
 		
 		return result;
+	}
+
+	@Override
+	public User read(Long id) {
+		User user = userMapper.selectByPrimaryKey(id);
+		return user;
 	}
 }

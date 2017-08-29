@@ -18,6 +18,8 @@ public interface UserService {
 	@SuppressWarnings("rawtypes")
 	int update(User user, ResponseBody resBody);
 	
+	User read(Long id);
+	
 //    int update(User user);
 
     String getAvatarUrl(String fileName);

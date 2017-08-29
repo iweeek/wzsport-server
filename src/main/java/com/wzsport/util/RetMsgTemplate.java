@@ -5,5 +5,5 @@ public class RetMsgTemplate {
 	public static String MSG_TEMPLATE_RECORD_EXIST = "记录已经存在";
 	public static String MSG_TEMPLATE_OPERATION_OK = "操作成功";
 	public static String MSG_TEMPLATE_NOT_FIND_BY_ID = "没有找到id是‘%s’的记录";
-	public static String MSG_TEMPLATE_NOT_FIND = "没有找到该记录";
+	public static String MSG_TEMPLATE_NOT_FOUND = "没有找到该记录";
 }

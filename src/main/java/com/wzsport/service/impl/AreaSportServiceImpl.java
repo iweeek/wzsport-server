@@ -136,7 +136,7 @@ public class AreaSportServiceImpl implements AreaSportService {
 			
 			return HttpServletResponse.SC_OK;
 		} else {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			logger.error(logMsg);
 			
 			resBody.obj = null;

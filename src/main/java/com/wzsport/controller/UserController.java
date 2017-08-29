@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import com.wzsport.model.User;
 import com.wzsport.model.WechatUser;
 import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -87,7 +89,7 @@ public class UserController {
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(@ApiParam("用户Id") @PathVariable Long id,
@@ -96,8 +98,20 @@ public class UserController {
 		// TODO 这个地方要判断open id，去数据库检查，匹配用户，才可以修改
 		ResponseBody resBody = new ResponseBody<User>();
 		
-		User user = new User();
-		user.setId(id);
+		User user = userService.read(id);
+		if (user == null) {
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
+			resBody.obj = null;
+			return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(resBody);
+		}
+		
+		if (user.getOpenId().equals("")) {
+//			resBody.statusMsg = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+			resBody.statusMsg = "您的学号尚未绑定公众号，无法修改密码";
+			resBody.obj = null;
+			return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+		}
+		
 		
 		String avatar = null;
 
@@ -110,11 +124,11 @@ public class UserController {
 			user.setAvatarUrl(avatar);
 		}
 
-		int status = userService.update(user, resBody);
+		int result = userService.update(user, resBody);
 		
-		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
+//		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
 
-		return ResponseEntity.status(status).body(resBody);
+		return ResponseEntity.status(result).body(resBody);
 	}
 	
 	public String uploadFile(MultipartFile mFile) throws IOException {
@@ -197,7 +211,6 @@ public class UserController {
 	}
 
 	// 参考：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842。
-	@SuppressWarnings({ "rawtypes", "deprecation" })
 	@ApiOperation(value = "微信回调接口", notes = "微信回调接口")
 	@RequestMapping(value = "/wechatAuth", method = RequestMethod.GET)
 	// redirect_uri/?code=CODE&state=STATE

@@ -94,7 +94,8 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(@ApiParam("用户Id") @PathVariable Long id,
 			@ApiParam("密码") @RequestParam(required = false) String password,
-			@ApiParam("头像") @RequestParam(required = false) MultipartFile mFile) throws IOException {
+			@ApiParam("头像") @RequestParam(required = false) MultipartFile mFile,
+			@ApiParam("openid") @RequestParam(required = false) String openid) throws IOException {
 		// TODO 这个地方要判断open id，去数据库检查，匹配用户，才可以修改
 		ResponseBody resBody = new ResponseBody<User>();
 		
@@ -105,21 +106,33 @@ public class UserController {
 			return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(resBody);
 		}
 		
+		//openid如果是空的话，不允许修改
 		if (user.getOpenId().equals("")) {
-//			resBody.statusMsg = HttpStatus.UNAUTHORIZED.getReasonPhrase();
-			resBody.statusMsg = "您的学号尚未绑定公众号，无法修改密码";
-			resBody.obj = null;
-			return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+			if (openid == null) {
+				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+			} else {
+				user.setOpenId(openid);
+			}
+		} else {
+			if (!user.getOpenId().equals(openid)) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+			}
 		}
 		
-		
-		String avatar = null;
-
 		if (password != null) {
-			user.setPassword(password);
+			if (user.getOpenId().equals("")) {
+	//			resBody.statusMsg = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+				resBody.statusMsg = "您的学号尚未绑定公众号，无法修改密码";
+				resBody.obj = null;
+				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+			} else {
+				user.setPassword(password);
+			}
 		}
+		
 		
 		if (mFile != null) {
+			String avatar = null;		
 			avatar = uploadFile(mFile);
 			user.setAvatarUrl(avatar);
 		}

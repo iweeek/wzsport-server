@@ -1,7 +1,5 @@
 package com.wzsport.controller;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.wzsport.service.CloudStorageService;
 import com.wzsport.util.HttpRequestUtil;
 import com.wzsport.util.PathUtil;
@@ -9,7 +7,9 @@ import com.wzsport.util.PropertyUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wzsport.model.User;
+import com.wzsport.model.WechatUser;
 import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -59,9 +62,11 @@ public class UserController {
 	@Autowired
 	private CloudStorageService qiniuService;
 
-	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";
+//	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
+	static final private String APP_SECRET = "6e37d78de49f1b7c625f132b1fe5059c";//微信测试号
 
-	static final private String APP_ID = "wx2c8f990778df47a3";
+//	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
+	static final private String APP_ID = "wx7d248efdb1dc6821";//微信测试号
 
 	/**
 	* 
@@ -85,34 +90,74 @@ public class UserController {
 		return ResponseEntity.status(status).body(resBody); 
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> update(@ApiParam("用户Id") @PathVariable Long id,
 			@ApiParam("密码") @RequestParam(required = false) String password,
-			@ApiParam("头像") @RequestParam(required = false) MultipartFile mFile) throws IOException {
+			@ApiParam("头像") @RequestParam(required = false) MultipartFile mFile,
+			@ApiParam("openid") @RequestParam(required = false) String openid) throws IOException {
 		// TODO 这个地方要判断open id，去数据库检查，匹配用户，才可以修改
+		int result = -1;
+		
 		ResponseBody resBody = new ResponseBody<User>();
 		
-		User user = new User();
-		user.setId(id);
+		WechatUser wUser = new WechatUser();
 		
-		String avatar = null;
-
+		User user = userService.read(id);
+		if (user == null) {
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
+			resBody.obj = null;
+			return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(resBody);
+		}		
+		
+		//openid如果是空的话，不允许修改
+		if (user.getOpenId().equals("")) {
+			if (openid == null) {
+				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+			} else {//未绑定状态
+				wUser.setOpenId(openid);
+				wUser = userService.search(wUser).get(0);
+				
+				user.setOpenId(openid);
+				user.setAvatarUrl(wUser.getHeadimgurl());
+				
+				wUser.setUserId(user.getId());
+				result = userService.update(wUser);
+				logger.error("没有成功更新用户微信信息， wUser: " + wUser);//TODO test
+				if (result == 0) {
+					logger.error("没有成功更新用户微信信息， wUser: " + wUser);
+					return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
+				}
+			}
+		} else {
+			if (!user.getOpenId().equals(openid)) {
+				return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+			}
+		}
+		
 		if (password != null) {
-			user.setPassword(password);
+			if (user.getOpenId().equals("")) {
+	//			resBody.statusMsg = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+				resBody.statusMsg = "您的学号尚未绑定公众号，无法修改密码";
+				resBody.obj = null;
+				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(resBody);
+			} else {
+				user.setPassword(password);
+			}
 		}
 		
 		if (mFile != null) {
+			String avatar = null;		
 			avatar = uploadFile(mFile);
 			user.setAvatarUrl(avatar);
 		}
-
-		int status = userService.update(user, resBody);
 		
-		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
+		result = userService.update(user, resBody);
+		
+//		user.setAvatarUrl(userService.getAvatarUrl(user.getAvatarUrl()));
 
-		return ResponseEntity.status(status).body(resBody);
+		return ResponseEntity.status(result).body(resBody);
 	}
 	
 	public String uploadFile(MultipartFile mFile) throws IOException {
@@ -195,11 +240,10 @@ public class UserController {
 	}
 
 	// 参考：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842。
-	@SuppressWarnings({ "rawtypes", "deprecation" })
 	@ApiOperation(value = "微信回调接口", notes = "微信回调接口")
 	@RequestMapping(value = "/wechatAuth", method = RequestMethod.GET)
 	// redirect_uri/?code=CODE&state=STATE
-	public void wechatAuth(@ApiParam("微信code") @RequestParam String code, HttpServletRequest request,
+	public void wechatAuth(@ApiParam("微信code") @RequestParam(required=false) String code, HttpServletRequest request,
 			HttpServletResponse response) {
 		String page = "";
 
@@ -210,52 +254,107 @@ public class UserController {
 		params += APP_SECRET + "&code=";
 		params += code + "&grant_type=authorization_code";
 
-		JsonParser parser = new JsonParser();
 		String result = HttpRequestUtil.sendGet(url, params);
 		if (result == null) {
 			logger.error("获取openid失败");
 			return;
 		} else {
-			JsonObject object;
+			result = result.substring(4);//test 代码
+			JSONObject obj = new JSONObject(result);
+			String openid = null;
+			String accessToken = null;
 			try {
-				object = parser.parse(result).getAsJsonObject();
+				//null{"access_token":"KymDdolRKjHhmfDzKD28ciXPFH0Z1ajTxHVIMKcaaUewLUl-pmFBEV5mvgGgJVCsZheFIvwi1LEB2N-FDW2Alg","expires_in":7200,"refresh_token":"OubNchftrS23cZEaAjOT2WhKN2qGAu9E3w1iGB-2GNPe7sgD3T4sNpjQ7EapmbjvZR10mYVKbfmPtlslY6yBlw","openid":"oKsKOvwMBayOSUZJuOiav1H-nt7o","scope":"snsapi_userinfo"}
+				openid = obj.getString("openid");
+				accessToken = obj.getString("access_token");
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("获取openid失败");
+				logger.error("获取openid和accessToken失败，e: " + e.getMessage());
 				return;
 			}
-			String openid = object.get("openid").getAsString();
-			if (openid == null) {
-				logger.error("获取openid失败");
+			
+			url = "https://api.weixin.qq.com/sns/userinfo";
+			params = "access_token=";
+			params += accessToken + "&openid=";
+			params += openid + "&lang=zh_CN";
+			
+			result = HttpRequestUtil.sendGet(url, params);
+			if (result == null) {
+				logger.error("获取用户信息失败");
 				return;
-			}
-
-			Map map = parseQueryString(request.getQueryString());
-			String[] arr = java.net.URLDecoder.decode(map.get("page").toString()).split("[?]");
-			System.out.println("getWechatToken arr:" + arr);
-			if (arr.length > 1) {
-				page += arr[0];
-				page += "?openid=" + openid;
-				if (arr[1].split("#")[0] != "") {
-					page += "&";
-				}
-				page += arr[1];
-			} else {
-				if (arr[0].split("#").length > 1) {
-					page += arr[0].split("#")[0];
-					page += "?openid=" + openid;
-					page += "#";
-					page += arr[0].split("#")[1];
+			} 
+			
+			result = result.substring(4);//test 代码
+			obj = new JSONObject(result);
+			
+			WechatUser user = new WechatUser();
+			try {
+				user.setOpenId(obj.getString("openid"));
+				
+				List<WechatUser> list = userService.search(user);
+				if (list == null) {
+					user.setCity(obj.getString("city"));
+					user.setHeadimgurl(obj.getString("headimgurl"));
+					user.setNickname(obj.getString("nickname"));
+					user.setProvince(obj.getString("province"));
+					user.setSex((byte) obj.getInt("sex"));
+					user.setUserId((long) 0);
+					user.setUnionid("");//TODO 
+	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
+					
+					//存入数据库
+					userService.create(user);
 				} else {
-					page += arr[0];
-					page += "?openid=" + openid;
+					user.setId(list.get(0).getId());
+					user.setCity(obj.getString("city"));
+					user.setHeadimgurl(obj.getString("headimgurl"));
+					user.setNickname(obj.getString("nickname"));
+					user.setProvince(obj.getString("province"));
+					user.setSex((byte) obj.getInt("sex"));
+					user.setUserId((long) 0);
+					user.setUnionid("");//TODO 
+	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
+					
+					//存入数据库
+					userService.update(user);
 				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("获取微信数据失败，e: " + e.getMessage());
+				return;
 			}
+			
+			page = request.getParameter("page");
+			page += "?openid=" + openid;
+//			Map map = parseQueryString(request.getQueryString());
+//			String[] arr = java.net.URLDecoder.decode(map.get("page").toString()).split("[?]");
+//			System.out.println("getWechatToken arr:" + arr);
+//			
+//			if (arr.length > 1) {
+//				page += arr[0];
+//				page += "?openid=" + openid;
+//				if (arr[1].split("#")[0] != "") {
+//					page += "&";
+//				}
+//				page += arr[1];
+//			} else {
+//				if (arr[0].split("#").length > 1) {
+//					page += arr[0].split("#")[0];
+//					page += "?openid=" + openid;
+//					page += "#";
+//					page += arr[0].split("#")[1];
+//				} else {
+//					page += arr[0];
+//					page += "?openid=" + openid;
+//				}
+//			}
 
-			page = page.replace("&#", "#");
-			System.out.println("getWechatToken page:" + page);
+//			page = page.replace("&#", "#");
+//			System.out.println("getWechatToken page: " + page);
 
-			page = "www.sina.com.cn";// TODO test
+//			page = "www.sina.com.cn";// TODO test
 			try {
 				response.sendRedirect(page);
 			} catch (IOException e) {

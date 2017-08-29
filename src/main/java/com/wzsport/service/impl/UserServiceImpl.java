@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wzsport.mapper.UserMapper;
+import com.wzsport.mapper.WechatUserMapper;
 import com.wzsport.model.User;
 import com.wzsport.model.UserExample;
 import com.wzsport.model.UserExample.Criteria;
+import com.wzsport.model.WechatUser;
+import com.wzsport.model.WechatUserExample;
 import com.wzsport.service.UserService;
 import com.wzsport.util.ResponseBody;
 import com.wzsport.util.RetMsgTemplate;
@@ -32,6 +35,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private WechatUserMapper wechatUserMapper;
 
     @Autowired
     private CloudStorageService cloudStorageService;
@@ -52,7 +58,7 @@ public class UserServiceImpl implements UserService {
 		
 		List<User> list = userMapper.selectByExample(example);
 		if (list.size() == 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			logger.info(logMsg);
 			return HttpServletResponse.SC_NOT_FOUND;
 		} else {
@@ -71,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	public int update(User user, ResponseBody resBody) {
 		int result = userMapper.updateByPrimaryKeySelective(user);
 		if (result == 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND;
+			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
 			logger.info(logMsg);
 			return HttpServletResponse.SC_NOT_FOUND;
 		} else {
@@ -109,4 +115,68 @@ public class UserServiceImpl implements UserService {
     public String getAvatarUrl(String fileName) {
 		return this.cloudStorageService.generateUrl(fileName);
     }
+
+	@Override
+	public int create(WechatUser user) {
+		int result = wechatUserMapper.insert(user);
+		return result;
+	}
+
+	@Override
+	public List<WechatUser> search(WechatUser user) {
+		WechatUserExample example = new WechatUserExample();
+		WechatUserExample.Criteria criteria = example.createCriteria();
+		
+		if (user.getId() != null) {
+			criteria.andIdEqualTo(user.getId());
+		}
+		
+		if (user.getOpenId() != null) {
+			criteria.andOpenIdEqualTo(user.getOpenId());
+		}
+		
+		if (user.getCity() != null) {
+			criteria.andCityEqualTo(user.getCity());
+		}
+		
+		if (user.getHeadimgurl() != null) {
+			criteria.andHeadimgurlEqualTo(user.getHeadimgurl());
+		}
+		
+		if (user.getNickname() != null) {
+			criteria.andNicknameEqualTo(user.getNickname());
+		}
+		
+		if (user.getProvince() != null) {
+			criteria.andProvinceEqualTo(user.getProvince());
+		}
+		
+		if (user.getSex() != null) {
+			criteria.andSexEqualTo(user.getSex());
+		}
+		
+		if (user.getUnionid() != null) {
+			criteria.andUnionidEqualTo(user.getUnionid());
+		}
+		
+		if (user.getUserId() != null) {
+			criteria.andUserIdEqualTo(user.getUserId());
+		}
+		
+		List<WechatUser> list = wechatUserMapper.selectByExample(example);
+		return list;
+	}
+
+	@Override
+	public int update(WechatUser user) {
+		int result = wechatUserMapper.updateByPrimaryKeySelective(user);
+		
+		return result;
+	}
+
+	@Override
+	public User read(Long id) {
+		User user = userMapper.selectByPrimaryKey(id);
+		return user;
+	}
 }

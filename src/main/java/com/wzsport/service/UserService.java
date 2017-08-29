@@ -1,6 +1,7 @@
 package com.wzsport.service;
 
 import com.wzsport.model.User;
+import com.wzsport.model.WechatUser;
 import com.wzsport.util.ResponseBody;
 
 /**
@@ -20,5 +21,9 @@ public interface UserService {
 //    int update(User user);
 
     String getAvatarUrl(String fileName);
+    
+    int create(WechatUser user);
+    
+    int read(WechatUser user);
 
 }

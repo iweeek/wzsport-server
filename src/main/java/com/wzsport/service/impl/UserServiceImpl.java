@@ -171,4 +171,11 @@ public class UserServiceImpl implements UserService {
 		
 		return 0;
 	}
+
+	@Override
+	public int update(WechatUser user) {
+		int result = wechatUserMapper.updateByPrimaryKeySelective(user);
+		
+		return result;
+	}
 }

@@ -25,5 +25,7 @@ public interface UserService {
     int create(WechatUser user);
     
     int read(WechatUser user);
+    
+    int update(WechatUser user);
 
 }

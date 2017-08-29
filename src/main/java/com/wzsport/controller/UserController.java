@@ -261,6 +261,18 @@ public class UserController {
 					
 					//存入数据库
 					userService.create(user);
+				} else {
+					user.setCity(obj.getString("city"));
+					user.setHeadimgurl(obj.getString("headimgurl"));
+					user.setNickname(obj.getString("nickname"));
+					user.setProvince(obj.getString("province"));
+					user.setSex((byte) obj.getInt("sex"));
+					user.setUserId((long) 0);
+					user.setUnionid("");//TODO 
+	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
+					
+					//存入数据库
+					userService.update(user);
 				}
 				
 				

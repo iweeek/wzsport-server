@@ -30,6 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,11 +65,11 @@ public class UserController {
 	@Autowired
 	private CloudStorageService qiniuService;
 
-//	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
-	static final private String APP_SECRET = "6e37d78de49f1b7c625f132b1fe5059c";//微信测试号
+	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
+//	static final private String APP_SECRET = "6e37d78de49f1b7c625f132b1fe5059c";//微信测试号
 
-//	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
-	static final private String APP_ID = "wx7d248efdb1dc6821";//微信测试号
+	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
+//	static final private String APP_ID = "wx7d248efdb1dc6821";//微信测试号
 
 	/**
 	* 
@@ -259,17 +262,21 @@ public class UserController {
 			logger.error("获取openid失败");
 			return;
 		} else {
-			result = result.substring(4);//test 代码
+//			logger.error("获取openid result: " + result);
+//			result = result.substring(4);//TODO test 代码
+			logger.error("获取openid result: " + result);
 			JSONObject obj = new JSONObject(result);
 			String openid = null;
 			String accessToken = null;
 			try {
 				//null{"access_token":"KymDdolRKjHhmfDzKD28ciXPFH0Z1ajTxHVIMKcaaUewLUl-pmFBEV5mvgGgJVCsZheFIvwi1LEB2N-FDW2Alg","expires_in":7200,"refresh_token":"OubNchftrS23cZEaAjOT2WhKN2qGAu9E3w1iGB-2GNPe7sgD3T4sNpjQ7EapmbjvZR10mYVKbfmPtlslY6yBlw","openid":"oKsKOvwMBayOSUZJuOiav1H-nt7o","scope":"snsapi_userinfo"}
 				openid = obj.getString("openid");
+				logger.debug("openid: " + openid);
+				
 				accessToken = obj.getString("access_token");
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("获取openid和accessToken失败，e: " + e.getMessage());
+				logger.error("获取openid和accessToken失败，e: " + e.getMessage() + ", result: " + result);
 				return;
 			}
 			
@@ -284,7 +291,8 @@ public class UserController {
 				return;
 			} 
 			
-			result = result.substring(4);//test 代码
+			logger.error("获取用户信息 result: " + result);
+//			result = result.substring(4);//TODO test 代码
 			obj = new JSONObject(result);
 			
 			WechatUser user = new WechatUser();
@@ -292,7 +300,8 @@ public class UserController {
 				user.setOpenId(obj.getString("openid"));
 				
 				List<WechatUser> list = userService.search(user);
-				if (list == null) {
+				if (list.size() == 0) {
+					logger.error("list == null");
 					user.setCity(obj.getString("city"));
 					user.setHeadimgurl(obj.getString("headimgurl"));
 					user.setNickname(obj.getString("nickname"));
@@ -303,8 +312,10 @@ public class UserController {
 	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
 					
 					//存入数据库
+					logger.error("creat user: " + user.toString());
 					userService.create(user);
 				} else {
+					logger.error("list != null, list.size: " + list.size());
 					user.setId(list.get(0).getId());
 					user.setCity(obj.getString("city"));
 					user.setHeadimgurl(obj.getString("headimgurl"));
@@ -316,10 +327,9 @@ public class UserController {
 	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
 					
 					//存入数据库
+					logger.error("update user: " + user.toString());
 					userService.update(user);
 				}
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("获取微信数据失败，e: " + e.getMessage());
@@ -327,7 +337,23 @@ public class UserController {
 			}
 			
 			page = request.getParameter("page");
-			page += "?openid=" + openid;
+			String openidQuery = "openid=" + openid;
+			try {
+				URI inUri = new URI(page);
+				String query = inUri.getQuery();
+				if (query == null) {
+					query = openidQuery;
+				} else {
+					query += "&" + openidQuery;
+				}
+				
+				URI outUri = new URI(inUri.getScheme(), inUri.getAuthority(),
+		                inUri.getPath(), query, inUri.getFragment());
+				page = outUri.toString();
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
+//			page += "?openid=" + openid;
 //			Map map = parseQueryString(request.getQueryString());
 //			String[] arr = java.net.URLDecoder.decode(map.get("page").toString()).split("[?]");
 //			System.out.println("getWechatToken arr:" + arr);

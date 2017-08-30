@@ -20,7 +20,7 @@ public class HttpRequestUtil {
      * @return URL 所代表远程资源的响应结果
      */
     public static String sendGet(String url, String param) {
-        String result = null;
+        String result = "";
         BufferedReader in = null;
         try {
             String urlNameString = url + "?" + param;

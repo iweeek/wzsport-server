@@ -78,7 +78,7 @@ dependencies {
 
     compile group: 'com.liferay', name: 'org.apache.commons.fileupload', version: '1.2.2.LIFERAY-PATCHED-1'
 }
-def env = System.getProperty("env") ?: "dev"
+def env = System.getProperty("env") ?: "product"
 
 ext {
 	configProperties = new Properties()
@@ -119,17 +119,16 @@ processResources {
 }
 
 remotes {
-
   testServer {
     host = '120.77.72.16'
     user = 'root'
-    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
+    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa_16')
   }
   
   productServer {
-    host = '暂无'
-    user = '暂无'
-    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa')
+    host = '59.110.142.240'
+    user = 'root'
+    identity = file(System.getProperty('user.home') + '/.ssh/id_rsa_240')
   }
 }
 
@@ -149,7 +148,15 @@ task deploy(dependsOn: [war, flywayMigrate]) {
 	    }
   	    break
   	  case 'product':
-  	    server = remotes.productServer
+	  	println 'start deploy to ' + env
+		ssh.run {
+		  session(remotes.productServer) {
+//		  	remove '/usr/local/webserver/tomcat/webapps/wzsport-server.war'
+		    put from: buildDir.toString() + '/libs/wzsport-server.war', into: '/usr/local/webserver/tomcat/webapps/'
+		    execute 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre/; /usr/local/webserver/tomcat/bin/shutdown.sh'
+		    execute 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre/; /usr/local/webserver/tomcat/bin/startup.sh'
+		  }
+		}
   	    break
   	  default:
   	  	println 'env: ' + env

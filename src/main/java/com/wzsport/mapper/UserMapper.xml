@@ -296,6 +296,7 @@
   <resultMap id="userWithRolesResultMap" type="com.wzsport.model.User">
 	<id column="user_id" property="id" />
 	<result column="username" property="username" />
+	<result column="avatar_url" property="avatarUrl" />
 	<result column="password" property="password" />
 	<result column="university_id" property="universityId" />
 	<collection ofType="com.wzsport.model.Role" property="roles">

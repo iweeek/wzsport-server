@@ -121,6 +121,7 @@ public interface UserMapper {
 	*/
 	@Select("SELECT user.id as user_id,"
 			+ "user.username as username,"
+			+ "user.avatar_url as avatar_url,"
 			+ "user.password as password,"
 			+ "user.university_id as university_id, "
 			+ "role.id as role_id,"

@@ -169,7 +169,9 @@ public class TokenServiceImpl implements TokenService {
 				.signWith(SignatureAlgorithm.HS512, KEY)
 				.compact();
 		
-		String avatarUrl = userService.getAvatarUrl(user.getAvatarUrl());
+//		String avatarUrl = userService.getAvatarUrl(user.getAvatarUrl());
+		String avatarUrl = user.getAvatarUrl();//暂时不使用七牛云
+
 		
 		logMsg = "登录成功";
 		logger.info(logMsg);

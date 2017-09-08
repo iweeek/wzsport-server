@@ -129,7 +129,7 @@ public class UserController {
 				User tempUser = new User();
 				tempUser.setOpenId(openid);
 				List<User> list = userService.search(tempUser);
-				if (list.size() == 0) {
+				if (list.size() > 0) {
 					return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
 				}
 				

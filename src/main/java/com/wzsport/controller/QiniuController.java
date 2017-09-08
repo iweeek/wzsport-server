@@ -47,7 +47,7 @@ public class QiniuController {
         logger.info("进来啦");
 
         String fileName = mfile.getOriginalFilename();
-        String filePath = PathUtil.getImages() + fileName;
+        String filePath = PathUtil.getImagePath() + fileName;
         File file = new File(filePath);
 
         if (!file.getParentFile().exists()) {

@@ -74,7 +74,7 @@ public class UserController {
 	/**
 	* 
 	*/
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息")
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
 	public ResponseEntity<?> show(@ApiParam("学校Id") @RequestParam Long universityId,
@@ -88,9 +88,16 @@ public class UserController {
 		
 		ResponseBody resBody = new ResponseBody<User>();
 		
-		int status = userService.search(user, resBody);
+		List<User>list = userService.search(user);
+		if (list.size() > 0) {
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			resBody.obj = list;
+			return ResponseEntity.status(HttpServletResponse.SC_OK).body(resBody); 
+		} else {
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
+			return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(resBody); 
+		}
 		
-		return ResponseEntity.status(status).body(resBody); 
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -119,6 +126,13 @@ public class UserController {
 			if (openid == null) {
 				return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build();
 			} else {//未绑定状态
+				User tempUser = new User();
+				tempUser.setOpenId(openid);
+				List<User> list = userService.search(tempUser);
+				if (list.size() > 0) {
+					return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+				}
+				
 				wUser.setOpenId(openid);
 				wUser = userService.search(wUser).get(0);
 				
@@ -166,7 +180,7 @@ public class UserController {
 	public String uploadFile(MultipartFile mFile) throws IOException {
 
 		String fileName = UUID.randomUUID().toString();
-		String filePath = PathUtil.getImages() + fileName;
+		String filePath = PathUtil.getImagePath() + fileName;
 		File file = new File(filePath);
 
 		if (!file.getParentFile().exists()) {

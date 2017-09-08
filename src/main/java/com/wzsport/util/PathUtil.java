@@ -1,12 +1,19 @@
 package com.wzsport.util;
 
+import java.io.File;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by kouga on 2017/8/19.
  */
 public class PathUtil {
-
+	
+	public static final String WEBSERVER_PATH = System.getProperty("catalina.base");
+	public static final String WEBAPP_PATH  = WEBSERVER_PATH + File.separator +"webapps" + File.separator;
+	
+	public static final String IMG_FOLDER_PATH = "images" + File.separator;
+	public static final String IMG_STORAGE_PATH = WEBAPP_PATH + File.separator + IMG_FOLDER_PATH + File.separator;
 
     /**
      * 获取到classes目录
@@ -23,6 +30,11 @@ public class PathUtil {
             return PathUtil.class.getResource("/").getFile().toString();
         }
     }
+    
+    public static String getImagesPath() {
+    	String path = PathUtil.getWebRootPath() + File.separator +"images";
+    	return path;
+    }
 
     /**
      * 获取到项目的路径
@@ -38,17 +50,10 @@ public class PathUtil {
      *
      * @return path
      */
-    public static String getRootPath() {
-        return getWEB_INF().replace("WEB-INF/", "");
-    }
-
-    /**
-     * 获取 web-inf目录
-     *
-     * @return path
-     */
-    public static String getWEB_INF() {
-        return getClassPath().replace("classes/", "");
+    public static String getWebRootPath() {
+        File file = new File(getClassPath());
+        File parent = file.getParentFile().getParentFile();
+        return parent.getPath();
     }
 
     /**
@@ -66,8 +71,8 @@ public class PathUtil {
      *
      * @return
      */
-    public static String getImages() {
-        return getRootPath() + "images/";
+    public static String getImagePath() {
+        return getWebRootPath() + File.separator + "images" + File.separator;
     }
 
 

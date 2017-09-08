@@ -1,8 +1,11 @@
 package com.wzsport.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wzsport.model.AreaSport;
 import com.wzsport.service.AreaSportService;
+import com.wzsport.util.FileUtil;
+import com.wzsport.util.PathUtil;
 import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
@@ -117,7 +123,10 @@ public class AreaSportController {
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam(required=false) Integer qualifiedCostTime,
 							@ApiParam("学校Id")
-							@RequestParam(required=false) Long universityId) {
+							@RequestParam(required=false) Long universityId,
+							@ApiParam("图片") 
+							@RequestParam(required = false) MultipartFile image,
+							HttpServletRequest request) {
 		AreaSport sport = new AreaSport();
 		sport.setId(id);
 		
@@ -145,6 +154,16 @@ public class AreaSportController {
 		
 		if (universityId != null) {
 			sport.setUniversityId(universityId);
+		}
+		
+		String imagePath = "";
+		if (image != null) {
+			try {
+				imagePath = FileUtil.uploadImage(PathUtil.IMG_STORAGE_PATH, image);
+				sport.setImgUrl(request.getScheme() + "://" + request.getRemoteHost() + ":" + request.getServerPort() + File.separator + PathUtil.IMG_FOLDER_PATH + imagePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 //		sport.setHourlyKcalConsumption(200);

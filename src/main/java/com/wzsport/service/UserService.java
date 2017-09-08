@@ -14,8 +14,7 @@ import com.wzsport.util.ResponseBody;
 */
 public interface UserService {
 
-	@SuppressWarnings("rawtypes")
-	int search(User user, ResponseBody resBody);
+	List<User> search(User user);
 
 	@SuppressWarnings("rawtypes")
 	int update(User user, ResponseBody resBody);

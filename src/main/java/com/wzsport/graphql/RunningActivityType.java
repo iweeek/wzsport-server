@@ -263,6 +263,8 @@ public class RunningActivityType {
 	        		.argument(GraphQLArgument.newArgument().name("anotherDistancePerStep").type(Scalars.GraphQLFloat).build())
 	        		.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 					.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+					.argument(GraphQLArgument.newArgument().name("qualified").type(Scalars.GraphQLBoolean).build())
+					.argument(GraphQLArgument.newArgument().name("isValid").type(Scalars.GraphQLBoolean).build())
 					.type(PageType.getPageTypeBuidler(getType())
 														.name("RunningActivityPage")
 														.description("活动记录分页")
@@ -383,6 +385,16 @@ public class RunningActivityType {
 							default:
 								break;
 	                		}
+	                	}
+	                	
+	                	Boolean qualified = environment.getArgument("qualified");
+	                	if (qualified != null) {
+	                		criteria.andQualifiedEqualTo(qualified);
+	                	}
+	                	
+	                	Boolean isValid = environment.getArgument("isValid");
+	                	if (isValid != null) {
+	                		criteria.andIsValidEqualTo(isValid);
 	                	}
 	                	
 	                	PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));

@@ -1,5 +1,10 @@
 package com.wzsport.controller;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wzsport.model.AreaSport;
 import com.wzsport.model.RunningSport;
 import com.wzsport.service.RunningSportService;
+import com.wzsport.util.FileUtil;
+import com.wzsport.util.PathUtil;
 import com.wzsport.util.ResponseBody;
 
 import io.swagger.annotations.Api;
@@ -62,14 +70,15 @@ public class RunningSportController {
 							@ApiParam("该项目达标的行动时间(单位：秒)")
 							@RequestParam(required=false) Integer qualifiedCostTime,
 							@ApiParam("该项目的运动数据采样数")
-							@RequestParam(required=false) Integer sampleNum
+							@RequestParam(required=false) Integer sampleNum,
+							@ApiParam("图片") 
+							@RequestParam(required = false) MultipartFile image,
+							HttpServletRequest request
 							) {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
 		
-		if (name != null) {
-			runningSport.setName(name);
-		}
+		runningSport.setName(name);
 		
 		if (isEnabled != null) {
 			runningSport.setIsEnabled(isEnabled);
@@ -91,6 +100,18 @@ public class RunningSportController {
 			runningSport.setSampleNum(sampleNum);
 			byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 			runningSport.setAcquisitionInterval(acquisitionInterval);
+		}
+		
+		String imagePath = "";
+		String imageDirPath = request.getServletContext().getContextPath() 
+				+ File.separator;
+		if (image != null) {
+			try {
+				imagePath = FileUtil.uploadImage(PathUtil.IMG_STORAGE_PATH, image);
+				runningSport.setImgUrl(request.getServerName() + ":" + request.getServerPort() + File.separator + PathUtil.IMG_FOLDER_PATH + imagePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		ResponseBody resBody = new ResponseBody<AreaSport>();

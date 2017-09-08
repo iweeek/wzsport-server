@@ -166,7 +166,7 @@ public class UserController {
 	public String uploadFile(MultipartFile mFile) throws IOException {
 
 		String fileName = UUID.randomUUID().toString();
-		String filePath = PathUtil.getImages() + fileName;
+		String filePath = PathUtil.getImagePath() + fileName;
 		File file = new File(filePath);
 
 		if (!file.getParentFile().exists()) {

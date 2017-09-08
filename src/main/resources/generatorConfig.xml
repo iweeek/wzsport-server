@@ -6,7 +6,7 @@
 <generatorConfiguration>
 
   <!-- 根据本地环境填写JDBC驱动包的路径 -->
-  <classPathEntry location="/Users/guojia/mysql-connector-java-5.1.43/mysql-connector-java-5.1.43-bin.jar" />
+  <classPathEntry location="/Users/chaiyu/mysql-connector-java-5.1.43/mysql-connector-java-5.1.43-bin.jar" />
 
   <context id="wzsport" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"

@@ -10,6 +10,7 @@ import com.wzsport.model.RunningActivity;
 import com.wzsport.model.SportDataValidateRule;
 import com.wzsport.model.SportDataValidateRuleExample;
 import com.wzsport.service.SportDataValidateService;
+import com.wzsport.util.ResponseBody;
 
 @Service
 public class SportDataValidateServiceImpl implements SportDataValidateService{
@@ -44,6 +45,18 @@ public class SportDataValidateServiceImpl implements SportDataValidateService{
 		
 		return true;
 			
+	}
+
+	@Override
+	public int create(SportDataValidateRule rule) {
+		int ret = sportDataValidataRuleMapper.insertSelective(rule);
+		return ret;
+	}
+
+	@Override
+	public int update(SportDataValidateRule rule) {
+		int ret = sportDataValidataRuleMapper.updateByPrimaryKeySelective(rule);
+		return ret;
 	}
 
 }

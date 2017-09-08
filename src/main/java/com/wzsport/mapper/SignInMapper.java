@@ -6,7 +6,6 @@ import com.wzsport.model.SignInExample;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +13,6 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 public interface SignInMapper {
 

@@ -106,7 +106,7 @@ public class RunningSportController {
 		if (image != null) {
 			try {
 				imagePath = FileUtil.uploadImage(PathUtil.IMG_STORAGE_PATH, image);
-				runningSport.setImgUrl(request.getServerName() + ":" + request.getServerPort() + File.separator + PathUtil.IMG_FOLDER_PATH + imagePath);
+				runningSport.setImgUrl(request.getScheme() + "://" + request.getRemoteHost() + ":" + request.getServerPort() + File.separator + PathUtil.IMG_FOLDER_PATH + imagePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

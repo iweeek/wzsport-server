@@ -47,29 +47,24 @@ public class UserServiceImpl implements UserService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public int search(User user, ResponseBody resBody) {
+	public List<User> search(User user) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andUniversityIdEqualTo(user.getUniversityId());
 		
-		if (user.getUsername() == null) {
+		if (user.getUniversityId() != null) {
+			criteria.andUniversityIdEqualTo(user.getUniversityId());
+		}
+		
+		if (user.getUsername() != null) {
 			criteria.andUsernameEqualTo(user.getUsername());
 		}
 		
-		List<User> list = userMapper.selectByExample(example);
-		if (list.size() == 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;
-			logger.info(logMsg);
-			return HttpServletResponse.SC_NOT_FOUND;
-		} else {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
-			logger.info(logMsg);
-			
-			resBody.obj = list.get(0);
-			resBody.statusMsg = logMsg; 
-			
-			return HttpServletResponse.SC_OK;
+		if (user.getOpenId() != null) {
+			criteria.andOpenIdEqualTo(user.getOpenId());
 		}
+		
+		List<User> list = userMapper.selectByExample(example);
+		return list;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

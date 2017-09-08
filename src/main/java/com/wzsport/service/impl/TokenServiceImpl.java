@@ -124,30 +124,31 @@ public class TokenServiceImpl implements TokenService {
 				resBody.obj = null;
 				
 				return HttpServletResponse.SC_BAD_REQUEST;
-			}
-		}
-			
-		//判断设备Id是否已经存在
-		example.clear();
-		example.or().andDeviceIdEqualTo(deviceId);
-		list = deviceMapper.selectByExample(example);
-		if (list.size() > 0) {//第二次登录，验证用户信息
-			device = list.get(0);
-			if (!device.getUserId().equals(user.getId())) {
-				logMsg = "用户Id不匹配";
-				logger.error(logMsg);
-				
-				resBody.statusMsg = logMsg;
-				resBody.obj = null;
-				
-				return HttpServletResponse.SC_BAD_REQUEST;
+			} 
+		} else {
+			//判断设备Id是否已经存在
+			example.clear();
+			example.or().andDeviceIdEqualTo(deviceId);
+			list = deviceMapper.selectByExample(example);
+			if (list.size() > 0) {//第二次登录，验证用户信息
+				device = list.get(0);
+				if (!device.getUserId().equals(user.getId())) {
+					logMsg = "用户Id不匹配";
+					logger.error(logMsg);
+					
+					resBody.statusMsg = logMsg;
+					resBody.obj = null;
+					
+					return HttpServletResponse.SC_BAD_REQUEST;
+				}
+			} else {//第一次登录
+				device = new Device();
+				device.setDeviceId(deviceId);
+				device.setUserId(user.getId());
+				deviceMapper.insertSelective(device);
 			}
 		}
 		
-		device = new Device();
-		device.setDeviceId(deviceId);
-		device.setUserId(user.getId());
-		deviceMapper.insertSelective(device);
 		
 		DeviceLoginLog log = new DeviceLoginLog();
 		log.setDeviceId(deviceId);

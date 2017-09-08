@@ -47,14 +47,14 @@ public class RunningActivityType {
 	private static GraphQLFieldDefinition listQueryField;
 	
 	public static enum Operator {
-		LESS_THAN, GREATER_THAN, EQUALL, BETWEEN
+		LESS_THAN, GREATER_THAN, EQUAL, BETWEEN
 	}
 	
 	private static GraphQLEnumType operatorEnumType = GraphQLEnumType.newEnum()
 		    .name("Operator")
 		    .value(Operator.LESS_THAN.toString())
 		    .value(Operator.GREATER_THAN.toString())
-		    .value(Operator.EQUALL.toString())
+		    .value(Operator.EQUAL.toString())
 		    .value(Operator.BETWEEN.toString())
 		    .build();
 	
@@ -329,7 +329,7 @@ public class RunningActivityType {
 								double anotherSpeed = environment.getArgument("anotherSpeed");
 								criteria.andSpeedBetween(speed, anotherSpeed);
 								break;
-							case EQUALL:
+							case EQUAL:
 								criteria.andSpeedEqualTo(speed);
 								break;
 							case GREATER_THAN:
@@ -351,7 +351,7 @@ public class RunningActivityType {
 								double anotherStepPerSecond = environment.getArgument("anotherStepPerSecond");
 								criteria.andStepPerSecondBetween(stepPerSecond, anotherStepPerSecond);
 								break;
-							case EQUALL:
+							case EQUAL:
 								criteria.andStepPerSecondEqualTo(stepPerSecond);
 								break;
 							case GREATER_THAN:
@@ -373,7 +373,7 @@ public class RunningActivityType {
 								double anotherDistancePerStep = environment.getArgument("anotherDistancePerStep");
 								criteria.andDistancePerStepBetween(distancePerStep, anotherDistancePerStep);
 								break;
-							case EQUALL:
+							case EQUAL:
 								criteria.andDistancePerStepEqualTo(distancePerStep);
 								break;
 							case GREATER_THAN:

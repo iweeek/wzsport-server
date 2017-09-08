@@ -103,8 +103,6 @@ public class RunningSportController {
 		}
 		
 		String imagePath = "";
-		String imageDirPath = request.getServletContext().getContextPath() 
-				+ File.separator;
 		if (image != null) {
 			try {
 				imagePath = FileUtil.uploadImage(PathUtil.IMG_STORAGE_PATH, image);

@@ -63,9 +63,9 @@ public class SportDataValidateRuleController {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@ApiOperation(value = "创建一个异常运动指标", notes = "创建一个异常运动指标")
+	@ApiOperation(value = "更新一个异常运动指标", notes = "更新一个异常运动指标")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
-	public ResponseEntity<?> create(@ApiParam("唯一主键id") @PathVariable("id") Long id,
+	public ResponseEntity<?> update(@ApiParam("唯一主键id") @PathVariable("id") Long id,
 							@ApiParam("步幅") @RequestParam(required=false) Double distancePerStep,
 							@ApiParam("速度") @RequestParam(required=false) Double speed) {
 		SportDataValidateRule rule = new SportDataValidateRule();

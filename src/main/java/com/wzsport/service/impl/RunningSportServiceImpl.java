@@ -41,40 +41,43 @@ public class RunningSportServiceImpl implements RunningSportService {
 		return false;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int update(RunningSport runningSport, ResponseBody resBody) {
-		RunningSportExample example = new RunningSportExample();
-		example.createCriteria().andIdNotEqualTo(runningSport.getId()).andNameEqualTo(runningSport.getName());
-		List<RunningSport> list = runningSportMapper.selectByExample(example);
-		if (list.size() > 0) {
-			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", runningSport.getName());
-			logger.error(logMsg);
-			
-			resBody.obj = list.get(0);
-			resBody.statusMsg = logMsg; 
-			
-			return HttpServletResponse.SC_CONFLICT;
-		} else {
-			int result = runningSportMapper.updateByPrimaryKeySelective(runningSport);
-			if (result > 0) {	
-				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
-				logger.info(logMsg);
-				
-				resBody.obj = runningSport;
-				resBody.statusMsg = logMsg; 
-				
-				return HttpServletResponse.SC_OK;
-			} else {
-				logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(runningSport.getId()));
-				logger.error(logMsg);
-				
-				resBody.obj = null;
-				resBody.statusMsg = logMsg;
-				
-				return HttpServletResponse.SC_NOT_FOUND;
-			}
-		}
+	public int update(RunningSport runningSport) {
+		int ret = runningSportMapper.updateByPrimaryKeySelective(runningSport);
+		return ret;
+		
+//		RunningSportExample example = new RunningSportExample();
+//		example.createCriteria().andIdNotEqualTo(runningSport.getId()).andNameEqualTo(runningSport.getName());
+//		List<RunningSport> list = runningSportMapper.selectByExample(example);
+//		if (list.size() > 0) {
+//			logMsg = RetMsgTemplate.MSG_TEMPLATE_NAME_EXIST.replace("%s", runningSport.getName());
+//			logger.error(logMsg);
+//			
+//			resBody.obj = list.get(0);
+//			resBody.statusMsg = logMsg; 
+//			
+//			return HttpServletResponse.SC_CONFLICT;
+//		} else {
+//			int result = runningSportMapper.updateByPrimaryKeySelective(runningSport);
+//			if (result > 0) {	
+//				logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+//				logger.info(logMsg);
+//				
+//				resBody.obj = runningSport;
+//				resBody.statusMsg = logMsg; 
+//				
+//				return HttpServletResponse.SC_OK;
+//			} else {
+//				logMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FIND_BY_ID.replace("%s", String.valueOf(runningSport.getId()));
+//				logger.error(logMsg);
+//				
+//				resBody.obj = null;
+//				resBody.statusMsg = logMsg;
+//				
+//				return HttpServletResponse.SC_NOT_FOUND;
+//			}
+//		}
 	}
 
 	@Override

@@ -33,5 +33,5 @@ public interface RunningSportService {
 	@SuppressWarnings("rawtypes")
 	int create(RunningSport sport, ResponseBody resBody);
 
-	int update(RunningSport sport, ResponseBody resBody);
+	int update(RunningSport sport);
 }

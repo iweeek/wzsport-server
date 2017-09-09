@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import com.wzsport.service.RunningSportService;
 import com.wzsport.util.FileUtil;
 import com.wzsport.util.PathUtil;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +42,8 @@ public class RunningSportController {
 	@Autowired
 	private RunningSportService runningSportService;
 	
+	static final String UPDATE_FAILED_MSG = "记录更新失败";
+	
 //	@SuppressWarnings("rawtypes")
 //	private ResponseBody resBody;
 //	
@@ -53,14 +57,14 @@ public class RunningSportController {
 	* @param qualifiedCostTime
 	* @param minCostTime
 	*/
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "更新项目指标", notes = "更改指定id的项目的指标")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
 	public ResponseEntity<?> update(
 							@ApiParam("唯一主键id")
 							@PathVariable("id") long id,
 							@ApiParam("该项目的名称")
-							@RequestParam String name,
+							@RequestParam(required=false) String name,
 							@ApiParam("该项目是否生效")
 							@RequestParam(required=false) Boolean isEnabled,
 							@ApiParam("性别")
@@ -78,7 +82,9 @@ public class RunningSportController {
 		RunningSport runningSport = new RunningSport();
 		runningSport.setId(id);
 		
-		runningSport.setName(name);
+		if (name != null) {
+			runningSport.setName(name);
+		}
 		
 		if (isEnabled != null) {
 			runningSport.setIsEnabled(isEnabled);
@@ -113,9 +119,22 @@ public class RunningSportController {
 		}
 		
 		ResponseBody resBody = new ResponseBody<AreaSport>();
-		int status = runningSportService.update(runningSport, resBody);
-		return ResponseEntity.status(status).body(resBody);
+		int status = 0;
+		try {
+			int ret = runningSportService.update(runningSport);
+			if (ret > 0) {
+				resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+				status = HttpServletResponse.SC_OK;
+			} else {
+				resBody.statusMsg = UPDATE_FAILED_MSG;
+				status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+			}
+		} catch (Exception e) {
+			status = 400;
+			e.printStackTrace();
+		}
 	
+		return ResponseEntity.status(status).body(resBody);
 	}
 	
 	/**

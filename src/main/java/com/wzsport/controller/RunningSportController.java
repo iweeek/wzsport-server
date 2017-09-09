@@ -42,8 +42,6 @@ public class RunningSportController {
 	@Autowired
 	private RunningSportService runningSportService;
 	
-	static final String UPDATE_FAILED_MSG = "记录更新失败";
-	
 //	@SuppressWarnings("rawtypes")
 //	private ResponseBody resBody;
 //	
@@ -126,8 +124,8 @@ public class RunningSportController {
 				resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
 				status = HttpServletResponse.SC_OK;
 			} else {
-				resBody.statusMsg = UPDATE_FAILED_MSG;
-				status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+				resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;;
+				status = HttpServletResponse.SC_NOT_FOUND;
 			}
 		} catch (Exception e) {
 			status = 400;

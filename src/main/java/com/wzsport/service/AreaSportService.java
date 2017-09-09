@@ -9,7 +9,7 @@ public interface AreaSportService {
 
 	int create(AreaSport sport, ResponseBody resBody);
 
-	int update(AreaSport sport, ResponseBody resBody);
+	int update(AreaSport sport);
 
 	int show(AreaSport sport, ResponseBody resBody);
 

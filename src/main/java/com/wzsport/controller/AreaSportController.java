@@ -22,6 +22,7 @@ import com.wzsport.service.AreaSportService;
 import com.wzsport.util.FileUtil;
 import com.wzsport.util.PathUtil;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -106,14 +107,14 @@ public class AreaSportController {
 	 * @param response the response
 	 * @return the area sport
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "根据id来更新一个定点运动项目", notes = "根据id来更新一个定点运动项目")
 	@RequestMapping(value="/{id}",method = RequestMethod.POST) 
 	public ResponseEntity<?> update(
 							@ApiParam("id")
 							@PathVariable long id,
 							@ApiParam("项目名称")
-							@RequestParam String name,
+							@RequestParam(required=false) String name,
 							@ApiParam("采样样本数，范围1-120")
 							@RequestParam(required=false) Byte sampleNum,
 							@ApiParam("是否生效")
@@ -168,7 +169,21 @@ public class AreaSportController {
 		
 //		sport.setHourlyKcalConsumption(200);
 		ResponseBody resBody = new ResponseBody<AreaSport>();
-		int status = areaSportService.update(sport, resBody);
+		int status = 0;
+		try {
+			int ret = areaSportService.update(sport);
+			if (ret > 0) {
+				resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+				status = HttpServletResponse.SC_OK;
+			} else {
+				resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_NOT_FOUND;;
+				status = HttpServletResponse.SC_NOT_FOUND;
+			}
+		} catch (Exception e) {
+			status = 400;
+			e.printStackTrace();
+		}
+	
 		return ResponseEntity.status(status).body(resBody);
 	}
 	

@@ -75,15 +75,25 @@ public class UserController {
 	* 
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息")
+	@ApiOperation(value = "搜索用户信息", notes = "搜索用户信息，根据universityId、studentId和openid来进行搜索，")
 	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ResponseEntity<?> show(@ApiParam("学校Id") @RequestParam Long universityId,
-			@ApiParam("学号") @RequestParam String studentId) {
+	public ResponseEntity<?> show(@ApiParam("学校Id，必选") @RequestParam Long universityId,
+			@ApiParam("学号，可选，但是不能和openid同时为空") @RequestParam(required = false) String studentId,
+			@ApiParam("openid，可选，但是不能和studentId同时为空") @RequestParam(required = false) String openid) {
+		//不能两个同时为空
+		if (studentId == null && openid == null) {
+			return null;
+		}
+		
 		User user = new User();
 		user.setUniversityId(universityId);
-
+		
 		if (studentId != null) {
 			user.setUsername(studentId);
+		}
+		
+		if (openid != null) {
+			user.setOpenId(openid);
 		}
 		
 		ResponseBody resBody = new ResponseBody<User>();

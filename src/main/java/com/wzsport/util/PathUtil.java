@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
  * Created by kouga on 2017/8/19.
  */
 public class PathUtil {
+	public static final String HOST_NAME = "api.guangyangyundong.com";
+	public static final String ORIGIN = "http://" + HOST_NAME;
 	
 	public static final String WEBSERVER_PATH = System.getProperty("catalina.base");
 	public static final String WEBAPP_PATH  = WEBSERVER_PATH + File.separator +"webapps" + File.separator;

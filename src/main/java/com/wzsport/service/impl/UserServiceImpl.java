@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
     /** The log msg. */
 	private String logMsg = "";
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<User> search(User user) {
 		UserExample example = new UserExample();

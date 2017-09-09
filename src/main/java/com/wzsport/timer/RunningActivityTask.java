@@ -1,7 +1,7 @@
 package com.wzsport.timer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,9 +30,9 @@ public class RunningActivityTask {
 	@Autowired
 	private SportDataValidateService sportDataValidateService;
 	
-	private static final Logger logger = LoggerFactory.getLogger(FixLocationOutdoorSportPointsController.class);
+	private static final Logger logger = LogManager.getLogger(FixLocationOutdoorSportPointsController.class);
 	
-    @Scheduled(cron = "0 0 1 * * ?")  
+    @Scheduled(cron = "0 5 0 * * ?")  
     public void job() {  
     	//找到昨天所有没有正常结束的活动
     	RunningActivityExample example = new RunningActivityExample();

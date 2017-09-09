@@ -1,5 +1,7 @@
 package com.wzsport.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wzsport.model.AreaSport;
 import com.wzsport.model.SportDataValidateRule;
 import com.wzsport.service.SportDataValidateService;
 import com.wzsport.util.ResponseBody;
+import com.wzsport.util.RetMsgTemplate;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -88,6 +90,24 @@ public class SportDataValidateRuleController {
 		int ret = sportDataValidateService.update(rule);
 		if (ret > 0) {
 			resBody.statusMsg = UPDATE_OK_MSG;
+			status = HttpServletResponse.SC_OK;
+		} else {
+			status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+		}
+		
+		return ResponseEntity.status(status).body(resBody);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@ApiOperation(value = "获取所有运动指标", notes = "获取所有运动指标")
+	@RequestMapping(value="",method = RequestMethod.GET) 
+	public ResponseEntity<?> index() {
+		ResponseBody resBody = new ResponseBody<SportDataValidateRule>();
+		int status = 0;
+		List<SportDataValidateRule> list = sportDataValidateService.index();
+		if (list.size() > 0) {
+			resBody.statusMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
+			resBody.obj = list;
 			status = HttpServletResponse.SC_OK;
 		} else {
 			status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;

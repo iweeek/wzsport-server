@@ -1,5 +1,6 @@
 package com.wzsport.service.impl;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import com.wzsport.model.RunningActivity;
 import com.wzsport.model.SportDataValidateRule;
 import com.wzsport.model.SportDataValidateRuleExample;
 import com.wzsport.service.SportDataValidateService;
-import com.wzsport.util.ResponseBody;
 
 @Service
 public class SportDataValidateServiceImpl implements SportDataValidateService{
@@ -57,6 +57,12 @@ public class SportDataValidateServiceImpl implements SportDataValidateService{
 	public int update(SportDataValidateRule rule) {
 		int ret = sportDataValidataRuleMapper.updateByPrimaryKeySelective(rule);
 		return ret;
+	}
+
+	@Override
+	public List<SportDataValidateRule> index() {
+		List<SportDataValidateRule> list = sportDataValidataRuleMapper.selectByExample(null);
+		return list;
 	}
 
 }

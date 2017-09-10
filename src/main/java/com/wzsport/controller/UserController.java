@@ -65,11 +65,13 @@ public class UserController {
 	@Autowired
 	private CloudStorageService qiniuService;
 
-	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
+//	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
 //	static final private String APP_SECRET = "6e37d78de49f1b7c625f132b1fe5059c";//微信测试号
+	static final private String APP_SECRET = "f550760f9ca91f471dc33814c031ab50";//光氧运动
 
-	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
+//	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
 //	static final private String APP_ID = "wx7d248efdb1dc6821";//微信测试号
+	static final private String APP_ID = "wx8e8661fdfc08da2d";//光氧运动
 
 	/**
 	* 

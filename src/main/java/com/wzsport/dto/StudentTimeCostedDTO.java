@@ -1,11 +1,12 @@
 package com.wzsport.dto;
 
 public class StudentTimeCostedDTO {
-	
+
 	private Long studentId;
 	private String studentName;
 	private Integer timeCosted;
-	
+	private String avatarUrl;
+
 	public Long getStudentId() {
 		return studentId;
 	}
@@ -24,4 +25,11 @@ public class StudentTimeCostedDTO {
 	public void setTimeCosted(Integer timeCosted) {
 		this.timeCosted = timeCosted;
 	}
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
+
 }

@@ -7,7 +7,7 @@ import graphql.schema.GraphQLObjectType;
 public class StudentTimeCostedType {
 
 	private static GraphQLObjectType type;
-	
+
 	public static GraphQLObjectType getType() {
 		if(type == null) {
 			type = GraphQLObjectType.newObject()
@@ -27,7 +27,6 @@ public class StudentTimeCostedType {
 							.name("avatarUrl")
 							.description("学生的头像地址")
 							.type(Scalars.GraphQLString)
-							.staticValue("http://wx.qlogo.cn/mmopen/2eKq6oMge2lyho7S3shicMAticbD2KWhIe9fBicYtAjDDDrnmV5QC952hiaNVdLiaz8OQibs53pZZeej60XStgEWSfow/0")
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("timeCosted")
@@ -36,7 +35,7 @@ public class StudentTimeCostedType {
 							.build())
 					.build();
 		}
-		
+
 		return type;
 	}
 }

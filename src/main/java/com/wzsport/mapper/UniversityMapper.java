@@ -98,24 +98,29 @@ public interface UniversityMapper {
 	*
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student_id, student_name ,SUM(kcal_consumed) as kcal_consumption  from ( "
-			+"SELECT student.id AS student_id, student.name AS student_name ,(runningAct.kcal_consumed) AS kcal_consumed  "
-			+"FROM wzsport_student AS student  "
-			+"JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed  "
-			+"	     FROM wzsport_running_activity  "
-			+"	 GROUP BY student_id) runningAct  "
-			+"ON student.id = runningAct.student_id  "
-			+"WHERE student.university_id = #{universityId} "
-			+"UNION ALL "
-			+"SELECT student.id AS student_id, student.name AS student_name ,(areaAct.kcal_consumed) AS kcal_consumed  "
-			+"FROM wzsport_student AS student  "
-			+"JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed  "
-			+"	     FROM wzsport_area_activity  "
-			+"	 GROUP BY student_id) areaAct  "
-			+"ON student.id = areaAct.student_id  "
-			+"WHERE student.university_id = #{universityId} ) st "
-			+"GROUP BY st.student_id "
-			+"ORDER BY SUM(kcal_consumed) desc")
+//	@Select("SELECT student_id, student_name ,SUM(kcal_consumed) as kcal_consumption  from ( "
+//			+"SELECT student.id AS student_id, student.name AS student_name ,(runningAct.kcal_consumed) AS kcal_consumed  "
+//			+"FROM wzsport_student AS student  "
+//			+"JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed  "
+//			+"	     FROM wzsport_running_activity  "
+//			+"	 GROUP BY student_id) runningAct  "
+//			+"ON student.id = runningAct.student_id  "
+//			+"WHERE student.university_id = #{universityId} "
+//			+"UNION ALL "
+//			+"SELECT student.id AS student_id, student.name AS student_name ,(areaAct.kcal_consumed) AS kcal_consumed  "
+//			+"FROM wzsport_student AS student  "
+//			+"JOIN (SELECT student_id,SUM(kcal_consumed) AS kcal_consumed  "
+//			+"	     FROM wzsport_area_activity  "
+//			+"	 GROUP BY student_id) areaAct  "
+//			+"ON student.id = areaAct.student_id  "
+//			+"WHERE student.university_id = #{universityId} ) st "
+//			+"GROUP BY st.student_id "
+//			+"ORDER BY SUM(kcal_consumed) desc")
+	@Select("SELECT student_id,name as student_name,avatar_url,SUM(kcal_consumed) AS kcal_consumption\n" +
+			"FROM wzsport_student_sport_consume_statistic\n" +
+			"WHERE university_id =  #{universityId}\n" +
+			"GROUP BY student_id\n" +
+			"ORDER BY kcal_consumed DESC")
 	List<StudentKcalConsumptionDTO> getKcalCostedRanking(@Param("universityId") long universityId);
 
 	/**
@@ -123,23 +128,28 @@ public interface UniversityMapper {
 	*
 	* @param universityId 大学id
 	*/
-	@Select("SELECT student_id, student_name ,SUM(time_costed) time_costed  from ( "
-			+ "SELECT student.id AS student_id, student.name AS student_name ,(runningAct.cost_time) AS time_costed  "
-			+ "FROM wzsport_student AS student  "
-			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time  "
-			+ "		   FROM wzsport_running_activity "
-			+ "	   GROUP BY student_id) runningAct  "
-			+ "ON student.id = runningAct.student_id  "
-			+ "WHERE student.university_id = #{universityId} "
-			+ "UNION ALL "
-			+ "SELECT student.id AS student_id, student.name AS student_name ,(areaAct.cost_time) AS time_costed  "
-			+ "FROM wzsport_student AS student  "
-			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time  "
-			+ "		   FROM wzsport_area_activity  "
-			+ "	   GROUP BY student_id) areaAct  "
-			+ "ON student.id = areaAct.student_id  "
-			+ "WHERE student.university_id = #{universityId} ) st "
-			+ "GROUP BY st.student_id "
-			+ "ORDER BY SUM(time_costed) desc ")
+//	@Select("SELECT student_id, student_name ,SUM(time_costed) time_costed  from ( "
+//			+ "SELECT student.id AS student_id, student.name AS student_name ,(runningAct.cost_time) AS time_costed  "
+//			+ "FROM wzsport_student AS student  "
+//			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time  "
+//			+ "		   FROM wzsport_running_activity "
+//			+ "	   GROUP BY student_id) runningAct  "
+//			+ "ON student.id = runningAct.student_id  "
+//			+ "WHERE student.university_id = #{universityId} "
+//			+ "UNION ALL "
+//			+ "SELECT student.id AS student_id, student.name AS student_name ,(areaAct.cost_time) AS time_costed  "
+//			+ "FROM wzsport_student AS student  "
+//			+ "JOIN (SELECT student_id,SUM(cost_time) AS cost_time  "
+//			+ "		   FROM wzsport_area_activity  "
+//			+ "	   GROUP BY student_id) areaAct  "
+//			+ "ON student.id = areaAct.student_id  "
+//			+ "WHERE student.university_id = #{universityId} ) st "
+//			+ "GROUP BY st.student_id "
+//			+ "ORDER BY SUM(time_costed) desc ")
+	@Select("SELECT student_id,name as student_name,avatar_url,SUM(cost_time) AS time_costed\n" +
+			"FROM wzsport_student_sport_consume_statistic\n" +
+			"WHERE university_id = #{universityId}\n" +
+			"GROUP BY student_id\n" +
+			"ORDER BY cost_time DESC")
 	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId);
 }

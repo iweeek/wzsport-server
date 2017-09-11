@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 public class RunningActivityTask {
-	
+
 	@Autowired
 	private RunningActivityDataMapper runningActivityDataMapper;
 	@Autowired
@@ -29,11 +29,12 @@ public class RunningActivityTask {
 	private RunningActivityService runningActivityService;
 	@Autowired
 	private SportDataValidateService sportDataValidateService;
-	
+
 	private static final Logger logger = LogManager.getLogger(FixLocationOutdoorSportPointsController.class);
-	
-    @Scheduled(cron = "0 5 0 * * ?")  
-    public void job() {  
+
+	@Scheduled(cron = "0 0 1 * * ?")
+//	@Scheduled(cron = "*/5 * * * * ?")
+    public void job() {
     	//找到昨天所有没有正常结束的活动
     	RunningActivityExample example = new RunningActivityExample();
     	example.createCriteria().andEndedAtIsNull();
@@ -42,9 +43,9 @@ public class RunningActivityTask {
     	int distance = 0;
     	int stepCount = 0;
     	int costTime = 0;
-    	
+
     	System.out.println("job list size: " + list.size());
-    	
+
     	//根据活动数据表最后一条记录来进行统计，把结果写入活动表
     	for (RunningActivity act : list) {
     		RunningActivityDataExample dataExample = new RunningActivityDataExample();
@@ -58,7 +59,7 @@ public class RunningActivityTask {
 	    				targetFinishedTime = (int) ((data.getCreatedAt().getTime() - act.getStartTime().getTime()) / 1000);
 	    			}
 	    		}
-	    		
+
 	    		distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
 	    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
 	    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getCreatedAt().getTime()
@@ -76,14 +77,14 @@ public class RunningActivityTask {
 			runningActivity.setCostTime(costTime);
 			runningActivity.setTargetFinishedTime(targetFinishedTime);
 			runningActivity.setEndedBy(true);
-			
+
 			//判断数据是否正常
-			boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
-			runningActivity.setIsValid(isValid);
+//			boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
+//			runningActivity.setIsValid(isValid);
 
 			runningActivity = runningActivityService.endRunningActivity(runningActivity);
 		}
-    	
+
 
     }
 }

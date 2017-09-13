@@ -36,16 +36,16 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 	@Autowired
 	private RunningSportMapper runningSportMapper;
-	
+
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
-	
+
 	@Autowired
 	private SignInMapper signInMapper;
-	
+
 	@Autowired
 	private TermService termService;
-	
+
 	@Autowired
 	private SportDataValidateService sportDataValidateService;
 
@@ -68,7 +68,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 
 		// 获取关联的项目
 		RunningSport runningSport = runningSportMapper.selectByPrimaryKey(runningActivity.getRunningSportId());
-		
+
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningSport.getQualifiedDistance()
 				&& runningActivity.getTargetFinishedTime() != null
@@ -153,7 +153,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());
 		runningActivity.setQualifiedCostTime(oldRecord.getQualifiedCostTime());
 		runningActivity.setMinCostTime(oldRecord.getMinCostTime());
-		
+
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningActivity.getQualifiedDistance()
 				&& runningActivity.getTargetFinishedTime() != 0
@@ -187,6 +187,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		if (runningActivity.getStepCount() != 0) {
 			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
 					(double) runningActivity.getDistance() / runningActivity.getStepCount());
+			System.out.println("distance_per_step" + distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {
 			runningActivity.setDistancePerStep((double) 0);
@@ -195,7 +196,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		//判断数据是否正常
 		boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
 		runningActivity.setIsValid(isValid);
-		
+
 		runningActivity.setEndedAt(new Date());
 
 		// 更新数据
@@ -332,7 +333,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 	public int getSignInCount(long studentId, Date start, Date end) {
 		SignInExample example = new SignInExample();
 		SignInExample.Criteria criteria = example.createCriteria().andStudentIdEqualTo(studentId);
-		
+
 		if (start != null) {
 			criteria.andSignInTimeGreaterThanOrEqualTo(start);
 		}
@@ -340,9 +341,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		if (end != null) {
 			criteria.andSignInTimeLessThanOrEqualTo(end);
 		}
-		
+
 		int count = (int) signInMapper.countByExample(example);
-		
+
 		return count;
 	}
 }

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mysql.cj.api.log.Log;
 import com.wzsport.controller.FixLocationOutdoorSportPointsController;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
@@ -77,6 +78,7 @@ public class TaskServiceImpl implements TaskService {
 			try {
 				runningActivity = runningActivityService.endRunningActivity(runningActivity);
 			} catch (Exception e) {
+				logger.error(e);
 				throw e;
 			}
 

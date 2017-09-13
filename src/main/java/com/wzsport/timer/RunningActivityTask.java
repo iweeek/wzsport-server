@@ -13,8 +13,8 @@ public class RunningActivityTask {
 	@Autowired
 	private TaskService taskService;
 
-//	@Scheduled(cron = "0 0 1 * * ?")
-	@Scheduled(cron = "*/5 * * * * ?")
+	@Scheduled(cron = "0 0 1 * * ?")
+//	@Scheduled(cron = "*/5 * * * * ?")
     public void job() {
 		taskService.runningActivityTask();
     }

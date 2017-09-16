@@ -7,8 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mysql.cj.api.log.Log;
-import com.wzsport.controller.FixLocationOutdoorSportPointsController;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
 import com.wzsport.model.RunningActivity;
@@ -16,6 +14,7 @@ import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.service.RunningActivityService;
+import com.wzsport.service.StudentSportConsumeStatisticService;
 import com.wzsport.service.TaskService;
 
 @Service
@@ -27,8 +26,10 @@ public class TaskServiceImpl implements TaskService {
 	private RunningActivityMapper runningActivityMapper;
 	@Autowired
 	private RunningActivityService runningActivityService;
+	@Autowired
+	private StudentSportConsumeStatisticService studentSportConsumeStatisticService;
 
-	private static final Logger logger = LogManager.getLogger(FixLocationOutdoorSportPointsController.class);
+	private static final Logger logger = LogManager.getLogger(TaskService.class);
 
 	@Override
 	public void runningActivityTask() {
@@ -79,10 +80,14 @@ public class TaskServiceImpl implements TaskService {
 				runningActivity = runningActivityService.endRunningActivity(runningActivity);
 			} catch (Exception e) {
 				logger.error(e);
-				throw e;
 			}
 
 		}
+	}
+
+	@Override
+	public void sportConsumeStatistic() {
+		studentSportConsumeStatisticService.create();
 	}
 
 }

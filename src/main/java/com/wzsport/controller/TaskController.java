@@ -18,7 +18,7 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(value="", method = RequestMethod.GET)
+	@RequestMapping(value="runningActiviy", method = RequestMethod.GET)
 	public ResponseEntity<?> runningActiviy() {
 		try {
 			taskService.runningActivityTask();
@@ -26,6 +26,15 @@ public class TaskController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
 
+	@RequestMapping(value="sportConsumeStatistic", method = RequestMethod.GET)
+	public ResponseEntity<?> sportConsumeStatistic() {
+		try {
+			taskService.sportConsumeStatistic();
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

@@ -120,7 +120,7 @@ public interface UniversityMapper {
 			"FROM wzsport_student_sport_consume_statistic\n" +
 			"WHERE university_id =  #{universityId}\n" +
 			"GROUP BY student_id\n" +
-			"ORDER BY kcal_consumed DESC")
+			"ORDER BY SUM(kcal_consumed) DESC")
 	List<StudentKcalConsumptionDTO> getKcalCostedRanking(@Param("universityId") long universityId);
 
 	/**
@@ -150,6 +150,6 @@ public interface UniversityMapper {
 			"FROM wzsport_student_sport_consume_statistic\n" +
 			"WHERE university_id = #{universityId}\n" +
 			"GROUP BY student_id\n" +
-			"ORDER BY cost_time DESC")
+			"ORDER BY SUM(cost_time) DESC")
 	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId);
 }

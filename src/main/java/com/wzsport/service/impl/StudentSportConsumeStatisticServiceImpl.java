@@ -18,10 +18,25 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
 	@Override
 	@Transactional
 	public boolean create() {
-		Calendar cal = Calendar.getInstance();//使用默认时区和语言环境获得一个日历
-		cal.add(Calendar.DAY_OF_MONTH, -1);//取当前日期的前一天.
+		Calendar c = Calendar.getInstance();
+		Calendar calFirst = Calendar.getInstance();
+		Calendar calLast = Calendar.getInstance();
+
+		int today = 	c.get(Calendar.DAY_OF_MONTH);
+		// 如果是本月第一天，取上个月第一天和最后一天,否则，取本月
+		if (today == 1) {
+			calFirst.add(Calendar.MONTH, -1); // 上一个月
+			calFirst.set(Calendar.DAY_OF_MONTH, 1);
+
+			calLast.set(Calendar.DAY_OF_MONTH,0);
+		} else {
+			calFirst.add(Calendar.MONTH, 0);
+			calFirst.set(Calendar.DAY_OF_MONTH,1);
+
+			calLast.set(Calendar.DAY_OF_MONTH, calLast.getActualMaximum(Calendar.DAY_OF_MONTH));
+		}
 		List<StudentSportConsumeStatistic> list =
-				studentSportConsumeStatisticMapper.getStudentSportConsumeStatisticList(cal.getTime());
+				studentSportConsumeStatisticMapper.getStudentSportConsumeStatisticList(calFirst.getTime(),calLast.getTime());
 
 		for (StudentSportConsumeStatistic studentSportConsumeStatistic : list) {
 			studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);

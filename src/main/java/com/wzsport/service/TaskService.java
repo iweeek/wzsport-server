@@ -3,5 +3,7 @@ package com.wzsport.service;
 public interface TaskService {
 	public void runningActivityTask();
 
-	public void sportConsumeStatistic();
+	public void sportConsumeStatisticTask();
+
+	public void signInTask();
 }

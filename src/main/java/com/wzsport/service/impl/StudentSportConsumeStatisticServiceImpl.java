@@ -2,6 +2,9 @@ package com.wzsport.service.impl;
 
 import java.util.List;
 import java.util.Calendar;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
 import com.wzsport.model.StudentSportConsumeStatistic;
 import com.wzsport.service.StudentSportConsumeStatisticService;
+import com.wzsport.service.TaskService;
 
 @Service
 public class StudentSportConsumeStatisticServiceImpl implements StudentSportConsumeStatisticService {
 	@Autowired
 	private StudentSportConsumeStatisticMapper studentSportConsumeStatisticMapper;
 
+	private static final Logger logger = LogManager.getLogger(StudentSportConsumeStatisticServiceImpl.class);
 	@Override
 	@Transactional
 	public boolean create() {
@@ -39,7 +44,11 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
 				studentSportConsumeStatisticMapper.getStudentSportConsumeStatisticList(calFirst.getTime(),calLast.getTime());
 
 		for (StudentSportConsumeStatistic studentSportConsumeStatistic : list) {
-			studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);
+			try {
+				studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);
+			} catch (Exception e) {
+				logger.error(e);
+			}
 		}
 
 		return true;

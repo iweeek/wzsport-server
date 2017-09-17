@@ -14,6 +14,7 @@ import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.service.RunningActivityService;
+import com.wzsport.service.SignInService;
 import com.wzsport.service.StudentSportConsumeStatisticService;
 import com.wzsport.service.TaskService;
 
@@ -28,6 +29,8 @@ public class TaskServiceImpl implements TaskService {
 	private RunningActivityService runningActivityService;
 	@Autowired
 	private StudentSportConsumeStatisticService studentSportConsumeStatisticService;
+	@Autowired
+	private SignInService signInService;
 
 	private static final Logger logger = LogManager.getLogger(TaskService.class);
 
@@ -86,8 +89,13 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public void sportConsumeStatistic() {
+	public void sportConsumeStatisticTask() {
 		studentSportConsumeStatisticService.create();
+	}
+
+	@Override
+	public void signInTask() {
+		signInService.create();
 	}
 
 }

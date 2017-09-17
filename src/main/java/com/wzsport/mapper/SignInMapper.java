@@ -140,7 +140,7 @@ public interface SignInMapper {
 			"			SELECT id AS activity_id, area_sport_id AS sport_id,start_time,student_id,1 AS sport_type\n" +
 			"				FROM wzsport_area_activity \n" +
 			"			 WHERE qualified = 1\n" +
-			"				 AND date(start_time) = date(#{end}) AND date(start_time) >= date(#{start})\n" +
+			"				 AND date(start_time) <= date(#{end}) AND date(start_time) >= date(#{start})\n" +
 			"		) AS act \n" +
 			"		LEFT JOIN wzsport_student AS student\n" +
 			"		ON act.student_id = student.id\n" +

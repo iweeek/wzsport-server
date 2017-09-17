@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import com.wzsport.service.SignInService;
 public class SignInServiceImpl implements SignInService {
 	@Autowired
 	SignInMapper signInMapper;
+
+	private static final Logger logger = LogManager.getLogger(SignInServiceImpl.class);
 
 	@Override
 	@Transactional
@@ -46,7 +50,12 @@ public class SignInServiceImpl implements SignInService {
 		List<SignIn> list = signInMapper.getSignInDataList(calFirst.getTime(), calLast.getTime());
 
 		for (SignIn signIn : list) {
-			signInMapper.insert(signIn);
+			try {
+				signInMapper.insert(signIn);
+			} catch (Exception e) {
+				logger.error(e);
+			}
+
 		}
 
 		return true;

@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 public class PathUtil {
 	public static final String HOST_NAME = "api.guangyangyundong.com";
 	public static final String ORIGIN = "http://" + HOST_NAME;
-	
+
 	public static final String WEBSERVER_PATH = System.getProperty("catalina.base");
 	public static final String WEBAPP_PATH  = WEBSERVER_PATH + File.separator +"webapps" + File.separator;
-	
+
 	public static final String IMG_FOLDER_PATH = "images" + File.separator;
 	public static final String IMG_STORAGE_PATH = WEBAPP_PATH + File.separator + IMG_FOLDER_PATH + File.separator;
 
@@ -32,7 +32,7 @@ public class PathUtil {
             return PathUtil.class.getResource("/").getFile().toString();
         }
     }
-    
+
     public static String getImagesPath() {
     	String path = PathUtil.getWebRootPath() + File.separator +"images";
     	return path;

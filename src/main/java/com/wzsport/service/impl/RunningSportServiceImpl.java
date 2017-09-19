@@ -18,7 +18,7 @@ import com.wzsport.util.RetMsgTemplate;
 
 @Service
 public class RunningSportServiceImpl implements RunningSportService {
-	private static final Logger logger = LoggerFactory.getLogger(AreaSportServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RunningSportServiceImpl.class);
 	
 	private String logMsg = "";
 

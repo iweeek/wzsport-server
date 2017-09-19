@@ -117,20 +117,20 @@ public interface RunningActivityMapper {
 			"ended_by = #{endedBy,jdbcType=TINYINT}", "where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(RunningActivity record);
 
-	@Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId}")
+	@Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1")
 	Integer sumCaloriesConsumedByStudentId(long studentId);
 
-	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId}")
+	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1")
 	Integer sumCostTimeByStudentId(long studentId);
 
 	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_running_activity "
-			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1")
 	Integer sumKCalConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
 
 	@Select("SELECT SUM(cost_time) "
 			+ "FROM wzsport_running_activity "
-			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end}")
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1")
 	Integer sumCostTimeByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
 
 	@Select("SELECT count(*) from ( "

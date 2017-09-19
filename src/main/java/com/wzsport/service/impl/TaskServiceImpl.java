@@ -49,6 +49,11 @@ public class TaskServiceImpl implements TaskService {
 
 	    	//根据活动数据表最后一条记录来进行统计，把结果写入活动表
 	    	for (RunningActivity act : list) {
+	    		distance = 0;
+	    		stepCount = 0;
+	    		costTime = 0;
+	    		targetFinishedTime = 0;
+
 	    		RunningActivityDataExample dataExample = new RunningActivityDataExample();
 	    		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
 	    		dataExample.setOrderByClause("created_at asc");

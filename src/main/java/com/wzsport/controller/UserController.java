@@ -65,13 +65,13 @@ public class UserController {
 	@Autowired
 	private CloudStorageService qiniuService;
 
-//	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
+	static final private String APP_SECRET = "56c7ff2a20c91dacc6a714ed5e4eb4fe";//欧旭
 //	static final private String APP_SECRET = "6e37d78de49f1b7c625f132b1fe5059c";//微信测试号
-	static final private String APP_SECRET = "f550760f9ca91f471dc33814c031ab50";//光氧运动
+//	static final private String APP_SECRET = "f550760f9ca91f471dc33814c031ab50";//光氧运动
 
-//	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
+	static final private String APP_ID = "wx2c8f990778df47a3";//欧旭
 //	static final private String APP_ID = "wx7d248efdb1dc6821";//微信测试号
-	static final private String APP_ID = "wx8e8661fdfc08da2d";//光氧运动
+//	static final private String APP_ID = "wx8e8661fdfc08da2d";//光氧运动
 
 	/**
 	* 
@@ -153,7 +153,6 @@ public class UserController {
 				
 				wUser.setUserId(user.getId());
 				result = userService.update(wUser);
-				logger.error("没有成功更新用户微信信息， wUser: " + wUser);//TODO test
 				if (result == 0) {
 					logger.error("没有成功更新用户微信信息， wUser: " + wUser);
 					return ResponseEntity.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
@@ -284,6 +283,7 @@ public class UserController {
 		params += code + "&grant_type=authorization_code";
 
 		String result = HttpRequestUtil.sendGet(url, params);
+		logger.error("获取openid result: " + result);
 		if (result == null) {
 			logger.error("获取openid失败");
 			return;
@@ -313,7 +313,7 @@ public class UserController {
 			
 			result = HttpRequestUtil.sendGet(url, params);
 			if (result == null) {
-				logger.error("获取用户信息失败");
+				logger.error("微信请求获取用户信息失败");
 				return;
 			} 
 			
@@ -353,7 +353,7 @@ public class UserController {
 	//				user.setUnionid(obj.getString("unionid"));//TODO test时候不给
 					
 					//存入数据库
-					logger.error("update user: " + user.toString());
+					logger.info("update user: " + user.toString());
 					userService.update(user);
 				}
 			} catch (Exception e) {
@@ -376,8 +376,11 @@ public class UserController {
 				URI outUri = new URI(inUri.getScheme(), inUri.getAuthority(),
 		                inUri.getPath(), query, inUri.getFragment());
 				page = outUri.toString();
+				logger.error("拼接跳转url，page: " + page);
 			} catch (URISyntaxException e1) {
 				e1.printStackTrace();
+				logger.error("拼接跳转url失败，e: " + e1.getMessage());
+				return;
 			}
 //			page += "?openid=" + openid;
 //			Map map = parseQueryString(request.getQueryString());
@@ -411,6 +414,7 @@ public class UserController {
 				response.sendRedirect(page);
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.error("发送跳转url失败，e: " + e.getMessage());
 				return;
 			}
 

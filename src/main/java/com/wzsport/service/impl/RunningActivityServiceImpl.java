@@ -155,10 +155,26 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setMinCostTime(oldRecord.getMinCostTime());
 
 		// 判断是否合格
-		if (runningActivity.getDistance() >= runningActivity.getQualifiedDistance()
-				&& runningActivity.getTargetFinishedTime() != 0
-				&& runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
-			runningActivity.setQualified(true);
+		if (runningActivity.getDistance() >= runningActivity.getQualifiedDistance()) {
+//				&& runningActivity.getTargetFinishedTime() != 0
+//				&& runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
+		    if (runningActivity.getTargetFinishedTime() > 0 && runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
+		        runningActivity.setQualified(true);
+		    } else {
+		        BigDecimal d = new BigDecimal(runningActivity.getDistance());
+		        BigDecimal t = new BigDecimal(runningActivity.getCostTime());
+		        BigDecimal v = d.divide(t).setScale(2, BigDecimal.ROUND_UP);
+		        
+		        BigDecimal qD = new BigDecimal(runningActivity.getQualifiedDistance());
+		        BigDecimal qT = new BigDecimal(runningActivity.getQualifiedCostTime());
+		        BigDecimal qV = qD.divide(qT).setScale(2, BigDecimal.ROUND_UP);
+		        
+		        if (v.compareTo(qV) >= 0) {
+		            runningActivity.setQualified(true);
+		        } else {
+		            runningActivity.setQualified(false);
+		        }
+		    }
 		} else {
 			runningActivity.setQualified(false);
 		}

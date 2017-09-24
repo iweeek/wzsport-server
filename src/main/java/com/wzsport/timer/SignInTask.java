@@ -11,7 +11,7 @@ public class SignInTask {
 	@Autowired
 	private SignInService signInService;
 
-	@Scheduled(cron = "0 0 1 * * ?")
+	@Scheduled(cron = "0 0 3 * * ?")
 //	@Scheduled(cron = "*/5 * * * * ?")
 
     public void job() {

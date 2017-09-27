@@ -162,11 +162,11 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		    } else {
 		        BigDecimal d = new BigDecimal(runningActivity.getDistance());
 		        BigDecimal t = new BigDecimal(runningActivity.getCostTime());
-		        BigDecimal v = d.divide(t, 2, BigDecimal.ROUND_UP);
+		        BigDecimal v = d.divide(t, 2, BigDecimal.ROUND_HALF_UP);
 		        
 		        BigDecimal qD = new BigDecimal(runningActivity.getQualifiedDistance());
 		        BigDecimal qT = new BigDecimal(runningActivity.getQualifiedCostTime());
-		        BigDecimal qV = qD.divide(qT, 2, BigDecimal.ROUND_UP);
+		        BigDecimal qV = qD.divide(qT, 2, BigDecimal.ROUND_HALF_UP);
 		        
 		        if (v.compareTo(qV) >= 0) {
 		            runningActivity.setQualified(true);

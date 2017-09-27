@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
 import com.wzsport.model.StudentSportConsumeStatistic;
 import com.wzsport.service.StudentSportConsumeStatisticService;
-import com.wzsport.service.TaskService;
+import com.wzsport.service.StatisticTaskService;
 
 @Service
 public class StudentSportConsumeStatisticServiceImpl implements StudentSportConsumeStatisticService {

@@ -49,7 +49,7 @@
         <mvc:exclude-mapping path="/runningSports/**"/>
         <mvc:exclude-mapping path="/runningActivityData/**"/>
         <mvc:exclude-mapping path="/runningActivities/**"/>
-        <mvc:exclude-mapping path="/task/**"/>
+        <mvc:exclude-mapping path="/statisticTasks/**"/>
 	        <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
 	        <bean class="com.wzsport.interceptor.TokenInterceptor"></bean>
     	</mvc:interceptor>

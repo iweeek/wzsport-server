@@ -157,17 +157,16 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		// 判断是否合格
 		if (runningActivity.getDistance() >= runningActivity.getQualifiedDistance()) {
 //				&& runningActivity.getTargetFinishedTime() != 0
-//				&& runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
 		    if (runningActivity.getTargetFinishedTime() > 0 && runningActivity.getTargetFinishedTime() <= runningActivity.getQualifiedCostTime()) {
 		        runningActivity.setQualified(true);
 		    } else {
 		        BigDecimal d = new BigDecimal(runningActivity.getDistance());
 		        BigDecimal t = new BigDecimal(runningActivity.getCostTime());
-		        BigDecimal v = d.divide(t).setScale(2, BigDecimal.ROUND_UP);
+		        BigDecimal v = d.divide(t, 2, BigDecimal.ROUND_UP);
 		        
 		        BigDecimal qD = new BigDecimal(runningActivity.getQualifiedDistance());
 		        BigDecimal qT = new BigDecimal(runningActivity.getQualifiedCostTime());
-		        BigDecimal qV = qD.divide(qT).setScale(2, BigDecimal.ROUND_UP);
+		        BigDecimal qV = qD.divide(qT, 2, BigDecimal.ROUND_UP);
 		        
 		        if (v.compareTo(qV) >= 0) {
 		            runningActivity.setQualified(true);
@@ -203,7 +202,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		if (runningActivity.getStepCount() != 0) {
 			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
 					(double) runningActivity.getDistance() / runningActivity.getStepCount());
-			System.out.println("distance_per_step" + distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
+			System.out.println("distance_per_step: " + distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {
 			runningActivity.setDistancePerStep((double) 0);

@@ -1,5 +1,6 @@
 package com.wzsport.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,10 +17,10 @@ import com.wzsport.model.RunningActivityExample;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.SignInService;
 import com.wzsport.service.StudentSportConsumeStatisticService;
-import com.wzsport.service.TaskService;
+import com.wzsport.service.StatisticTaskService;
 
 @Service
-public class TaskServiceImpl implements TaskService {
+public class StatisticTaskServiceImpl implements StatisticTaskService {
 
 	@Autowired
 	private RunningActivityDataMapper runningActivityDataMapper;
@@ -32,13 +33,13 @@ public class TaskServiceImpl implements TaskService {
 	@Autowired
 	private SignInService signInService;
 
-	private static final Logger logger = LogManager.getLogger(TaskService.class);
+	private static final Logger logger = LogManager.getLogger(StatisticTaskService.class);
 
 	@Override
-	public void runningActivityTask() {
+	public void runningActivityTask(Date startDate, Date endDate) {
 		//找到昨天所有没有正常结束的活动
 	    	RunningActivityExample example = new RunningActivityExample();
-	    	example.createCriteria().andEndedAtIsNull();
+	    	example.createCriteria().andEndedAtIsNull().andStartTimeBetween(startDate, endDate);
 	    	List<RunningActivity> list = runningActivityMapper.selectByExample(example);
 	    	int targetFinishedTime = 0;
 	    	int distance = 0;
@@ -58,7 +59,6 @@ public class TaskServiceImpl implements TaskService {
 	    		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
 	    		dataExample.setOrderByClause("created_at asc");
 	    		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
-	    		logger.info("job act data list: " + runningActivityDataList.size());
 	    		if (runningActivityDataList.size() > 0) {
 		    		for (RunningActivityData data : runningActivityDataList) {
 		    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
@@ -70,10 +70,6 @@ public class TaskServiceImpl implements TaskService {
 		    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
 		    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getCreatedAt().getTime()
 		    				- runningActivityDataList.get(0).getCreatedAt().getTime()) / 1000);
-		    		logger.info("job distance: " + distance);
-		    		logger.info("job stepCount: " + stepCount);
-		    		logger.info("job costTime: " + costTime);
-		    		logger.info("job targetFinishedTime: " + targetFinishedTime);
 			}
 
 			RunningActivity runningActivity = new RunningActivity();

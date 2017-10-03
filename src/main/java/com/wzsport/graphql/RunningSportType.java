@@ -85,6 +85,11 @@ public class RunningSportType {
 							.type(Scalars.GraphQLInt)
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
+                            .name("qualifiedVelocity")
+                            .description("该项目的合格速度(单位:米/秒)")
+                            .type(Scalars.GraphQLBigDecimal)
+                            .build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("minCostTime")
 							.description("该项目的最少耗时(单位:秒)")
 							.type(Scalars.GraphQLInt)
@@ -159,6 +164,7 @@ public class RunningSportType {
 	                		criteria.andIsManEqualTo(isMan);
 	                	}
 	                	
+                        runningSportExample.setOrderByClause("qualified_velocity ASC");
 	                	List<RunningSport> runningSportList = runningSportMapper.selectByExample(runningSportExample);
 	                	return runningSportList;
 	                } ).build();

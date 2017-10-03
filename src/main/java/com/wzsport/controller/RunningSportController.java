@@ -2,6 +2,8 @@ package com.wzsport.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,13 +94,17 @@ public class RunningSportController {
 			runningSport.setIsMan(isMan);
 		}
 		
-		if (qualifiedDistance != null) {
+		//这两个字段要求前端一起提交，否则还需要再查一次数据库
+		if (qualifiedDistance != null && qualifiedCostTime != null) {
 			runningSport.setQualifiedDistance(qualifiedDistance);
+			runningSport.setQualifiedCostTime(qualifiedCostTime);
+			
+            BigDecimal d = new BigDecimal(qualifiedDistance);
+            BigDecimal t = new BigDecimal(qualifiedCostTime);
+            BigDecimal v = d.divide(t, 2, RoundingMode.HALF_UP);
+            runningSport.setQualifiedVelocity(v);
 		}
 		
-		if (qualifiedCostTime != null) { 
-			runningSport.setQualifiedCostTime(qualifiedCostTime);
-		}
 		
 		if (sampleNum != null) {
 			runningSport.setSampleNum(sampleNum);
@@ -183,10 +189,16 @@ public class RunningSportController {
 		byte acquisitionInterval = (byte) (qualifiedCostTime / sampleNum);
 		sport.setAcquisitionInterval(acquisitionInterval);
 		sport.setHourlyKcalConsumption(hourlyKcalConsumption);
-		sport.setQualifiedDistance(qualifiedDistance);
 		sport.setIsEnabled(isEnabled);
 		sport.setIsMan(isMan);
+		sport.setQualifiedDistance(qualifiedDistance);
 		sport.setQualifiedCostTime(qualifiedCostTime);
+		
+		BigDecimal d = new BigDecimal(qualifiedDistance);
+		BigDecimal t = new BigDecimal(qualifiedCostTime);
+		BigDecimal v = d.divide(t, 2, RoundingMode.HALF_UP);
+		sport.setQualifiedVelocity(v);
+		
 		sport.setUniversityId(universityId);
 		
 		ResponseBody resBody = new ResponseBody<RunningSport>();

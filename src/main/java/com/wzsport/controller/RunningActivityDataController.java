@@ -43,6 +43,8 @@ public class RunningActivityDataController {
 								@RequestParam long activityId,
 								@ApiParam("运动步数累计")
 								@RequestParam int stepCount,
+								@ApiParam("自己计算的运动步数累计")
+								@RequestParam(required = false) Short stepCountCal,
 								@ApiParam("运动距离（单位：米）")
 								@RequestParam int distance,
 								@ApiParam("当前的经度")
@@ -72,6 +74,12 @@ public class RunningActivityDataController {
 		runningActivityData.setActivityId(activityId);
 		runningActivityData.setAcquisitionTime(new Date());
 		runningActivityData.setStepCount(stepCount);
+		
+		if (stepCountCal != null) {
+		    runningActivityData.setStepCountCal(stepCountCal);
+		} else {
+		    runningActivityData.setStepCountCal((short) 0);
+		}
 		runningActivityData.setDistance(distance);
 		runningActivityData.setLongitude(longitude);
 		runningActivityData.setLatitude(latitude);

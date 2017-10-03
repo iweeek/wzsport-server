@@ -36,7 +36,7 @@ public class RunningActivityController {
 	@ApiOperation(value = "创建RunningActivity", notes = "向服务端提交一条活动结果数据，服务端对其进行验证后存储至数据库并返回数据。")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<RunningActivity> create(
-								@ApiParam("活动项目id,目前仅对应RunningSport的id")
+								@ApiParam("活动项目id，对应RunningSport的id")
 								@RequestParam long runningSportId,
 								@ApiParam("学生id") 
 								@RequestParam long studentId,
@@ -90,6 +90,8 @@ public class RunningActivityController {
 	public ResponseEntity<RunningActivity> end(
 								@ApiParam("活动id")
 								@RequestParam long id,
+								@ApiParam("活动项目id，对应RunningSport的id")
+								@RequestParam long runningSportId,
 								@ApiParam("活动距离(单位:米)")
 								@RequestParam int distance,
 								@ApiParam("运动步数累计")
@@ -101,6 +103,7 @@ public class RunningActivityController {
 		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setId(id);
+		runningActivity.setRunningSportId(runningSportId);
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);

@@ -147,7 +147,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			throw new RunningActivityAlreadyEndException("本次运动已经结束");
 		}
 
-//		runningActivity.setRunningSportId(oldRecord.getRunningSportId());
+		runningActivity.setRunningSportId(oldRecord.getRunningSportId());
 		runningActivity.setStudentId(oldRecord.getStudentId());
 		runningActivity.setStartTime(oldRecord.getStartTime());
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());

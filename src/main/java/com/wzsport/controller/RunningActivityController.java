@@ -103,7 +103,7 @@ public class RunningActivityController {
 		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setId(id);
-		runningActivity.setRunningSportId(runningSportId);
+		runningActivity.setEndRunningSportId(runningSportId);
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);

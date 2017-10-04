@@ -91,7 +91,7 @@ public class RunningActivityController {
 								@ApiParam("活动id")
 								@RequestParam long id,
 								@ApiParam("活动项目id，对应RunningSport的id")
-								@RequestParam long runningSportId,
+								@RequestParam(required = false) Long runningSportId,
 								@ApiParam("活动距离(单位:米)")
 								@RequestParam int distance,
 								@ApiParam("运动步数累计")
@@ -103,7 +103,10 @@ public class RunningActivityController {
 		
 		RunningActivity runningActivity = new RunningActivity();
 		runningActivity.setId(id);
-		runningActivity.setEndRunningSportId(runningSportId);
+		
+		if (runningSportId != null) {
+		    runningActivity.setEndRunningSportId(runningSportId);
+		}
 		runningActivity.setDistance(distance);
 		runningActivity.setStepCount(stepCount);
 		runningActivity.setCostTime(costTime);

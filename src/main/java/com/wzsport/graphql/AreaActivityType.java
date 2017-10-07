@@ -13,11 +13,13 @@ import com.github.pagehelper.PageHelper;
 import com.wzsport.mapper.AreaActivityDataMapper;
 import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.AreaSportMapper;
+import com.wzsport.mapper.FixLocationOutdoorSportPointMapper;
 import com.wzsport.mapper.StudentMapper;
 import com.wzsport.model.AreaActivity;
 import com.wzsport.model.AreaActivityDataExample;
 import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.AreaActivityExample.Criteria;
+import com.wzsport.model.FixLocationOutdoorSportPoint;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 
@@ -37,9 +39,10 @@ import graphql.schema.GraphQLTypeReference;
 public class AreaActivityType {
 	
 	private static AreaActivityMapper areaActivityMapper;
-	private static AreaActivityDataMapper AreaActivityDataMapper;
+	private static AreaActivityDataMapper areaActivityDataMapper;
 	private static AreaSportMapper AreaSportMapper;
 	private static StudentMapper studentMapper;
+	private static FixLocationOutdoorSportPointMapper fixLocationOutdoorSportPointMapper;
 	private static GraphQLObjectType type;
 	private static GraphQLFieldDefinition singleQueryField;
 	private static GraphQLFieldDefinition listQueryField;
@@ -75,9 +78,24 @@ public class AreaActivityType {
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("areaSportId")
-							.description("该活动关联的区域运动的ID")
+							.description("该活动关联的区域运动的Id")
 							.type(Scalars.GraphQLLong)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+                            .name("locationId")
+                            .description("运动场所的Id")
+                            .type(Scalars.GraphQLLong)
+                            .build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+                            .name("location")
+                            .description("运动场所信息")
+                            .type(FixLocationOutdoorSportPointType.getType())
+                            .dataFetcher(environment -> {
+                                AreaActivity areaActivity = environment.getSource();
+                                FixLocationOutdoorSportPoint point = fixLocationOutdoorSportPointMapper.selectByPrimaryKey(areaActivity.getLocationId());
+                                return point;
+                            })
+                            .build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("costTime")
 							.description("活动消耗时间,时间戳格式(毫秒)")
@@ -156,7 +174,7 @@ public class AreaActivityType {
 								AreaActivity AreaActivity = environment.getSource();
 								AreaActivityDataExample example = new AreaActivityDataExample();
 								example.createCriteria().andActivityIdEqualTo(AreaActivity.getId());
-			                	return AreaActivityDataMapper.selectByExample(example);
+			                	return areaActivityDataMapper.selectByExample(example);
 							} )
 							.build())
 					.build();
@@ -286,7 +304,12 @@ public class AreaActivityType {
 	}
 	
 	@Autowired(required = true)
-	public void setAreaActivityDataMapper(AreaActivityDataMapper AreaActivityDataMapper) {
-		AreaActivityType.AreaActivityDataMapper = AreaActivityDataMapper;
+	public void setAreaActivityDataMapper(AreaActivityDataMapper areaActivityDataMapper) {
+		AreaActivityType.areaActivityDataMapper = areaActivityDataMapper;
 	}
+	
+   @Autowired(required = true)
+    public void setfixLocationOutdoorSportPointMapper(FixLocationOutdoorSportPointMapper fixLocationOutdoorSportPointMapper) {
+        AreaActivityType.fixLocationOutdoorSportPointMapper = fixLocationOutdoorSportPointMapper;
+    }
 }

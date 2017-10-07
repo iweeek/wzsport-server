@@ -131,6 +131,7 @@
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="longitude" javaType="java.lang.Double"/>
       <columnOverride column="latitude" javaType="java.lang.Double"/>
+      <columnOverride column="is_normal" javaType="java.lang.Boolean"/>
       <columnOverride column="location_type" javaType="java.lang.Integer"/>
     </table>
 

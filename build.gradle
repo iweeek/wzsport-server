@@ -132,7 +132,7 @@ remotes {
   }
 }
 
-task deploy(dependsOn: [war, flywayMigrate]) {
+task deploy(dependsOn: [war]) {
   doLast {
   	switch (env) {
   	  case 'test':

@@ -43,11 +43,13 @@ public class AreaActivityDataController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(
 								@ApiParam("活动id")
-								@RequestParam long activityId,
+								@RequestParam Long activityId,
+								@ApiParam("是否正常")
+								@RequestParam Boolean isNormal,
 								@ApiParam("当前的经度")
-								@RequestParam double longitude,
+								@RequestParam Double longitude,
 								@ApiParam("当前的纬度")
-								@RequestParam double latitude,
+								@RequestParam Double latitude,
 								@ApiParam("定位类型")
 								@RequestParam int locationType) {
 		if (!areaActivityService.isActivityExist(activityId)) {
@@ -59,6 +61,7 @@ public class AreaActivityDataController {
 		
 		areaActivityData.setActivityId(activityId);
 		areaActivityData.setAcquisitionTime(new Date());
+		areaActivityData.setIsNormal(isNormal);
 		areaActivityData.setLongitude(longitude);
 		areaActivityData.setLatitude(latitude);
 		areaActivityData.setLocationType(locationType);

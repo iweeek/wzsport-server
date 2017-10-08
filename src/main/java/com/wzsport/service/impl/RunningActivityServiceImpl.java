@@ -148,6 +148,11 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		}
 
 		runningActivity.setRunningSportId(oldRecord.getRunningSportId());
+		
+		if (runningActivity.getEndRunningSportId() == null) {
+		    runningActivity.setEndRunningSportId(oldRecord.getRunningSportId());
+		}
+		
 		runningActivity.setStudentId(oldRecord.getStudentId());
 		runningActivity.setStartTime(oldRecord.getStartTime());
 		runningActivity.setQualifiedDistance(oldRecord.getQualifiedDistance());

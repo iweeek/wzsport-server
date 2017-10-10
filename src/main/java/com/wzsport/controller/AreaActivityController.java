@@ -45,13 +45,16 @@ public class AreaActivityController {
 	@ApiOperation(value = "创建AreaActivity", notes = "向服务端提交一条活动结果数据，服务端对其进行验证后存储至数据库并返回数据。")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> create(
-								@ApiParam("活动项目id，目前仅对应AreaSport的id")
+								@ApiParam("活动项目Id，对应AreaSport的id")
 								@RequestParam long areaSportId,
+								@ApiParam("活动场所Id，对应location的Id")
+								@RequestParam long locationId,
 								@ApiParam("学生id") 
 								@RequestParam long studentId)
 								{
 		AreaActivity areaActivity = new AreaActivity();
 		areaActivity.setAreaSportId(areaSportId);
+		areaActivity.setLocationId(locationId);
 		areaActivity.setStudentId(studentId);
 		areaActivity.setStartTime(new Date());
 		

@@ -69,7 +69,7 @@ public class FixLocationOutdoorSportPointsController {
 							@ApiParam("经度")
 							@RequestParam BigDecimal longitude,
 							@ApiParam("定点活动区域的半径（米）")
-							@RequestParam byte radius,
+							@RequestParam Integer radius,
 							@ApiParam("达标时间")
 							@RequestParam int qualifiedCostTime,
 							@ApiParam("定点活动区域的地址")
@@ -128,7 +128,7 @@ public class FixLocationOutdoorSportPointsController {
 								@ApiParam("经度")
 								@RequestParam BigDecimal longitude,
 								@ApiParam("定点活动区域的半径（米）")
-								@RequestParam byte radius,
+								@RequestParam Integer radius,
 								@ApiParam("达标时间")
 								@RequestParam int qualifiedCostTime,
 								@ApiParam("定点活动区域的地址")

@@ -59,6 +59,17 @@ public class RunningActivityDataController {
 								@RequestParam int locationType,
 								@ApiParam("数据是否正常")
 								@RequestParam boolean isNormal) {
+	    logger.info("activityId: " + activityId);
+	    logger.info("stepCount: " + stepCount);
+	    logger.info("stepCountCal: " + stepCountCal);
+	    logger.info("distance: " + distance);
+	    logger.info("longitude: " + longitude);
+	    logger.info("latitude: " + latitude);
+	    logger.info("distancePerStep: " + distancePerStep);
+	    logger.info("stepPerSecond: " + stepPerSecond);
+	    logger.info("locationType: " + locationType);
+	    logger.info("isNormal: " + isNormal);
+	    
 		ResponseBody resBody = new ResponseBody();
 		int status = 0;
 		

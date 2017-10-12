@@ -216,6 +216,9 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		//判断数据是否正常
 		boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
 		runningActivity.setIsValid(isValid);
+		
+		//暂时放开，不判断
+		runningActivity.setIsValid(true);
 
 		runningActivity.setEndedAt(new Date());
 

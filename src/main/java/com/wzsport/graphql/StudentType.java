@@ -182,8 +182,7 @@ public class StudentType {
 								return list;
 							}).build())
 					.field(GraphQLFieldDefinition.newFieldDefinition().name("areaActivities").description("所有区域运动活动记录")
-							.argument(
-									GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
+							.argument(GraphQLArgument.newArgument().name("startDate").type(Scalars.GraphQLString).build())
 							.argument(GraphQLArgument.newArgument().name("endDate").type(Scalars.GraphQLString).build())
 							.type(PageType.getPageTypeBuidler(AreaActivityType.getType()).name("AreaActivitiesPage")
 									.description("区域运动活动记录分页").build())
@@ -194,7 +193,8 @@ public class StudentType {
 								Date endDate = null;
 								try {
 									startDate = simpleDateFormat.parse(environment.getArgument("startDate"));
-									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+//									endDate = simpleDateFormat.parse(environment.getArgument("endDate"));
+									endDate = new Date();
 								} catch (ParseException e) {
 									e.printStackTrace();
 									return list;

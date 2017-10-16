@@ -129,10 +129,10 @@ public class AreaSportType {
 	                		criteria.andIsEnabledEqualTo(isEnabled);
 	                	}
 	                	
-	                	Boolean isMan;
-	                	if ((isMan = environment.getArgument("isMan")) != null) {
-	                		criteria.andIsManEqualTo(isMan);
-	                	}
+//	                	Boolean isMan;
+//	                	if ((isMan = environment.getArgument("isMan")) != null) {
+//	                		criteria.andIsManEqualTo(isMan);
+//	                	}
 	                	
 	                	List<AreaSport> runningSportList = areaSportMapper.selectByExample(areaSportExample);
 	                	return runningSportList;

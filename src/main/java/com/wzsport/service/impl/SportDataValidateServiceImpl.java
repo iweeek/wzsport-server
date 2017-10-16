@@ -40,9 +40,9 @@ public class SportDataValidateServiceImpl implements SportDataValidateService{
 			if (Double.compare(rule.getDistancePerStep(), 0.0) != 0) {
 				if (Double.compare(runningActivity.getDistancePerStep(), rule.getDistancePerStep()) > 0) {
 					return false;
-				} else if (Double.compare(runningActivity.getDistancePerStep(), 0.0) == 0) {
+				} /*else if (Double.compare(runningActivity.getDistancePerStep(), 0.0) == 0) {//步数判断暂时注释掉
 					return false;
-				}
+				}*/
 			}
 		}
 

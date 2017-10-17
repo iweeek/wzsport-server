@@ -218,7 +218,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setIsValid(isValid);
 		
 		//暂时放开，不判断
-		runningActivity.setIsValid(true);
+//		runningActivity.setIsValid(true);
 
 		runningActivity.setEndedAt(new Date());
 

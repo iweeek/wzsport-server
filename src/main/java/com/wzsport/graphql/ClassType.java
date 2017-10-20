@@ -139,15 +139,26 @@ public class ClassType {
 	public static GraphQLFieldDefinition getListQueryField() {
 		if(listQueryField == null) {
 			listQueryField = GraphQLFieldDefinition.newFieldDefinition()
+			        .argument(GraphQLArgument.newArgument().name("UniversityId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
 	        		.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
 	                .name("classes")
-	                .description("根据专业ID获取关联的班级")
+	                .description("根据学校Id、专业Id、班级Id获取关联的班级")
 	                .type(new GraphQLList(getType()))
 	                .dataFetcher(environment -> {
-	                	long majorId = environment.getArgument("majorId");
-	                	ClassExample classExample = new ClassExample();
-	                	Criteria criteria = classExample.createCriteria().andMajorIdEqualTo(majorId);
+	                    ClassExample classExample = new ClassExample();
+	                    Criteria criteria = classExample.createCriteria();
+	                    
+	                    Long universityId = environment.getArgument("universityId");
+	                    if (universityId != null) {
+	                        criteria.andUniversityIdEqualTo(universityId);
+	                    }
+	                    
+	                	Long majorId = environment.getArgument("majorId");
+	                	if (majorId != null) {
+	                	    criteria.andMajorIdEqualTo(majorId);
+	                	}
+	                	
 	                	Integer gradle = environment.getArgument("grade");
 	                	if (gradle != null) {
 	                		criteria.andGradeEqualTo(gradle);

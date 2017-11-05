@@ -9,8 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wzsport.mapper.ClassMapper;
+import com.wzsport.mapper.CollegeMapper;
+import com.wzsport.mapper.MajorMapper;
 import com.wzsport.mapper.StudentSportConsumeDailyStatisticMapper;
 import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
+import com.wzsport.model.ClassExample;
+import com.wzsport.model.College;
+import com.wzsport.model.Class;
+import com.wzsport.model.CollegeExample;
+import com.wzsport.model.Major;
 import com.wzsport.model.StudentSportConsumeDailyStatistic;
 import com.wzsport.model.StudentSportConsumeStatistic;
 import com.wzsport.service.StudentSportConsumeStatisticService;
@@ -22,6 +30,15 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
     
     @Autowired
     private StudentSportConsumeDailyStatisticMapper studentSportConsumeDailyStatisticMapper;
+    
+    @Autowired
+    private CollegeMapper collegeMappper;
+    
+    @Autowired
+    private ClassMapper classMappper;
+    
+    @Autowired
+    private MajorMapper majorMapper;
 
     private static final Logger logger = LogManager.getLogger(StudentSportConsumeStatisticServiceImpl.class);
     @Override
@@ -50,29 +67,40 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
 
         for (StudentSportConsumeStatistic studentSportConsumeStatistic : list) {
             try {
+                Class classInfo = classMappper.selectByPrimaryKey(studentSportConsumeStatistic.getClassId());
+                studentSportConsumeStatistic.setGrade(classInfo.getGrade());
+                studentSportConsumeStatistic.setMajorId(classInfo.getMajorId());
+                studentSportConsumeStatistic.setMajorName(classInfo.getName());
+                
+                Major majorInfo = majorMapper.selectByPrimaryKey(classInfo.getMajorId());
+                College collegeInfo = collegeMappper.selectByPrimaryKey(majorInfo.getCollegeId());
+                studentSportConsumeStatistic.setCollegeId(collegeInfo.getId());
+                studentSportConsumeStatistic.setCollegeName(collegeInfo.getName());
+                
                 studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);
+                
             } catch (Exception e) {
                 logger.error(e);
             }
         }
         
-        List<StudentSportConsumeDailyStatistic> runningDailylist = studentSportConsumeDailyStatisticMapper.getRunningSportDailyList(calFirst.getTime(), calLast.getTime());
-        for (StudentSportConsumeDailyStatistic runningSport : runningDailylist) {
-            try {
-                studentSportConsumeDailyStatisticMapper.insert(runningSport);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-        }
-        
-        List<StudentSportConsumeDailyStatistic> areaDailylist = studentSportConsumeDailyStatisticMapper.getAreaSportDailyList(calFirst.getTime(), calLast.getTime());
-        for (StudentSportConsumeDailyStatistic areaSport : areaDailylist) {
-            try {
-                studentSportConsumeDailyStatisticMapper.insert(areaSport);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-        }
+//        List<StudentSportConsumeDailyStatistic> runningDailylist = studentSportConsumeDailyStatisticMapper.getRunningSportDailyList(calFirst.getTime(), calLast.getTime());
+//        for (StudentSportConsumeDailyStatistic runningSport : runningDailylist) {
+//            try {
+//                studentSportConsumeDailyStatisticMapper.insert(runningSport);
+//            } catch (Exception e) {
+//                logger.error(e);
+//            }
+//        }
+//        
+//        List<StudentSportConsumeDailyStatistic> areaDailylist = studentSportConsumeDailyStatisticMapper.getAreaSportDailyList(calFirst.getTime(), calLast.getTime());
+//        for (StudentSportConsumeDailyStatistic areaSport : areaDailylist) {
+//            try {
+//                studentSportConsumeDailyStatisticMapper.insert(areaSport);
+//            } catch (Exception e) {
+//                logger.error(e);
+//            }
+//        }
         return true;
     }
 

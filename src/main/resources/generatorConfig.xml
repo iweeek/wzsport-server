@@ -197,6 +197,7 @@
 
     <table schema="wzpsort" tableName="wzsport_student_sport_consume_statistic" domainObjectName ="StudentSportConsumeStatistic" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="grade" javaType="java.lang.Integer"/>
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
     </table>

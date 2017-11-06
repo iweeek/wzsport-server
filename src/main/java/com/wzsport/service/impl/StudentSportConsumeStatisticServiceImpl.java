@@ -14,8 +14,10 @@ import com.wzsport.mapper.CollegeMapper;
 import com.wzsport.mapper.MajorMapper;
 import com.wzsport.mapper.StudentSportConsumeDailyStatisticMapper;
 import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
-import com.wzsport.model.Class;
+import com.wzsport.model.ClassExample;
 import com.wzsport.model.College;
+import com.wzsport.model.Class;
+import com.wzsport.model.CollegeExample;
 import com.wzsport.model.Major;
 import com.wzsport.model.StudentSportConsumeDailyStatistic;
 import com.wzsport.model.StudentSportConsumeStatistic;
@@ -28,11 +30,19 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
 
     @Autowired
     private StudentSportConsumeDailyStatisticMapper studentSportConsumeDailyStatisticMapper;
+    
+    @Autowired
+    private CollegeMapper collegeMappper;
+    
+    @Autowired
+    private ClassMapper classMappper;
+    
+    @Autowired
+    private MajorMapper majorMapper;
 
     @Autowired
     private ClassMapper classMapper;
-    @Autowired
-    private MajorMapper majorMapper;
+    
     @Autowired
     private CollegeMapper collegeMapper;
 
@@ -59,9 +69,10 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
             calLast.set(Calendar.DAY_OF_MONTH, calLast.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
 
-        calFirst.add(Calendar.MONTH, 0);
-        calFirst.set(Calendar.DAY_OF_MONTH, 5);
-        calLast.set(Calendar.DAY_OF_MONTH, calLast.getActualMaximum(Calendar.DAY_OF_MONTH));
+        //TODO 测试
+//        calFirst.add(Calendar.MONTH, 0);
+//        calFirst.set(Calendar.DAY_OF_MONTH, 5);
+//        calLast.set(Calendar.DAY_OF_MONTH, calLast.getActualMaximum(Calendar.DAY_OF_MONTH));
 
         List<StudentSportConsumeStatistic> list = studentSportConsumeStatisticMapper
                 .getStudentSportConsumeStatisticList(calFirst.getTime(), calLast.getTime());
@@ -84,26 +95,24 @@ public class StudentSportConsumeStatisticServiceImpl implements StudentSportCons
                 logger.error(e);
             }
         }
-
-        List<StudentSportConsumeDailyStatistic> runningDailylist = studentSportConsumeDailyStatisticMapper
-                .getRunningSportDailyList(calFirst.getTime(), calLast.getTime());
-        for (StudentSportConsumeDailyStatistic runningSport : runningDailylist) {
-            try {
-                studentSportConsumeDailyStatisticMapper.insert(runningSport);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-        }
-
-        List<StudentSportConsumeDailyStatistic> areaDailylist = studentSportConsumeDailyStatisticMapper
-                .getAreaSportDailyList(calFirst.getTime(), calLast.getTime());
-        for (StudentSportConsumeDailyStatistic areaSport : areaDailylist) {
-            try {
-                studentSportConsumeDailyStatisticMapper.insert(areaSport);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-        }
+        
+//        List<StudentSportConsumeDailyStatistic> runningDailylist = studentSportConsumeDailyStatisticMapper.getRunningSportDailyList(calFirst.getTime(), calLast.getTime());
+//        for (StudentSportConsumeDailyStatistic runningSport : runningDailylist) {
+//            try {
+//                studentSportConsumeDailyStatisticMapper.insert(runningSport);
+//            } catch (Exception e) {
+//                logger.error(e);
+//            }
+//        }
+//        
+//        List<StudentSportConsumeDailyStatistic> areaDailylist = studentSportConsumeDailyStatisticMapper.getAreaSportDailyList(calFirst.getTime(), calLast.getTime());
+//        for (StudentSportConsumeDailyStatistic areaSport : areaDailylist) {
+//            try {
+//                studentSportConsumeDailyStatisticMapper.insert(areaSport);
+//            } catch (Exception e) {
+//                logger.error(e);
+//            }
+//        }
         return true;
     }
 }

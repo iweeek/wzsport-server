@@ -33,6 +33,11 @@ public class StudentKcalConsumptionType {
 							.description("卡路里消耗量")
 							.type(Scalars.GraphQLInt)
 							.build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+                            .name("collegeName")
+                            .description("学院名称")
+                            .type(Scalars.GraphQLString)
+                            .build())
 					.build();
 		}
 		return type;

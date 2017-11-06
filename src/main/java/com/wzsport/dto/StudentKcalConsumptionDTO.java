@@ -6,8 +6,15 @@ public class StudentKcalConsumptionDTO {
 	private String studentName;
 	private Integer kcalConsumption;
 	private String avatarUrl;
+	private String collegeName;
 	
-	public Long getStudentId() {
+	public String getCollegeName() {
+        return collegeName;
+    }
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+    public Long getStudentId() {
 		return studentId;
 	}
 	public void setStudentId(Long studentId) {

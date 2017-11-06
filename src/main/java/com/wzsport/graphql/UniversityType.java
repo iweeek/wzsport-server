@@ -1,6 +1,11 @@
 package com.wzsport.graphql;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,9 +19,11 @@ import com.wzsport.model.CollegeExample;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.TeacherExample;
+import com.wzsport.model.Term;
 import com.wzsport.model.University;
 import com.wzsport.model.UniversityExample;
 import com.wzsport.service.TermService;
+import com.wzsport.util.MyDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -111,14 +118,75 @@ public class UniversityType {
 							.description("该校的学生累计热量消耗量排行榜")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("period").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
+							.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
+							.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
 							.type(PageType.getPageTypeBuidler(StudentKcalConsumptionType.getType())
 									.name("StudentKcalConsumptionPage")
 									.description("学生卡路里消耗量分页")
 									.build())
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
+								
+								Integer period = environment.getArgument("period");
+								Date start = null;
+								if (period != null) {
+								    switch (period) {
+								    case 0:
+                                        start = MyDateUtil.getCurrentWeekStartDate();
+                                        break;
+                                    case 1:
+                                        start = MyDateUtil.getCurrentMonthStartDate();
+                                        break;
+                                    case 2:
+                                        Term currentTerm = termService.getCurrentTerm(university.getId());
+                                        if (currentTerm == null) {
+                                            return 0;
+                                        } else {
+                                            start = currentTerm.getStartDate();
+                                        }
+                                        break;
+                                    default:
+                                        start = MyDateUtil.getCurrentWeekStartDate();
+                                        break;
+								    }
+								} else {
+								    start = MyDateUtil.getCurrentWeekStartDate();
+								}
+								
+								Long collegeId = environment.getArgument("collegeId");
+								
+								Integer grade = environment.getArgument("grade");
+								
+								Long majorId = environment.getArgument("majorId");
+								
+								Boolean isMan = environment.getArgument("isMan");
+								
 								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	return universityMapper.getKcalCostedRanking(university.getId());
+								
+								String condition = new String();
+								 if (collegeId != null) {
+								     condition += " and college_id = " + collegeId;
+								 }
+								 
+								 if (grade != null) {
+								     condition += " and grade = " + grade;
+								 }
+								 
+								 if (majorId != null) {
+								     condition += " and major_id = " + majorId;
+								 }
+								 
+								 if (isMan != null) {
+                                     condition += " and is_man = " + isMan;
+                                 }
+								
+								 condition += " ";
+								 
+								 return universityMapper.getKcalCostedRankingByCondition(university.getId(), start, condition);
+								
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()

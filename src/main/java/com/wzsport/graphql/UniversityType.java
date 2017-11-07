@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ import com.wzsport.model.University;
 import com.wzsport.model.UniversityExample;
 import com.wzsport.service.TermService;
 import com.wzsport.util.MyDateUtil;
+import com.wzsport.util.TermDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -118,7 +120,8 @@ public class UniversityType {
 							.description("该校的学生累计热量消耗量排行榜")
 							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("period").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("monthNo").type(Scalars.GraphQLInt).build())
+							.argument(GraphQLArgument.newArgument().name("weekNo").type(Scalars.GraphQLInt).build())
 							.argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
 							.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
 							.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
@@ -129,44 +132,36 @@ public class UniversityType {
 									.build())
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
+								String condition = new String();
 								
-								Integer period = environment.getArgument("period");
-								Date start = null;
-								if (period != null) {
-								    switch (period) {
-								    case 0:
-                                        start = MyDateUtil.getCurrentWeekStartDate();
-                                        break;
-                                    case 1:
-                                        start = MyDateUtil.getCurrentMonthStartDate();
-                                        break;
-                                    case 2:
-                                        Term currentTerm = termService.getCurrentTerm(university.getId());
-                                        if (currentTerm == null) {
-                                            return 0;
-                                        } else {
-                                            start = currentTerm.getStartDate();
-                                        }
-                                        break;
-                                    default:
-                                        start = MyDateUtil.getCurrentWeekStartDate();
-                                        break;
-								    }
-								} else {
-								    start = MyDateUtil.getCurrentWeekStartDate();
-								}
-								
+                                 Integer monthNo = environment.getArgument("monthNo");
+                                 Integer weekNo = environment.getArgument("weekNo");
+
+                                 String startDate = null;
+                                 String endDate = null;
+                                 if (weekNo != null && monthNo != null) {
+                                     return null;
+                                 } else {
+                                     if (weekNo != null) {
+                                         startDate = TermDateUtil.getWeekStartDate(university.getId(), weekNo).toString("yyyy-MM-dd");
+                                         endDate = TermDateUtil.getWeekEndDate(university.getId(), weekNo).toString("yyyy-MM-dd");
+                                         condition += " and sport_date >= date('" + startDate + "')";
+                                         condition += " and sport_date < date('" + endDate + "')";
+                                     }
+                                     if (monthNo != null) {
+                                         startDate = TermDateUtil.getMonthStartDate(university.getId(), monthNo).toString("yyyy-MM-dd");
+                                         endDate = TermDateUtil.getMonthEndDate(university.getId(), monthNo).toString("yyyy-MM-dd");
+                                         condition += " and sport_date >= date('" + startDate + "')";
+                                         condition += " and sport_date < date('" + endDate + "')";
+                                     }
+                                 }
+                                 
 								Long collegeId = environment.getArgument("collegeId");
-								
-								Integer grade = environment.getArgument("grade");
-								
-								Long majorId = environment.getArgument("majorId");
-								
-								Boolean isMan = environment.getArgument("isMan");
-								
+                                 Integer grade = environment.getArgument("grade");
+                                 Long majorId = environment.getArgument("majorId");
+                                 Boolean isMan = environment.getArgument("isMan");
 								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
 								
-								String condition = new String();
 								 if (collegeId != null) {
 								     condition += " and college_id = " + collegeId;
 								 }
@@ -185,7 +180,7 @@ public class UniversityType {
 								
 								 condition += " ";
 								 
-								 return universityMapper.getKcalCostedRankingByCondition(university.getId(), start, condition);
+								 return universityMapper.getKcalCostedRankingByCondition(university.getId(), condition);
 								
 							} )
 							.build())

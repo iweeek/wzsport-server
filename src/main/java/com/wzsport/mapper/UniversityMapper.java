@@ -137,12 +137,11 @@ public interface UniversityMapper {
 
     @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
             "FROM wzsport_student_sport_consume_statistic \n" +
-            "WHERE university_id =  #{universityId} and \n" +
-            " sport_date >= date(#{start}) "+
+            "WHERE university_id =  #{universityId} \n" +
             " ${condition} "+
             "GROUP BY student_id \n" +
             "ORDER BY SUM(kcal_consumed) DESC")
-    List<StudentKcalConsumptionDTO> getKcalCostedRankingByCondition(@Param("universityId") long universityId, @Param("start") Date start, 
+    List<StudentKcalConsumptionDTO> getKcalCostedRankingByCondition(@Param("universityId") long universityId,
             @Param("condition")String condition);  
     
     @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +

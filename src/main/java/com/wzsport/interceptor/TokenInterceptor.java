@@ -50,8 +50,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			
 		} else {
 			String token = request.getHeader("Authorization");
+
+			System.out.println("request.getRequestURI():" + request.getRequestURI() + "   request.getMethod(): " + request.getMethod());
 			if (token != null) {
-	//			SecurityUtils.getSubject().login(new UsernamePasswordToken(token, ""));
 				Claims claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
 				logger.info(claims.toString());
 			} else {

@@ -135,12 +135,20 @@ public interface UniversityMapper {
     List<StudentKcalConsumptionDTO> getKcalCostedRankingByDateGrade(@Param("universityId") long universityId, @Param("start") Date start, 
             @Param("grade")Integer grade);	
 
-    @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
+
+//    @Select("select *, (@rankNo := @rankNo + 1) as rankNo from ( " + 
+//            "SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, college_name, is_man" + 
+//            "FROM wzsport_student_sport_consume_statistic\n" + 
+//            "WHERE university_id = #{universityId} " +
+//            " ${condition} "+
+//            "GROUP BY student_id " +
+//            "ORDER BY SUM(kcal_consumed) DESC ) AS s,(select @rankNo := 0) as r")
+    @Select("select *, (@rank_no := @rank_no + 1) as rank_no from ( " + 
+            "SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
             "FROM wzsport_student_sport_consume_statistic \n" +
             "WHERE university_id =  #{universityId} \n" +
-            " ${condition} "+
             "GROUP BY student_id \n" +
-            "ORDER BY SUM(kcal_consumed) DESC")
+            "ORDER BY SUM(kcal_consumed) DESC)  AS s,(select @rank_no := 0) as r")
     List<StudentKcalConsumptionDTO> getKcalCostedRankingByCondition(@Param("universityId") long universityId,
             @Param("condition")String condition);  
     

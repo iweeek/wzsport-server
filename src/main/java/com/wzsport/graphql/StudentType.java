@@ -27,10 +27,12 @@ import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 import com.wzsport.model.StudentExample.Criteria;
 import com.wzsport.model.Term;
+import com.wzsport.model.University;
 import com.wzsport.service.AreaActivityService;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.TermService;
 import com.wzsport.util.MyDateUtil;
+import com.wzsport.util.TermDateUtil;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLArgument;
@@ -753,6 +755,72 @@ public class StudentType {
 								}
 								return areaActivityService.getQualifiedActivityCount(student.getId(), null, null);
 							}).build())
+					.field(GraphQLFieldDefinition.newFieldDefinition()
+					        .name("kcalConsumptionRanking")
+					        .description("该学生在该校所有学生累计热量消耗量排行榜中的排名")
+//                            .argument(GraphQLArgument.newArgument().name("timeRange").type(timeRangeEnumType).build())
+					        .argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("monthNo").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("weekNo").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
+                            .argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
+                            .argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
+                            .type(StudentKcalConsumptionType.getType())
+                            .dataFetcher(environment -> {
+                                Student student = environment.getSource();
+                                String condition = new String();
+                                
+                                 Integer monthNo = environment.getArgument("monthNo");
+                                 Integer weekNo = environment.getArgument("weekNo");
+
+                                 String startDate = null;
+                                 String endDate = null;
+                                 if (weekNo != null && monthNo != null) {
+                                     return null;
+                                 } else {
+                                     if (weekNo != null) {
+                                         startDate = TermDateUtil.getWeekStartDate(student.getUniversityId(), weekNo).toString("yyyy-MM-dd");
+                                         endDate = TermDateUtil.getWeekEndDate(student.getUniversityId(), weekNo).toString("yyyy-MM-dd");
+                                         condition += " and sport_date >= date('" + startDate + "')";
+                                         condition += " and sport_date < date('" + endDate + "')";
+                                     }
+                                     if (monthNo != null) {
+                                         startDate = TermDateUtil.getMonthStartDate(student.getUniversityId(), monthNo).toString("yyyy-MM-dd");
+                                         endDate = TermDateUtil.getMonthEndDate(student.getUniversityId(), monthNo).toString("yyyy-MM-dd");
+                                         condition += " and sport_date >= date('" + startDate + "')";
+                                         condition += " and sport_date < date('" + endDate + "')";
+                                     }
+                                 }
+                                 
+                                Long collegeId = environment.getArgument("collegeId");
+                                 Integer grade = environment.getArgument("grade");
+                                 Long majorId = environment.getArgument("majorId");
+                                 Boolean isMan = environment.getArgument("isMan");
+                                PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+                                
+                                 if (collegeId != null) {
+                                     condition += " and college_id = " + collegeId;
+                                 }
+                                 
+                                 if (grade != null) {
+                                     condition += " and grade = " + grade;
+                                 }
+                                 
+                                 if (majorId != null) {
+                                     condition += " and major_id = " + majorId;
+                                 }
+                                 
+                                 if (isMan != null) {
+                                     condition += " and is_man = " + isMan;
+                                 }
+                                
+                                 condition += " ";
+                                 
+                                 return studentMapper.getKcalCostedRankingByCondition(student.getUniversityId(), student.getId(), condition);
+                                
+                            }).build())
 					.build();
 		}
 

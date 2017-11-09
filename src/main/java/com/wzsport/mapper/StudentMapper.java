@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.wzsport.dto.StudentKcalConsumptionDTO;
 import com.wzsport.model.Student;
 import com.wzsport.model.StudentExample;
 
@@ -95,4 +96,16 @@ public interface StudentMapper {
             "name = #{name,jdbcType=VARCHAR},", "created_at = #{createdAt,jdbcType=TIMESTAMP},",
             "updated_at = #{updatedAt,jdbcType=TIMESTAMP}", "where id = #{id,jdbcType=BIGINT}" })
     int updateByPrimaryKey(Student record);
+    
+    @Select("select * from (" +
+            "select *, (@rank_no := @rank_no + 1) as rank_no from ( " + 
+            "SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
+            "FROM wzsport_student_sport_consume_statistic \n" +
+            "WHERE university_id =  #{universityId} \n" +
+            "GROUP BY student_id \n" +
+            "ORDER BY SUM(kcal_consumed) DESC)  AS s,(select @rank_no := 0) as r " +
+            ") as a " +
+            "WHERE student_id = #{studentId}")
+   StudentKcalConsumptionDTO getKcalCostedRankingByCondition(@Param("universityId") long universityId, 
+            @Param("studentId") long studentId, @Param("condition")String condition);  
 }

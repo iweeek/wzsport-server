@@ -80,11 +80,16 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 			runningActivity.setTargetFinishedTime(targetFinishedTime);
 			runningActivity.setEndedBy(true);
 
+			//未完成运动结束运动
 			try {
 				runningActivity = runningActivityService.endRunningActivity(runningActivity);
 			} catch (Exception e) {
 				logger.error(e);
 			}
+			
+			//TODO完成审核
+			runningActivity.setIsVerified(true);
+			runningActivityMapper.updateByPrimaryKey(runningActivity);
 
 		}
 	}

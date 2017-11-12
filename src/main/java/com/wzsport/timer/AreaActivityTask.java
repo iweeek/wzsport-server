@@ -55,6 +55,12 @@ public class AreaActivityTask {
 			areaActivity.setEndedBy(true);
 
 			areaActivity = areaActivityService.endAreaActivity(areaActivity);
+			
+			//是否审核通过
+			areaActivity.setIsVerified(true);
+			
+			areaActivityMapper.updateByPrimaryKey(areaActivity);
+			
 		} 
     }
 }

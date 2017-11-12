@@ -205,6 +205,9 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		} else {
 			areaActivity.setQualified(false);
 		}
+		
+		//TODO 需要判断是否正常
+		areaActivity.setIsValid(true);
 
 		// 获取关联的项目
 		AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());

@@ -76,6 +76,7 @@
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
       <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_verified" property="isVerified" javaType="java.lang.Boolean"/>
       <columnOverride column="step_count" javaType="java.lang.Integer"/>
       <columnOverride column="speed" javaType="java.lang.Double"/>
       <columnOverride column="step_per_second" javaType="java.lang.Double"/>
@@ -86,6 +87,8 @@
     <table schema="wzpsort" tableName="wzsport_area_activity" domainObjectName ="AreaActivity" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_verified" property="isVerified" javaType="java.lang.Boolean"/>
       <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
     </table>
 

@@ -121,26 +121,26 @@ public interface RunningActivityMapper {
             "ended_by = #{endedBy,jdbcType=TINYINT}", "where id = #{id,jdbcType=BIGINT}" })
     int updateByPrimaryKey(RunningActivity record);
 
-    @Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1")
+    @Select("SELECT SUM(kcal_consumed) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1 and qualified = 1 and is_verified = 1")
 	Integer sumCaloriesConsumedByStudentId(long studentId);
 
-	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1")
+	@Select("SELECT SUM(cost_time) FROM wzsport_running_activity WHERE student_id = #{studentId} and is_valid = 1 and qualified = 1 and is_verified = 1")
 	Integer sumCostTimeByStudentId(long studentId);
 
 	@Select("SELECT SUM(kcal_consumed) "
 			+ "FROM wzsport_running_activity "
-			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1")
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1 and qualified = 1 and is_verified = 1")
 	Integer sumKCalConsumedByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start") Date start,@Param("end")  Date end);
 
 	@Select("SELECT SUM(cost_time) "
 			+ "FROM wzsport_running_activity "
-			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1")
+			+ "WHERE student_id = #{studentId} AND start_time > #{start} AND start_time < #{end} and is_valid = 1 and qualified = 1 and is_verified = 1")
 	Integer sumCostTimeByStudentIdAndDuration(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
 
 	@Select("SELECT count(*) from ( "
 			+ "SELECT count(*) from wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} "
-			+ "and qualified = 1 "
+			+ "and qualified = 1 and is_valid = 1 and is_verified = 1"
 			+ "and start_time BETWEEN #{start} AND #{end} "
 			+ "GROUP BY date_format(created_at,'%y-%m-%d') "
 			+ ") act")

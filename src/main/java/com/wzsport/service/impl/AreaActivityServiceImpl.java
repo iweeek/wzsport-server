@@ -142,6 +142,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 					areaSport.getHourlyKcalConsumption());
 			areaActivity.setKcalConsumed(caloriesConsumed);
 
+			areaActivity.setIsVerified(false);
 			areaActivityMapper.updateByPrimaryKey(areaActivity);
 
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;

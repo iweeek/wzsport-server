@@ -140,7 +140,7 @@ public interface RunningActivityMapper {
 	@Select("SELECT count(*) from ( "
 			+ "SELECT count(*) from wzsport_running_activity "
 			+ "WHERE student_id = #{studentId} "
-			+ "and qualified = 1 and is_valid = 1 and is_verified = 1"
+			+ "and qualified = 1 and is_valid = 1 and is_verified = 1 "
 			+ "and start_time BETWEEN #{start} AND #{end} "
 			+ "GROUP BY date_format(created_at,'%y-%m-%d') "
 			+ ") act")

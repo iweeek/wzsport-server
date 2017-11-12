@@ -7,3 +7,5 @@
 .DS_Store
 /.idea
 /src/main/webapp/WEB-INF/images
+src/main/java/com/wzsport/model/
+src/main/java/com/wzsport/mapper/

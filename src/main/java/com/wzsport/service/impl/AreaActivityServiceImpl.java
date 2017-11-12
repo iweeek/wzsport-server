@@ -133,12 +133,16 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			} else {
 				areaActivity.setQualified(false);
 			}
+			
+			//TODO 需要判断是否正常
+	        areaActivity.setIsValid(true);
 
 			// 计算卡路里消耗
 			int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, areaActivity.getCostTime(),
 					areaSport.getHourlyKcalConsumption());
 			areaActivity.setKcalConsumed(caloriesConsumed);
 
+			areaActivity.setIsVerified(false);
 			areaActivityMapper.updateByPrimaryKey(areaActivity);
 
 			logMsg = RetMsgTemplate.MSG_TEMPLATE_OPERATION_OK;
@@ -205,6 +209,9 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		} else {
 			areaActivity.setQualified(false);
 		}
+		
+		//TODO 需要判断是否正常
+		areaActivity.setIsValid(true);
 
 		// 获取关联的项目
 		AreaSport areaSport = areaSportMapper.selectByPrimaryKey(areaActivity.getAreaSportId());

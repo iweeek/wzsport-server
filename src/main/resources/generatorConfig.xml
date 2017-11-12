@@ -76,17 +76,24 @@
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
       <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_verified" property="isVerified" javaType="java.lang.Boolean"/>
       <columnOverride column="step_count" javaType="java.lang.Integer"/>
       <columnOverride column="speed" javaType="java.lang.Double"/>
       <columnOverride column="step_per_second" javaType="java.lang.Double"/>
       <columnOverride column="distance_per_step" javaType="java.lang.Double"/>
       <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_area_activity" domainObjectName ="AreaActivity" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="qualified" property="qualified" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_verified" property="isVerified" javaType="java.lang.Boolean"/>
       <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >
@@ -113,6 +120,8 @@
     <table schema="wzpsort" tableName="wzsport_fitness_check_data" domainObjectName ="FitnessCheckData" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="bmi" property="bmi" javaType="java.lang.Double"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_running_activity_data" domainObjectName ="RunningActivityData" >
@@ -125,6 +134,8 @@
       <columnOverride column="latitude" javaType="java.lang.Double"/>
       <columnOverride column="location_type" javaType="java.lang.Integer"/>
       <columnOverride column="is_normal" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
      <table schema="wzpsort" tableName="wzsport_area_activity_data" domainObjectName ="AreaActivityData" >
@@ -133,12 +144,16 @@
       <columnOverride column="latitude" javaType="java.lang.Double"/>
       <columnOverride column="is_normal" javaType="java.lang.Boolean"/>
       <columnOverride column="location_type" javaType="java.lang.Integer"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_client_version" domainObjectName ="ClientVersion" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_forced" javaType="java.lang.Boolean"/>
       <columnOverride column="is_published" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_fix_location_outdoor_sport_point" domainObjectName ="FixLocationOutdoorSportPoint" >

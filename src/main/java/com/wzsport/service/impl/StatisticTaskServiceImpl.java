@@ -39,7 +39,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 	public void runningActivityTask(Date startDate, Date endDate) {
 		//找到昨天所有没有正常结束的活动
 	    	RunningActivityExample example = new RunningActivityExample();
-	    	example.createCriteria().andEndedAtIsNull().andStartTimeBetween(startDate, endDate);
+	    	example.createCriteria().andStartTimeBetween(startDate, endDate);
 	    	List<RunningActivity> list = runningActivityMapper.selectByExample(example);
 	    	int targetFinishedTime = 0;
 	    	int distance = 0;
@@ -50,41 +50,52 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
 	    	//根据活动数据表最后一条记录来进行统计，把结果写入活动表
 	    	for (RunningActivity act : list) {
-	    		distance = 0;
-	    		stepCount = 0;
-	    		costTime = 0;
-	    		targetFinishedTime = 0;
-
-	    		RunningActivityDataExample dataExample = new RunningActivityDataExample();
-	    		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
-	    		dataExample.setOrderByClause("created_at asc");
-	    		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
-	    		if (runningActivityDataList.size() > 0) {
-		    		for (RunningActivityData data : runningActivityDataList) {
-		    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
-		    				targetFinishedTime = (int) ((data.getCreatedAt().getTime() - act.getStartTime().getTime()) / 1000);
-		    			}
-		    		}
-
-		    		distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
-		    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
-		    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getCreatedAt().getTime()
-		    				- runningActivityDataList.get(0).getCreatedAt().getTime()) / 1000);
-			}
-
-			RunningActivity runningActivity = new RunningActivity();
-			runningActivity.setId(act.getId());
-			runningActivity.setDistance(distance);
-			runningActivity.setStepCount(stepCount);
-			runningActivity.setCostTime(costTime);
-			runningActivity.setTargetFinishedTime(targetFinishedTime);
-			runningActivity.setEndedBy(true);
-
-			try {
-				runningActivity = runningActivityService.endRunningActivity(runningActivity);
-			} catch (Exception e) {
-				logger.error(e);
-			}
+	    	    if (act.getEndedAt() == null) {
+    	    		distance = 0;
+    	    		stepCount = 0;
+    	    		costTime = 0;
+    	    		targetFinishedTime = 0;
+    
+    	    		RunningActivityDataExample dataExample = new RunningActivityDataExample();
+    	    		dataExample.createCriteria().andActivityIdEqualTo(act.getId());
+    	    		dataExample.setOrderByClause("created_at asc");
+    	    		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
+    	    		if (runningActivityDataList.size() > 0) {
+    		    		for (RunningActivityData data : runningActivityDataList) {
+    		    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
+    		    				targetFinishedTime = (int) ((data.getAcquisitionTime().getTime() - act.getStartTime().getTime()) / 1000);
+    		    			}
+    		    		}
+    
+    		    		distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
+    		    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
+    		    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getAcquisitionTime().getTime()
+    		    				- runningActivityDataList.get(0).getAcquisitionTime().getTime()) / 1000);
+    	    		}
+    
+    			RunningActivity runningActivity = new RunningActivity();
+    			runningActivity.setId(act.getId());
+    			runningActivity.setDistance(distance);
+    			runningActivity.setStepCount(stepCount);
+    			runningActivity.setCostTime(costTime);
+    			runningActivity.setTargetFinishedTime(targetFinishedTime);
+    			runningActivity.setEndedBy(true);
+    
+    			//未完成运动结束运动
+    			try {
+    				act = runningActivityService.endRunningActivity(runningActivity);
+    			} catch (Exception e) {
+    				logger.error(e);
+    			}
+	    	}
+			
+			//TODO完成审核
+	    	    try {
+	    	        act.setIsVerified(true);
+	    	        runningActivityMapper.updateByPrimaryKey(act);
+	    	    } catch (Exception e) {
+	    	        logger.error(e);
+	    	    }
 
 		}
 	}

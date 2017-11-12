@@ -133,6 +133,9 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			} else {
 				areaActivity.setQualified(false);
 			}
+			
+			//TODO 需要判断是否正常
+	        areaActivity.setIsValid(true);
 
 			// 计算卡路里消耗
 			int caloriesConsumed = CalorieUtil.calculateCalorieConsumption(68, areaActivity.getCostTime(),

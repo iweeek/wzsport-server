@@ -128,7 +128,7 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 			int costTime = (int) ((areaActivity.getEndedAt().getTime() - areaActivity.getStartTime().getTime()) / 1000);
 			areaActivity.setCostTime(costTime);
 			// 判断是否合格
-			if (areaActivity.getCostTime() > list.get(0).getQualifiedCostTime()) {
+			if (areaActivity.getCostTime() >= list.get(0).getQualifiedCostTime()) {
 				areaActivity.setQualified(true);
 			} else {
 				areaActivity.setQualified(false);

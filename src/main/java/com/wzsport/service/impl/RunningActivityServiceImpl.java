@@ -213,9 +213,11 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			runningActivity.setDistancePerStep((double) 0);
 		}
 
-		//判断数据是否正常
-		boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
-		runningActivity.setIsValid(isValid);
+		//判断数据是否正常，先判断是否达标，再判断数据是否正常
+		if (runningActivity.getQualified()) {
+		    boolean isValid = sportDataValidateService.rapidValidateForRunningActivity(runningActivity);
+		    runningActivity.setIsValid(isValid);
+		}
 		
 		runningActivity.setIsVerified(false);
 		runningActivity.setEndedAt(new Date());

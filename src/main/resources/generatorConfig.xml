@@ -82,6 +82,8 @@
       <columnOverride column="step_per_second" javaType="java.lang.Double"/>
       <columnOverride column="distance_per_step" javaType="java.lang.Double"/>
       <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_area_activity" domainObjectName ="AreaActivity" >
@@ -90,6 +92,8 @@
       <columnOverride column="is_valid" property="isValid" javaType="java.lang.Boolean"/>
       <columnOverride column="is_verified" property="isVerified" javaType="java.lang.Boolean"/>
       <columnOverride column="ended_by" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_running_sport" domainObjectName ="RunningSport" >

@@ -19,7 +19,8 @@ public class RunningActivityTask {
 //	@Scheduled(cron = "*/5 * * * * ?")
     public void job() {
         DateTime dt = new DateTime(0);
-        Date startDate = dt.toDate();
+        DateTime yesterday = new DateTime().withMillisOfDay(0).minusDays(1);
+        Date startDate = yesterday.toDate();
         
         DateTime now = new DateTime();
         Date endDate = now.withTimeAtStartOfDay().toDate();

@@ -31,8 +31,8 @@ public class StatisticTasksController {
 	        @ApiParam("活动结束时间") @RequestParam(required = false)  @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate) {
 	    
 	    if (startDate == null) {
-	        DateTime dt = new DateTime(0);
-	        startDate = dt.toDate();
+	        DateTime yesterday = new DateTime().withMillisOfDay(0).minusDays(1);
+	        startDate = yesterday.toDate();
 	    }
 	    
 	    if (endDate == null) {

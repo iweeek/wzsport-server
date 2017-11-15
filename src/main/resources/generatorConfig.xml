@@ -115,8 +115,6 @@
       <columnOverride column="meter1500_run_score" javaType="java.lang.Integer"/>
       <columnOverride column="abdominal_curl_count" javaType="java.lang.Integer"/>
       <columnOverride column="abdominal_curl_score" javaType="java.lang.Integer"/>
-      <ignoreColumn column="created_at"/>
-      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_fitness_check_data" domainObjectName ="FitnessCheckData" >

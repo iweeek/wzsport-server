@@ -87,7 +87,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                         DateTime acquisitionTime = new DateTime(data.getAcquisitionTime());
                         DateTime lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
                         Interval interval = new Interval(lastAcquisitionTime, acquisitionTime);
-                        if (interval.toDuration().getMillis() > 10) {
+                        if (distanceInterval / (interval.toDuration().getMillis() / 1000) > 10) {
                             speedAgainst++;
                         }
                     }

@@ -205,9 +205,21 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 		runningActivity.setStepPerSecond(stepPerSecond.setScale(2, RoundingMode.HALF_UP).doubleValue());
 
 		if (runningActivity.getStepCount() != 0) {
-			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
-					(double) runningActivity.getDistance() / runningActivity.getStepCount());
+		    BigDecimal distancePerStep = null;
+		    if (runningActivity.getStepCount() == 0) {
+		        distancePerStep = new BigDecimal(0);
+		    } else {
+		        distancePerStep = new BigDecimal(
+		                (double) runningActivity.getDistance() / runningActivity.getStepCount());
+		        if (distancePerStep.intValue() > 999) {
+		            distancePerStep = new BigDecimal(0);
+		        }
+		    }
+		    
+//			BigDecimal distancePerStep = runningActivity.getStepCount() == 0 ? new BigDecimal(0) : new BigDecimal(
+//					(double) runningActivity.getDistance() / runningActivity.getStepCount());
 			System.out.println("distance_per_step: " + distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
+			System.out.println("runningActivity.getStudentId(): " + runningActivity.getStudentId());
 			runningActivity.setDistancePerStep(distancePerStep.setScale(2, RoundingMode.HALF_UP).doubleValue());
 		} else {
 			runningActivity.setDistancePerStep((double) 0);

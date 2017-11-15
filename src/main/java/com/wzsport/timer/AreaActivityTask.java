@@ -44,8 +44,8 @@ public class AreaActivityTask {
 	    		dataExample.setOrderByClause("created_at desc");
 	    		List<AreaActivityData> areaActivityDataList = areaActivityDataMapper.selectByExample(dataExample);
 	    		if (areaActivityDataList.size() > 0) {
-		    		costTime = (int) ((areaActivityDataList.get(0).getCreatedAt().getTime()
-		    				- areaActivityDataList.get(areaActivityDataList.size() - 1).getCreatedAt().getTime()) / 1000);
+		    		costTime = (int) ((areaActivityDataList.get(0).getAcquisitionTime().getTime()
+		    				- areaActivityDataList.get(areaActivityDataList.size() - 1).getAcquisitionTime().getTime()) / 1000);
 			} 
 	
 			AreaActivity areaActivity = new AreaActivity();

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.wzsport.service.StatisticTaskService;
 
 
-
 @Component
 public class RunningActivityTask {
 	@Autowired
@@ -24,7 +23,7 @@ public class RunningActivityTask {
         
         DateTime now = new DateTime();
         Date endDate = now.withTimeAtStartOfDay().toDate();
-	        
+	    
 		taskService.runningActivityTask(startDate, endDate);
     }
 }

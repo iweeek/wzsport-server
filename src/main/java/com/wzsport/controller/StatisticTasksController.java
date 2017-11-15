@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,8 @@ public class StatisticTasksController {
 
 	@ApiOperation(value = "调用跑步运动的统计任务", notes = "调用跑步运动的统计任务")
 	@RequestMapping(value="/runningActivityTask", method = RequestMethod.GET)
-	public ResponseEntity<?> runningActiviy(@ApiParam("活动开始时间") @RequestParam(required = false) Date startDate,
-	        @ApiParam("活动结束时间") @RequestParam(required = false) Date endDate) {
+	public ResponseEntity<?> runningActiviy(@ApiParam("活动开始时间") @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd")  Date startDate,
+	        @ApiParam("活动结束时间") @RequestParam(required = false)  @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate) {
 	    
 	    if (startDate == null) {
 	        DateTime dt = new DateTime(0);
@@ -38,6 +39,7 @@ public class StatisticTasksController {
 	        DateTime now = new DateTime();
 	        endDate = now.withTimeAtStartOfDay().toDate();
 	    }
+	    
 		try {
 			taskService.runningActivityTask(startDate, endDate);
 			return ResponseEntity.ok().build();

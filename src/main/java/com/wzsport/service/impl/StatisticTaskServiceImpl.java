@@ -63,14 +63,14 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     	    		if (runningActivityDataList.size() > 0) {
     		    		for (RunningActivityData data : runningActivityDataList) {
     		    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
-    		    				targetFinishedTime = (int) ((data.getCreatedAt().getTime() - act.getStartTime().getTime()) / 1000);
+    		    				targetFinishedTime = (int) ((data.getAcquisitionTime().getTime() - act.getStartTime().getTime()) / 1000);
     		    			}
     		    		}
     
     		    		distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
     		    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
-    		    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getCreatedAt().getTime()
-    		    				- runningActivityDataList.get(0).getCreatedAt().getTime()) / 1000);
+    		    		costTime = (int) ((runningActivityDataList.get(runningActivityDataList.size() - 1).getAcquisitionTime().getTime()
+    		    				- runningActivityDataList.get(0).getAcquisitionTime().getTime()) / 1000);
     	    		}
     
     			RunningActivity runningActivity = new RunningActivity();
@@ -83,18 +83,21 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     
     			//未完成运动结束运动
     			try {
-    				runningActivity = runningActivityService.endRunningActivity(runningActivity);
+    				act = runningActivityService.endRunningActivity(runningActivity);
     			} catch (Exception e) {
     				logger.error(e);
     			}
 	    	}
 			
 			//TODO完成审核
-			act.setIsVerified(true);
-			runningActivityMapper.updateByPrimaryKey(act);
+	    	    try {
+	    	        act.setIsVerified(true);
+	    	        runningActivityMapper.updateByPrimaryKey(act);
+	    	    } catch (Exception e) {
+	    	        logger.error(e);
+	    	    }
 
 		}
-	    	
 	}
 
 	@Override

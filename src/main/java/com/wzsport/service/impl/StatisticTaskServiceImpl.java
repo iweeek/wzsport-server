@@ -1,15 +1,20 @@
 package com.wzsport.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wzsport.mapper.ActivityDataStatisticMapper;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityMapper;
+import com.wzsport.model.ActivityDataStatistic;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
@@ -26,6 +31,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 	private RunningActivityDataMapper runningActivityDataMapper;
 	@Autowired
 	private RunningActivityMapper runningActivityMapper;
+	@Autowired
+    private ActivityDataStatisticMapper activityDataStatisticMapper;
 	@Autowired
 	private RunningActivityService runningActivityService;
 	@Autowired
@@ -61,11 +68,44 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     	    		dataExample.setOrderByClause("created_at asc");
     	    		List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
     	    		if (runningActivityDataList.size() > 0) {
+    	    		    
+    	    		    ActivityDataStatistic activityDataStatistic = new ActivityDataStatistic();
+    	    		    int distancePerStepAgainst = 0;
+                int speedAgainst = 0;
+                
+                Integer lastDistance = null;
+                RunningActivityData lastRunningActivityData =  null;
+                
     		    		for (RunningActivityData data : runningActivityDataList) {
     		    			if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
     		    				targetFinishedTime = (int) ((data.getAcquisitionTime().getTime() - act.getStartTime().getTime()) / 1000);
     		    			}
+    		    			
+	    		       // 违背了速度的规则
+                    if (lastDistance != null) {
+                        int distanceInterval = data.getDistance().intValue() - lastDistance.intValue();
+                        DateTime acquisitionTime = new DateTime(data.getAcquisitionTime());
+                        DateTime lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
+                        Interval interval = new Interval(lastAcquisitionTime, acquisitionTime);
+                        if (interval.toDuration().getMillis() > 10) {
+                            speedAgainst++;
+                        }
+                    }
+                    lastDistance = data.getDistance();
+                    lastRunningActivityData = data;
+                    
+    		    			// 违背了步幅的规则
+    		    			BigDecimal distancePerStep = new BigDecimal(data.getDistancePerStep());
+    		    			if (distancePerStep.compareTo(new BigDecimal(2)) > 0) {
+    		    			    distancePerStepAgainst++;
+    		    			}
     		    		}
+    		    		
+    		    		activityDataStatistic.setActivityId(act.getId());
+    		    		activityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
+    		    		activityDataStatistic.setDataCount(runningActivityDataList.size());
+    		    		activityDataStatistic.setSpeedAgainst(speedAgainst);
+    		    		activityDataStatisticMapper.insertSelective(activityDataStatistic);
     
     		    		distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
     		    		stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();

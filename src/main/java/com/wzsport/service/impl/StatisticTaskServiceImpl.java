@@ -330,7 +330,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
                 for (AreaActivityData data : areaActivityDataList) {
                     // 违背了区域范围的规则
-                    if (data.getIsNormal()) {
+                    if (!data.getIsNormal()) {
                         locationAgainst++;
                     }
                 }

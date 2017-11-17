@@ -8,4 +8,6 @@ public interface StatisticTaskService {
 	public void sportConsumeStatisticTask();
 
 	public void signInTask();
+
+    void runningActivityDataStatisticTask(Date startDate, Date endDate);
 }

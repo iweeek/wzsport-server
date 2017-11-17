@@ -202,7 +202,8 @@ public class AreaActivityServiceImpl implements AreaActivityService {
 		areaActivity.setStudentId(oldRecord.getStudentId());
 		areaActivity.setStartTime(oldRecord.getStartTime());
 		areaActivity.setQualifiedCostTime(oldRecord.getQualifiedCostTime());
-
+		areaActivity.setLocationId(oldRecord.getLocationId());
+		
 		// 判断是否合格
 		if (areaActivity.getCostTime() >= areaActivity.getQualifiedCostTime()) {
 			areaActivity.setQualified(true);

@@ -20,6 +20,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -33,6 +34,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     long countByExample(TeacherExample example);
 
@@ -42,6 +46,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -55,6 +60,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int deleteByExample(TeacherExample example);
 
@@ -64,6 +72,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -77,6 +86,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Delete({ "delete from wzsport_teacher", "where id = #{id,jdbcType=BIGINT}" })
     int deleteByPrimaryKey(Long id);
@@ -87,6 +99,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -100,6 +113,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Insert({ "insert into wzsport_teacher (job_no, university_id, ", "name, is_man, created_at, ", "updated_at)",
             "values (#{jobNo,jdbcType=VARCHAR}, #{universityId,jdbcType=BIGINT}, ",
@@ -114,6 +130,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -127,6 +144,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int insertSelective(Teacher record);
 
@@ -136,6 +156,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -149,6 +170,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     List<Teacher> selectByExample(TeacherExample example);
 
@@ -158,6 +182,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -171,6 +196,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Select({ "select", "id, job_no, university_id, name, is_man, created_at, updated_at", "from wzsport_teacher",
             "where id = #{id,jdbcType=BIGINT}" })
@@ -183,6 +211,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -196,6 +225,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExampleSelective(@Param("record") Teacher record, @Param("example") TeacherExample example);
 
@@ -205,6 +237,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -218,6 +251,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExample(@Param("record") Teacher record, @Param("example") TeacherExample example);
 
@@ -227,6 +263,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -240,6 +277,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByPrimaryKeySelective(Teacher record);
 
@@ -249,6 +289,7 @@ public interface TeacherMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -262,6 +303,9 @@ public interface TeacherMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Update({ "update wzsport_teacher", "set job_no = #{jobNo,jdbcType=VARCHAR},",
             "university_id = #{universityId,jdbcType=BIGINT},", "name = #{name,jdbcType=VARCHAR},",

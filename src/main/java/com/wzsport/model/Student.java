@@ -10,6 +10,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -23,6 +24,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Long id;
     /**
@@ -31,6 +35,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -44,6 +49,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Long userId;
     /**
@@ -52,6 +60,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -65,6 +74,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Long classId;
     /**
@@ -73,6 +85,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -86,6 +99,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Long universityId;
     /**
@@ -94,6 +110,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -107,6 +124,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private String studentNo;
     /**
@@ -115,6 +135,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -128,6 +149,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Boolean man;
     /**
@@ -136,6 +160,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -149,6 +174,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private String name;
     /**
@@ -157,6 +185,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -170,6 +199,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Date createdAt;
     /**
@@ -178,6 +210,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -191,6 +224,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     private Date updatedAt;
 
@@ -201,6 +237,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -214,6 +251,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Long getId() {
         return id;
@@ -226,6 +266,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -239,6 +280,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setId(Long id) {
         this.id = id;
@@ -251,6 +295,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -264,6 +309,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Long getUserId() {
         return userId;
@@ -276,6 +324,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -289,6 +338,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setUserId(Long userId) {
         this.userId = userId;
@@ -301,6 +353,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -314,6 +367,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Long getClassId() {
         return classId;
@@ -326,6 +382,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -339,6 +396,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setClassId(Long classId) {
         this.classId = classId;
@@ -351,6 +411,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -364,6 +425,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Long getUniversityId() {
         return universityId;
@@ -376,6 +440,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -389,6 +454,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setUniversityId(Long universityId) {
         this.universityId = universityId;
@@ -401,6 +469,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -414,6 +483,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public String getStudentNo() {
         return studentNo;
@@ -426,6 +498,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -439,6 +512,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setStudentNo(String studentNo) {
         this.studentNo = studentNo;
@@ -451,6 +527,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -464,6 +541,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Boolean getMan() {
         return man;
@@ -476,6 +556,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -489,6 +570,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setMan(Boolean man) {
         this.man = man;
@@ -501,6 +585,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -514,6 +599,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public String getName() {
         return name;
@@ -526,6 +614,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -539,6 +628,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setName(String name) {
         this.name = name;
@@ -551,6 +643,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -564,6 +657,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Date getCreatedAt() {
         return createdAt;
@@ -576,6 +672,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -589,6 +686,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
@@ -601,6 +701,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -614,6 +715,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public Date getUpdatedAt() {
         return updatedAt;
@@ -626,6 +730,7 @@ public class Student {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -639,6 +744,9 @@ public class Student {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;

@@ -19,6 +19,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -32,6 +33,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     long countByExample(WechatUserExample example);
 
@@ -41,6 +45,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -54,6 +59,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int deleteByExample(WechatUserExample example);
 
@@ -63,6 +71,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -76,6 +85,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Delete({ "delete from wzsport_wechat_user", "where id = #{id,jdbcType=BIGINT}" })
     int deleteByPrimaryKey(Long id);
@@ -86,6 +98,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -99,6 +112,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Insert({ "insert into wzsport_wechat_user (user_id, open_id, ", "nickname, sex, province, ", "city, headimgurl, ",
             "unionid)", "values (#{userId,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, ",
@@ -113,6 +129,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -126,6 +143,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int insertSelective(WechatUser record);
 
@@ -135,6 +155,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -148,6 +169,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     List<WechatUser> selectByExample(WechatUserExample example);
 
@@ -157,6 +181,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -170,6 +195,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Select({ "select", "id, user_id, open_id, nickname, sex, province, city, headimgurl, unionid",
             "from wzsport_wechat_user", "where id = #{id,jdbcType=BIGINT}" })
@@ -182,6 +210,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -195,6 +224,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExampleSelective(@Param("record") WechatUser record, @Param("example") WechatUserExample example);
 
@@ -204,6 +236,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -217,6 +250,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExample(@Param("record") WechatUser record, @Param("example") WechatUserExample example);
 
@@ -226,6 +262,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -239,6 +276,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByPrimaryKeySelective(WechatUser record);
 
@@ -248,6 +288,7 @@ public interface WechatUserMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -261,6 +302,9 @@ public interface WechatUserMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Update({ "update wzsport_wechat_user", "set user_id = #{userId,jdbcType=BIGINT},",
             "open_id = #{openId,jdbcType=VARCHAR},", "nickname = #{nickname,jdbcType=VARCHAR},",

@@ -19,6 +19,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -32,6 +33,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     long countByExample(AreaSportExample example);
 
@@ -41,6 +45,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -54,6 +59,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int deleteByExample(AreaSportExample example);
 
@@ -63,6 +71,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -76,6 +85,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Delete({ "delete from wzsport_area_sport", "where id = #{id,jdbcType=BIGINT}" })
     int deleteByPrimaryKey(Long id);
@@ -86,6 +98,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -99,6 +112,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Insert({ "insert into wzsport_area_sport (name, is_enabled, ", "is_man, qualified_cost_time, ",
             "img_url, sample_num, ", "hourly_kcal_consumption, acquisition_interval, ", "university_id)",
@@ -116,6 +132,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -129,6 +146,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int insertSelective(AreaSport record);
 
@@ -138,6 +158,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -151,6 +172,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     List<AreaSport> selectByExample(AreaSportExample example);
 
@@ -160,6 +184,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -173,6 +198,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Select({ "select",
             "id, name, is_enabled, is_man, qualified_cost_time, img_url, sample_num, hourly_kcal_consumption, ",
@@ -186,6 +214,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -199,6 +228,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExampleSelective(@Param("record") AreaSport record, @Param("example") AreaSportExample example);
 
@@ -208,6 +240,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -221,6 +254,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExample(@Param("record") AreaSport record, @Param("example") AreaSportExample example);
 
@@ -230,6 +266,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -243,6 +280,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByPrimaryKeySelective(AreaSport record);
 
@@ -252,6 +292,7 @@ public interface AreaSportMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -265,6 +306,9 @@ public interface AreaSportMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Update({ "update wzsport_area_sport", "set name = #{name,jdbcType=VARCHAR},",
             "is_enabled = #{isEnabled,jdbcType=BIT},", "is_man = #{isMan,jdbcType=TINYINT},",

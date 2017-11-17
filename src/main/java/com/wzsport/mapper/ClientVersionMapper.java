@@ -18,6 +18,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -31,6 +32,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     long countByExample(ClientVersionExample example);
 
@@ -40,6 +44,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -53,6 +58,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int deleteByExample(ClientVersionExample example);
 
@@ -62,6 +70,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -75,6 +84,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Delete({ "delete from wzsport_client_version", "where id = #{id,jdbcType=BIGINT}" })
     int deleteByPrimaryKey(Long id);
@@ -85,6 +97,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -98,6 +111,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Insert({ "insert into wzsport_client_version (version_name, version_code, ", "change_log, is_forced, ",
             "download_url, is_published, ", "platform_id)",
@@ -113,6 +129,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -126,6 +143,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int insertSelective(ClientVersion record);
 
@@ -135,6 +155,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -148,6 +169,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     List<ClientVersion> selectByExample(ClientVersionExample example);
 
@@ -157,6 +181,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -170,6 +195,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Select({ "select", "id, version_name, version_code, change_log, is_forced, download_url, is_published, ",
             "platform_id", "from wzsport_client_version", "where id = #{id,jdbcType=BIGINT}" })
@@ -182,6 +210,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -195,6 +224,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExampleSelective(@Param("record") ClientVersion record, @Param("example") ClientVersionExample example);
 
@@ -204,6 +236,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -217,6 +250,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExample(@Param("record") ClientVersion record, @Param("example") ClientVersionExample example);
 
@@ -226,6 +262,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -239,6 +276,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByPrimaryKeySelective(ClientVersion record);
 
@@ -248,6 +288,7 @@ public interface ClientVersionMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -261,6 +302,9 @@ public interface ClientVersionMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Update({ "update wzsport_client_version", "set version_name = #{versionName,jdbcType=VARCHAR},",
             "version_code = #{versionCode,jdbcType=INTEGER},", "change_log = #{changeLog,jdbcType=VARCHAR},",

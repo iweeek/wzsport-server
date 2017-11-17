@@ -19,6 +19,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -32,6 +33,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     long countByExample(SportDataValidateRuleExample example);
 
@@ -41,6 +45,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -54,6 +59,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int deleteByExample(SportDataValidateRuleExample example);
 
@@ -63,6 +71,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -76,6 +85,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Delete({ "delete from wzsport_sport_data_validate_rule", "where id = #{id,jdbcType=BIGINT}" })
     int deleteByPrimaryKey(Long id);
@@ -86,6 +98,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -99,6 +112,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Insert({ "insert into wzsport_sport_data_validate_rule (distance_per_step, speed, ", "validate_mode)",
             "values (#{distancePerStep,jdbcType=DECIMAL}, #{speed,jdbcType=DECIMAL}, ",
@@ -112,6 +128,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -125,6 +142,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int insertSelective(SportDataValidateRule record);
 
@@ -134,6 +154,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -147,6 +168,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     List<SportDataValidateRule> selectByExample(SportDataValidateRuleExample example);
 
@@ -156,6 +180,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -169,6 +194,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Select({ "select", "id, distance_per_step, speed, validate_mode", "from wzsport_sport_data_validate_rule",
             "where id = #{id,jdbcType=BIGINT}" })
@@ -181,6 +209,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -194,6 +223,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExampleSelective(@Param("record") SportDataValidateRule record,
             @Param("example") SportDataValidateRuleExample example);
@@ -204,6 +236,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -217,6 +250,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByExample(@Param("record") SportDataValidateRule record,
             @Param("example") SportDataValidateRuleExample example);
@@ -227,6 +263,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -240,6 +277,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     int updateByPrimaryKeySelective(SportDataValidateRule record);
 
@@ -249,6 +289,7 @@ public interface SportDataValidateRuleMapper {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @mbg.generated  Sun Nov 05 18:23:19 CST 2017
 =======
      * @mbg.generated  Sun Nov 12 14:24:13 CST 2017
@@ -262,6 +303,9 @@ public interface SportDataValidateRuleMapper {
 =======
      * @mbg.generated  Thu Nov 16 22:47:22 CST 2017
 >>>>>>> d053db385567... see f_1139_2
+=======
+     * @mbg.generated  Fri Nov 17 14:37:24 CST 2017
+>>>>>>> 2913deae1992... see f_1124_17
      */
     @Update({ "update wzsport_sport_data_validate_rule", "set distance_per_step = #{distancePerStep,jdbcType=DECIMAL},",
             "speed = #{speed,jdbcType=DECIMAL},", "validate_mode = #{validateMode,jdbcType=TINYINT}",

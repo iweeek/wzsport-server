@@ -11,14 +11,23 @@ import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wzsport.mapper.AreaActivityDataMapper;
+import com.wzsport.mapper.AreaActivityDataStatisticMapper;
+import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityDataStatisticMapper;
 import com.wzsport.mapper.RunningActivityMapper;
+import com.wzsport.model.AreaActivity;
+import com.wzsport.model.AreaActivityData;
+import com.wzsport.model.AreaActivityDataExample;
+import com.wzsport.model.AreaActivityDataStatistic;
+import com.wzsport.model.AreaActivityExample;
 import com.wzsport.model.RunningActivity;
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityDataStatistic;
 import com.wzsport.model.RunningActivityExample;
+import com.wzsport.service.AreaActivityService;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.SignInService;
 import com.wzsport.service.StudentSportConsumeStatisticService;
@@ -39,6 +48,15 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     private StudentSportConsumeStatisticService studentSportConsumeStatisticService;
     @Autowired
     private SignInService signInService;
+    @Autowired
+    private AreaActivityDataMapper areaActivityDataMapper;
+    @Autowired
+    private AreaActivityMapper areaActivityMapper;
+    @Autowired
+    private AreaActivityDataStatisticMapper areaActivityDataStatisticMapper;
+    @Autowired
+    private AreaActivityService areaActivityService;
+    
 
     private static final Logger logger = LogManager.getLogger(StatisticTaskService.class);
 
@@ -53,7 +71,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         int stepCount = 0;
         int costTime = 0;
 
-        System.out.println("job list size: " + list.size());
+        System.out.println("running job list size: " + list.size());
 
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (RunningActivity act : list) {
@@ -117,7 +135,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                     runningActivityDataStatistic.setStudentId(act.getStudentId());
                     runningActivityDataStatistic.setActivityId(act.getId());
                     runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
-                    runningActivityDataStatistic.setDataCount(runningActivityDataList.size());
+                    runningActivityDataStatistic.setLocationTotalCount(runningActivityDataList.size());
                     runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
                     try {
                         runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
@@ -176,9 +194,6 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         example.createCriteria().andStartTimeBetween(startDate, endDate);
         List<RunningActivity> list = runningActivityMapper.selectByExample(example);
         int targetFinishedTime = 0;
-        int distance = 0;
-        int stepCount = 0;
-        int costTime = 0;
 
         System.out.println("job list size: " + list.size());
 
@@ -211,7 +226,12 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                             int distanceInterval = data.getDistance().intValue() - lastDistance.intValue();
                             acquisitionTime = new DateTime(data.getAcquisitionTime());
                             lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
-                            Long interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration().getMillis();
+                            Long interval = 0l;
+                            if (acquisitionTime.getMillis() > lastAcquisitionTime.getMillis()) {
+                                interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration().getMillis();
+                            } else {
+                                interval = new Interval(acquisitionTime, lastAcquisitionTime).toDuration().getMillis();
+                            }
                             if (interval / 1000 <= 0) {
 
                             } else {
@@ -236,10 +256,96 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 runningActivityDataStatistic.setStudentId(act.getStudentId());
                 runningActivityDataStatistic.setActivityId(act.getId());
                 runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
-                runningActivityDataStatistic.setDataCount(runningActivityDataList.size());
+                runningActivityDataStatistic.setLocationTotalCount(runningActivityDataList.size());
                 runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
                 try {
                     runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+        }
+    }
+    
+    
+    @Override
+    public void areaActivityTask(Date startDate, Date endDate) {
+        AreaActivityExample example = new AreaActivityExample();
+        example.createCriteria().andStartTimeBetween(startDate, endDate);
+        List<AreaActivity> list = areaActivityMapper.selectByExample(example);
+        int costTime = 0;
+
+        System.out.println("area job list size: " + list.size());
+
+        // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
+        for (AreaActivity act : list) {
+            if (act.getEndedAt() == null) {
+
+                AreaActivityDataExample dataExample = new AreaActivityDataExample();
+                dataExample.createCriteria().andActivityIdEqualTo(act.getId());
+                dataExample.setOrderByClause("created_at asc");
+                List<AreaActivityData> areaActivityDataList = areaActivityDataMapper
+                        .selectByExample(dataExample);
+                if (areaActivityDataList.size() > 0) {
+                    costTime = (int) ((areaActivityDataList.get(areaActivityDataList.size() - 1)
+                            .getAcquisitionTime().getTime()
+                            - areaActivityDataList.get(0).getAcquisitionTime().getTime()) / 1000);
+                }
+
+                AreaActivity areaActivity = new AreaActivity();
+                areaActivity.setId(act.getId());
+                areaActivity.setAreaSportId(act.getAreaSportId());
+                areaActivity.setCostTime(costTime);
+                areaActivity.setEndedBy(true);
+
+                // 未完成运动结束运动
+                try {
+                    act = areaActivityService.endAreaActivity(areaActivity);
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+
+            // 完成审核
+            try {
+                act.setIsVerified(true);
+                areaActivityMapper.updateByPrimaryKey(act);
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+    }
+    
+    @Override
+    public void areaActivityDataStatisticTask(Date startDate, Date endDate) {
+        AreaActivityExample example = new AreaActivityExample();
+        example.createCriteria().andStartTimeBetween(startDate, endDate);
+        List<AreaActivity> list = areaActivityMapper.selectByExample(example);
+
+        System.out.println("area statistic job list size: " + list.size());
+
+        for (AreaActivity act : list) {
+            AreaActivityDataExample dataExample = new AreaActivityDataExample();
+            dataExample.createCriteria().andActivityIdEqualTo(act.getId());
+            dataExample.setOrderByClause("created_at asc");
+            List<AreaActivityData> areaActivityDataList = areaActivityDataMapper.selectByExample(dataExample);
+            if (areaActivityDataList.size() > 0) {
+                int locationAgainst = 0;
+                AreaActivityDataStatistic areaActivityDataStatistic = new AreaActivityDataStatistic();
+
+                for (AreaActivityData data : areaActivityDataList) {
+                    // 违背了区域范围的规则
+                    if (!data.getIsNormal()) {
+                        locationAgainst++;
+                    }
+                }
+                System.out.println("locationAgainst: " + locationAgainst);
+                areaActivityDataStatistic.setStudentId(act.getStudentId());
+                areaActivityDataStatistic.setActivityId(act.getId());
+                areaActivityDataStatistic.setLocationTotalCount(areaActivityDataList.size());
+                areaActivityDataStatistic.setLocationAgainst(locationAgainst);
+                try {
+                    areaActivityDataStatisticMapper.insertSelective(areaActivityDataStatistic);
                 } catch (Exception e) {
                     logger.error(e);
                 }

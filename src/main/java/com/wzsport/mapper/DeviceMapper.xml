@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -22,6 +23,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
@@ -35,6 +39,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -48,6 +53,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -85,6 +93,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -98,6 +107,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -135,6 +147,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -148,6 +161,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     id, device_id, user_id
   </sql>
@@ -159,6 +175,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -172,6 +189,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     select
     <if test="distinct">
@@ -194,6 +214,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -207,6 +228,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     delete from wzsport_device
     <if test="_parameter != null">
@@ -221,6 +245,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -234,6 +259,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -264,6 +292,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -277,6 +306,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     select count(*) from wzsport_device
     <if test="_parameter != null">
@@ -291,6 +323,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -304,6 +337,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     update wzsport_device
     <set>
@@ -329,6 +365,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -342,6 +379,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     update wzsport_device
     set id = #{record.id,jdbcType=BIGINT},
@@ -359,6 +399,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       This element was generated on Sun Nov 05 18:23:19 CST 2017.
 =======
       This element was generated on Sun Nov 12 14:24:13 CST 2017.
@@ -372,6 +413,9 @@
 =======
       This element was generated on Thu Nov 16 22:47:22 CST 2017.
 >>>>>>> d053db385567... see f_1139_2
+=======
+      This element was generated on Fri Nov 17 14:37:24 CST 2017.
+>>>>>>> 2913deae1992... see f_1124_17
     -->
     update wzsport_device
     <set>

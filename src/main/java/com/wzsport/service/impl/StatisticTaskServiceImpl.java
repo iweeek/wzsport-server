@@ -226,7 +226,12 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                             int distanceInterval = data.getDistance().intValue() - lastDistance.intValue();
                             acquisitionTime = new DateTime(data.getAcquisitionTime());
                             lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
-                            Long interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration().getMillis();
+                            Long interval = 0l;
+                            if (acquisitionTime.getMillis() > lastAcquisitionTime.getMillis()) {
+                                interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration().getMillis();
+                            } else {
+                                interval = new Interval(acquisitionTime, lastAcquisitionTime).toDuration().getMillis();
+                            }
                             if (interval / 1000 <= 0) {
 
                             } else {

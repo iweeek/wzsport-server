@@ -12,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wzsport.mapper.ClassMapper;
 import com.wzsport.mapper.CollegeMapper;
 import com.wzsport.mapper.MajorMapper;
-import com.wzsport.mapper.StudentSportConsumeDailyStatisticMapper;
 import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
 import com.wzsport.model.ClassExample;
 import com.wzsport.model.College;
 import com.wzsport.model.Class;
 import com.wzsport.model.CollegeExample;
 import com.wzsport.model.Major;
-import com.wzsport.model.StudentSportConsumeDailyStatistic;
 import com.wzsport.model.StudentSportConsumeStatistic;
 import com.wzsport.service.StudentSportConsumeStatisticService;
 
@@ -27,9 +25,6 @@ import com.wzsport.service.StudentSportConsumeStatisticService;
 public class StudentSportConsumeStatisticServiceImpl implements StudentSportConsumeStatisticService {
     @Autowired
     private StudentSportConsumeStatisticMapper studentSportConsumeStatisticMapper;
-    
-    @Autowired
-    private StudentSportConsumeDailyStatisticMapper studentSportConsumeDailyStatisticMapper;
     
     @Autowired
     private CollegeMapper collegeMappper;

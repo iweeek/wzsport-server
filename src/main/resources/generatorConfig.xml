@@ -210,7 +210,7 @@
       <ignoreColumn column="updated_at"/>
     </table>
 
-    <table schema="wzpsort" tableName="wzsport_student_sport_consume_statistic" domainObjectName ="StudentSportConsumeStatistic" >
+    <table schema="wzpsort" tableName="wzsport_student_sport_consume_statistic_new" domainObjectName ="StudentSportConsumeStatistic" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="grade" javaType="java.lang.Integer"/>
       <ignoreColumn column="created_at"/>
@@ -230,6 +230,11 @@
     </table>
     
     <table schema="wzpsort" tableName="wzsport_area_activity_data_statistic" domainObjectName ="AreaActivityDataStatistic" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    <table schema="wzpsort" tableName="wzsport_activity_data_collection" domainObjectName ="ActivityDataCollection" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>

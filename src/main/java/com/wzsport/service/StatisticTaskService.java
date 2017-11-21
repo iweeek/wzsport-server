@@ -14,4 +14,6 @@ public interface StatisticTaskService {
     void areaActivityTask(Date startDate, Date endDate);
 
     void areaActivityDataStatisticTask(Date startDate, Date endDate);
+
+    void runningActivityDataCollectionTask(Date startDate, Date endDate);
 }

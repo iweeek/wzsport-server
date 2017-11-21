@@ -1,6 +1,7 @@
 package com.wzsport.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,12 +12,14 @@ import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wzsport.mapper.ActivityDataCollectionMapper;
 import com.wzsport.mapper.AreaActivityDataMapper;
 import com.wzsport.mapper.AreaActivityDataStatisticMapper;
 import com.wzsport.mapper.AreaActivityMapper;
 import com.wzsport.mapper.RunningActivityDataMapper;
 import com.wzsport.mapper.RunningActivityDataStatisticMapper;
 import com.wzsport.mapper.RunningActivityMapper;
+import com.wzsport.model.ActivityDataCollection;
 import com.wzsport.model.AreaActivity;
 import com.wzsport.model.AreaActivityData;
 import com.wzsport.model.AreaActivityDataExample;
@@ -57,7 +60,9 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     @Autowired
     private AreaActivityService areaActivityService;
     
-
+    @Autowired
+    private ActivityDataCollectionMapper activityDataCollectionMapper;
+    
     private static final Logger logger = LogManager.getLogger(StatisticTaskService.class);
 
     @Override
@@ -266,8 +271,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
             }
         }
     }
-    
-    
+
     @Override
     public void areaActivityTask(Date startDate, Date endDate) {
         AreaActivityExample example = new AreaActivityExample();
@@ -276,7 +280,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         int costTime = 0;
 
         System.out.println("area job list size: " + list.size());
-
+        int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (AreaActivity act : list) {
             if (act.getEndedAt() == null) {
@@ -284,12 +288,10 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 AreaActivityDataExample dataExample = new AreaActivityDataExample();
                 dataExample.createCriteria().andActivityIdEqualTo(act.getId());
                 dataExample.setOrderByClause("created_at asc");
-                List<AreaActivityData> areaActivityDataList = areaActivityDataMapper
-                        .selectByExample(dataExample);
+                List<AreaActivityData> areaActivityDataList = areaActivityDataMapper.selectByExample(dataExample);
                 if (areaActivityDataList.size() > 0) {
-                    costTime = (int) ((areaActivityDataList.get(areaActivityDataList.size() - 1)
-                            .getAcquisitionTime().getTime()
-                            - areaActivityDataList.get(0).getAcquisitionTime().getTime()) / 1000);
+                    costTime = (int) ((areaActivityDataList.get(areaActivityDataList.size() - 1).getAcquisitionTime()
+                            .getTime() - areaActivityDataList.get(0).getAcquisitionTime().getTime()) / 1000);
                 }
 
                 AreaActivity areaActivity = new AreaActivity();
@@ -308,6 +310,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
             // 完成审核
             try {
+                counter++;
+                System.out.println("counter: " + counter);
                 act.setIsVerified(true);
                 areaActivityMapper.updateByPrimaryKey(act);
             } catch (Exception e) {
@@ -315,7 +319,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
             }
         }
     }
-    
+
     @Override
     public void areaActivityDataStatisticTask(Date startDate, Date endDate) {
         AreaActivityExample example = new AreaActivityExample();
@@ -352,4 +356,128 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
             }
         }
     }
+
+    @Override
+    public void runningActivityDataCollectionTask(Date startDate, Date endDate) {
+
+        // 压缩data表
+        RunningActivityExample example = new RunningActivityExample();
+        example.createCriteria().andStartTimeBetween(startDate, endDate);
+        List<RunningActivity> list = runningActivityMapper.selectByExample(example);
+        System.out.println("collection job list size: " + list.size());
+        int counter = 0;
+        for (RunningActivity act : list) {
+            
+            ActivityDataCollection activityDataCollection = new ActivityDataCollection();
+            RunningActivityDataExample dataExample = new RunningActivityDataExample();
+            dataExample.createCriteria().andActivityIdEqualTo(act.getId());
+            dataExample.setOrderByClause("created_at asc");
+            List<RunningActivityData> runningActivityDataList = runningActivityDataMapper.selectByExample(dataExample);
+            StringBuilder sb = new StringBuilder();
+            StringBuilder idBuilder = new StringBuilder("id:[");
+            StringBuilder acquisitionTimeBuilder = new StringBuilder("acquisitionTime:[");
+            StringBuilder stepCountBuilder = new StringBuilder("stepCount:[");
+            StringBuilder stepCountCalBuilder = new StringBuilder("stepCountCal:[");
+            StringBuilder distanceBuilder = new StringBuilder("distance:[");
+            StringBuilder distancePerStepBuilder = new StringBuilder("distancePerStep:[");
+            StringBuilder stepPerSecondBuilder = new StringBuilder("stepPerSecond:[");
+            StringBuilder longitudeBuilder = new StringBuilder("longitude:[");
+            StringBuilder latitudeBuilder = new StringBuilder("latitude:[");
+            StringBuilder locationTypeBuilder = new StringBuilder("locationType:[");
+            StringBuilder isNormalBuilder = new StringBuilder("isNormal:[");
+            
+            if (runningActivityDataList.size() > 0) {
+//                sb.append("{data:{activityId:" + runningActivityDataList.get(0).getActivityId() +",");
+                sb.append("{data:{");
+                int i = 0;
+                for (RunningActivityData data : runningActivityDataList) {
+                    if (i >= 200) {
+                        break;
+                    }
+                    idBuilder.append(data.getId() + ",");
+                    String millis = String.valueOf(new DateTime(data.getAcquisitionTime()).getMillis());
+                    acquisitionTimeBuilder.append(millis.substring(0, millis.length() - 3) + ","); // 精确到秒
+                    stepCountBuilder.append(data.getStepCount() + ",");
+                    stepCountCalBuilder.append(data.getStepCountCal() + ",");
+                    distanceBuilder.append(data.getDistance() + ",");
+                    distancePerStepBuilder.append(data.getDistancePerStep() + ",");
+                    stepPerSecondBuilder.append(data.getStepPerSecond() + ",");
+                    longitudeBuilder.append(data.getLongitude() + ",");
+                    latitudeBuilder.append(data.getLatitude() + ",");
+                    locationTypeBuilder.append(data.getLocationType() + ",");
+                    isNormalBuilder.append(data.getIsNormal() + ",");
+                    
+//                    sb.append("{id:" + data.getId() + ",");
+//                    sb.append("activityId:" + data.getActivityId() + ",");
+//                     sb.append("acquisitionTime:" + new
+//                     DateTime(data.getAcquisitionTime()).getMillis() + ",");
+////                    sb.append("acquisitionTime:" + data.getAcquisitionTime() + ",");
+//                    sb.append("stepCount:" + data.getStepCount() + ",");
+//                    sb.append("stepCountCal:" + data.getStepCountCal() + ",");
+//                    sb.append("distance:" + data.getDistance() + ",");
+//                    sb.append("distancePerStep:" + data.getDistancePerStep() + ",");
+//                    sb.append("stepPerSecond:" + data.getStepPerSecond() + ",");
+//                    sb.append("longitude:" + data.getLongitude() + ",");
+//                    sb.append("latitude:" + data.getLatitude() + ",");
+//                    sb.append("locationType:" + data.getLocationType() + ",");
+//                    sb.append("isNormal:" + data.getIsNormal() + "},");
+                    
+                    
+                    
+                    // sb.append("{" + data.getId() + ",");
+                    // sb.append(data.getActivityId() + ",");
+                    // sb.append(data.getAcquisitionTime() + ",");
+                    // sb.append(data.getStepCount() + ",");
+                    // sb.append(data.getStepCountCal() + ",");
+                    // sb.append(data.getDistance() + ",");
+                    // sb.append(data.getDistancePerStep() + ",");
+                    // sb.append(data.getStepPerSecond() + ",");
+                    // sb.append(data.getLongitude() + ",");
+                    // sb.append(data.getLatitude() + ",");
+                    // sb.append(data.getLocationType() + ",");
+                    // sb.append(data.getIsNormal() + "},");
+                    i++;
+                }
+                idBuilder.deleteCharAt(idBuilder.length() - 1).append("],");
+                acquisitionTimeBuilder.deleteCharAt(acquisitionTimeBuilder.length() - 1).append("],");
+                stepCountBuilder.deleteCharAt(stepCountBuilder.length() - 1).append("],");
+                stepCountCalBuilder.deleteCharAt(stepCountCalBuilder.length() - 1).append("],");
+                distanceBuilder.deleteCharAt(distanceBuilder.length() - 1).append("],");
+                distancePerStepBuilder.deleteCharAt(distancePerStepBuilder.length() - 1).append("],");
+                stepPerSecondBuilder.deleteCharAt(stepPerSecondBuilder.length() - 1).append("],");
+                longitudeBuilder.deleteCharAt(longitudeBuilder.length() - 1).append("],");
+                latitudeBuilder.deleteCharAt(latitudeBuilder.length() - 1).append("],");
+                locationTypeBuilder.deleteCharAt(locationTypeBuilder.length() - 1).append("],");
+                isNormalBuilder.deleteCharAt(isNormalBuilder.length() - 1).append("]");
+                
+                sb.append(
+                        idBuilder.toString() 
+                        + acquisitionTimeBuilder.toString()
+                        + stepCountBuilder.toString()
+                        + stepCountCalBuilder.toString()
+                        + distanceBuilder.toString()
+                        + distancePerStepBuilder.toString()
+                        + stepPerSecondBuilder.toString()
+                        + longitudeBuilder.toString()
+                        + latitudeBuilder.toString()
+                        + locationTypeBuilder.toString()
+                        + isNormalBuilder.toString()
+                        );
+                sb.append("}}");
+//                System.out.println("collection: " + sb.toString());
+                System.out.println("collection.length: " + sb.toString().length());
+            }
+            activityDataCollection.setActivityId(act.getId());
+            activityDataCollection.setCollectionData(sb.toString());
+            try {
+                activityDataCollectionMapper.insertSelective(activityDataCollection);
+                counter++;
+                System.out.println("counter: " + counter);
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+
+    }
+
 }

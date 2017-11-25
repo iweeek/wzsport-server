@@ -110,68 +110,83 @@ public class UniversityType {
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
-							.name("kcalConsumptionRanking")
-							.description("该校的学生累计热量消耗量排行榜")
-							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("period").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
-							.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
-							.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
-							.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
-							.type(PageType.getPageTypeBuidler(StudentKcalConsumptionType.getType())
-									.name("StudentKcalConsumptionPage")
-									.description("学生卡路里消耗量分页")
-									.build())
-							.dataFetcher(environment ->  {
-								University university = environment.getSource();
-								
-								Integer period = environment.getArgument("period");
-								Date start = null;
-								if (period != null) {
-								    switch (period) {
-								    case 0:
-                                        start = MyDateUtil.getCurrentWeekStartDate();
-                                        break;
-                                    case 1:
-                                        start = MyDateUtil.getCurrentMonthStartDate();
-                                        break;
-                                    case 2:
-                                        Term currentTerm = termService.getCurrentTerm(university.getId());
-                                        if (currentTerm == null) {
-                                            return 0;
-                                        } else {
-                                            start = currentTerm.getStartDate();
-                                        }
-                                        break;
-                                    default:
-                                        start = MyDateUtil.getCurrentWeekStartDate();
-                                        break;
-								    }
-								} else {
-								    start = MyDateUtil.getCurrentWeekStartDate();
-								}
-								
-								Long collegeId = environment.getArgument("collegeId");
-								
-								Integer grade = environment.getArgument("grade");
-								
-								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-								
-//								 return universityMapper.getKcalCostedRankingByDate(university.getId(), start);
-								
-								if (collegeId == null) {
-								    if (grade == null) {
-								        return universityMapper.getKcalCostedRankingByDate(university.getId(), start);
-								    } else {
-								        return universityMapper.getKcalCostedRankingByDateGrade(university.getId(), start, grade);
-								    }
-								} else {
-								    return universityMapper.getKcalCostedRankingByDateGradeCollege(university.getId(), start, grade, collegeId);
-								}
-								
-							} )
-							.build())
+                            .name("kcalConsumptionRanking")
+                            .description("该校的学生累计热量消耗量排行榜")
+                            .argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+                            .argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+                            .type(PageType.getPageTypeBuidler(StudentKcalConsumptionType.getType())
+                                    .name("StudentKcalConsumptionPage")
+                                    .description("学生卡路里消耗量分页")
+                                    .build())
+                            .dataFetcher(environment ->  {
+                                University university = environment.getSource();
+                                PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+                                return universityMapper.getKcalCostedRanking(university.getId());
+                            } )
+                            .build())
+//					.field(GraphQLFieldDefinition.newFieldDefinition()
+//							.name("kcalConsumptionRanking")
+//							.description("该校的学生累计热量消耗量排行榜")
+//							.argument(GraphQLArgument.newArgument().name("pageNumber").type(Scalars.GraphQLInt).build())
+//							.argument(GraphQLArgument.newArgument().name("pageSize").type(Scalars.GraphQLInt).build())
+//							.argument(GraphQLArgument.newArgument().name("period").type(Scalars.GraphQLInt).build())
+//							.argument(GraphQLArgument.newArgument().name("collegeId").type(Scalars.GraphQLLong).build())
+//							.argument(GraphQLArgument.newArgument().name("majorId").type(Scalars.GraphQLLong).build())
+//							.argument(GraphQLArgument.newArgument().name("grade").type(Scalars.GraphQLInt).build())
+//							.argument(GraphQLArgument.newArgument().name("isMan").type(Scalars.GraphQLBoolean).build())
+//							.type(PageType.getPageTypeBuidler(StudentKcalConsumptionType.getType())
+//									.name("StudentKcalConsumptionPage")
+//									.description("学生卡路里消耗量分页")
+//									.build())
+//							.dataFetcher(environment ->  {
+//								University university = environment.getSource();
+//								
+//								Integer period = environment.getArgument("period");
+//								Date start = null;
+//								if (period != null) {
+//								    switch (period) {
+//								    case 0:
+//                                        start = MyDateUtil.getCurrentWeekStartDate();
+//                                        break;
+//                                    case 1:
+//                                        start = MyDateUtil.getCurrentMonthStartDate();
+//                                        break;
+//                                    case 2:
+//                                        Term currentTerm = termService.getCurrentTerm(university.getId());
+//                                        if (currentTerm == null) {
+//                                            return 0;
+//                                        } else {
+//                                            start = currentTerm.getStartDate();
+//                                        }
+//                                        break;
+//                                    default:
+//                                        start = MyDateUtil.getCurrentWeekStartDate();
+//                                        break;
+//								    }
+//								} else {
+//								    start = MyDateUtil.getCurrentWeekStartDate();
+//								}
+//								
+//								Long collegeId = environment.getArgument("collegeId");
+//								
+//								Integer grade = environment.getArgument("grade");
+//								
+//								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
+//								
+////								 return universityMapper.getKcalCostedRankingByDate(university.getId(), start);
+//								
+//								if (collegeId == null) {
+//								    if (grade == null) {
+//								        return universityMapper.getKcalCostedRankingByDate(university.getId(), start);
+//								    } else {
+//								        return universityMapper.getKcalCostedRankingByDateGrade(university.getId(), start, grade);
+//								    }
+//								} else {
+//								    return universityMapper.getKcalCostedRankingByDateGradeCollege(university.getId(), start, grade, collegeId);
+//								}
+//								
+//							} )
+//							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
 							.name("timeCostedRanking")
 							.description("该校的学生累计锻炼时长排行榜")

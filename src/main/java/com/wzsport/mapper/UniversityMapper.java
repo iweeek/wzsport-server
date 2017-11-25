@@ -117,34 +117,43 @@ public interface UniversityMapper {
 //			+"WHERE student.university_id = #{universityId} ) st "
 //			+"GROUP BY st.student_id "
 //			+"ORDER BY SUM(kcal_consumed) desc")
-	@Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name\n" +
-			"FROM wzsport_student_sport_consume_statistic \n" +
-			"WHERE university_id =  #{universityId} and \n" +
-			" sport_date >= date(#{start}) "+
-			"GROUP BY student_id \n" +
-			"ORDER BY SUM(kcal_consumed) DESC")
-	List<StudentKcalConsumptionDTO> getKcalCostedRankingByDate(@Param("universityId") long universityId, @Param("start") Date start);
-	
-    @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
-            "FROM wzsport_student_sport_consume_statistic \n" +
-            "WHERE university_id =  #{universityId} and \n" +
-            " sport_date >= date(#{start}) and "+
-            " grade = #{grade} "+
-            "GROUP BY student_id \n" +
-            "ORDER BY SUM(kcal_consumed) DESC")
-    List<StudentKcalConsumptionDTO> getKcalCostedRankingByDateGrade(@Param("universityId") long universityId, @Param("start") Date start, 
-            @Param("grade")Integer grade);	
     
-    @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
-            "FROM wzsport_student_sport_consume_statistic \n" +
-            "WHERE university_id =  #{universityId} and \n" +
-            " sport_date >= date(#{start}) and "+
-            " grade = #{grade} and "+
-            " collegeId = (#{gracollegeIdde}) "+
-            "GROUP BY student_id \n" +
+    @Select("SELECT student_id,name as student_name,avatar_url,SUM(kcal_consumed) AS kcal_consumption\n" +
+            "FROM wzsport_student_sport_consume_statistic\n" +
+            "WHERE university_id =  #{universityId}\n" +
+            "GROUP BY student_id\n" +
             "ORDER BY SUM(kcal_consumed) DESC")
-    List<StudentKcalConsumptionDTO> getKcalCostedRankingByDateGradeCollege(@Param("universityId") long universityId, @Param("start") Date start, 
-            @Param("grade")Integer grade, @Param("collegeId")Long collegeId);
+    List<StudentKcalConsumptionDTO> getKcalCostedRanking(@Param("universityId") long universityId);
+    
+    // 2017年11月25日注释
+//	@Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name\n" +
+//			"FROM wzsport_student_sport_consume_statistic \n" +
+//			"WHERE university_id =  #{universityId} and \n" +
+//			" sport_date >= date(#{start}) "+
+//			"GROUP BY student_id \n" +
+//			"ORDER BY SUM(kcal_consumed) DESC")
+//	List<StudentKcalConsumptionDTO> getKcalCostedRankingByDate(@Param("universityId") long universityId, @Param("start") Date start);
+//	
+//    @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
+//            "FROM wzsport_student_sport_consume_statistic \n" +
+//            "WHERE university_id =  #{universityId} and \n" +
+//            " sport_date >= date(#{start}) and "+
+//            " grade = #{grade} "+
+//            "GROUP BY student_id \n" +
+//            "ORDER BY SUM(kcal_consumed) DESC")
+//    List<StudentKcalConsumptionDTO> getKcalCostedRankingByDateGrade(@Param("universityId") long universityId, @Param("start") Date start, 
+//            @Param("grade")Integer grade);	
+//    
+//    @Select("SELECT student_id, name as student_name, avatar_url, SUM(kcal_consumed) AS kcal_consumption, is_man, college_name \n" +
+//            "FROM wzsport_student_sport_consume_statistic \n" +
+//            "WHERE university_id =  #{universityId} and \n" +
+//            " sport_date >= date(#{start}) and "+
+//            " grade = #{grade} and "+
+//            " collegeId = (#{gracollegeIdde}) "+
+//            "GROUP BY student_id \n" +
+//            "ORDER BY SUM(kcal_consumed) DESC")
+//    List<StudentKcalConsumptionDTO> getKcalCostedRankingByDateGradeCollege(@Param("universityId") long universityId, @Param("start") Date start, 
+//            @Param("grade")Integer grade, @Param("collegeId")Long collegeId);
 
 	/**
 	* 获取指定大学的学生运动时长的排名列表

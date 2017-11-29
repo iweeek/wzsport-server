@@ -76,8 +76,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         int stepCount = 0;
         int costTime = 0;
 
-        System.out.println("running job list size: " + list.size());
-
+        logger.info("running job list size: " + list.size());
+        int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (RunningActivity act : list) {
             if (act.getEndedAt() == null) {
@@ -173,6 +173,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
             // TODO完成审核
             try {
+                counter++;
+                logger.info("counter: " + counter);
                 act.setIsVerified(true);
                 runningActivityMapper.updateByPrimaryKey(act);
             } catch (Exception e) {
@@ -279,7 +281,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         List<AreaActivity> list = areaActivityMapper.selectByExample(example);
         int costTime = 0;
 
-        System.out.println("area job list size: " + list.size());
+        logger.info("area job list size: " + list.size());
         int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (AreaActivity act : list) {
@@ -311,7 +313,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
             // 完成审核
             try {
                 counter++;
-                System.out.println("counter: " + counter);
+                logger.info("counter: " + counter);
                 act.setIsVerified(true);
                 areaActivityMapper.updateByPrimaryKey(act);
             } catch (Exception e) {

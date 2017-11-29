@@ -16,7 +16,6 @@ public class RunningActivityTask {
 	private StatisticTaskService taskService;
 
 	@Scheduled(cron = "0 0 1 * * ?")
-//	@Scheduled(cron = "*/5 * * * * ?")
     public void job() {
         DateTime yesterday = new DateTime().withMillisOfDay(0).minusDays(1);
         Date startDate = yesterday.toDate();

@@ -24,5 +24,6 @@ public class RunningActivityTask {
         Date endDate = now.withTimeAtStartOfDay().toDate();
 	    
 		taskService.runningActivityTask(startDate, endDate);
+		taskService.runningActivityDataStatisticTask(startDate, endDate);
     }
 }

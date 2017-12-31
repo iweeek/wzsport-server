@@ -24,6 +24,7 @@ public class AreaActivityTask {
         Date endDate = now.withTimeAtStartOfDay().toDate();
         
         taskService.areaActivityTask(startDate, endDate);
+        taskService.areaActivityDataStatisticTask(startDate, endDate);
     }
     
 //    public static void main(String[] args) throws ParseException {

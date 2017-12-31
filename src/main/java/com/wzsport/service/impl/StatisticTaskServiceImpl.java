@@ -202,8 +202,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         List<RunningActivity> list = runningActivityMapper.selectByExample(example);
         int targetFinishedTime = 0;
 
-        System.out.println("job list size: " + list.size());
-
+        logger.info("job list size: " + list.size());
+        int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (RunningActivity act : list) {
             RunningActivityDataExample dataExample = new RunningActivityDataExample();
@@ -259,13 +259,15 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                         logger.error(e);
                     }
                 }
-                System.out.println("speedAgainst: " + speedAgainst);
+                logger.info("speedAgainst: " + speedAgainst);
                 runningActivityDataStatistic.setStudentId(act.getStudentId());
                 runningActivityDataStatistic.setActivityId(act.getId());
                 runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
                 runningActivityDataStatistic.setLocationTotalCount(runningActivityDataList.size());
                 runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
                 try {
+                    counter++;
+                    logger.info("counter: " + counter);
                     runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
                 } catch (Exception e) {
                     logger.error(e);
@@ -324,38 +326,54 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
     @Override
     public void areaActivityDataStatisticTask(Date startDate, Date endDate) {
-        AreaActivityExample example = new AreaActivityExample();
-        example.createCriteria().andStartTimeBetween(startDate, endDate);
-        List<AreaActivity> list = areaActivityMapper.selectByExample(example);
+        DateTime start = new DateTime(startDate);
+        DateTime end = new DateTime(endDate);
+        DateTime after = start.plusDays(1);
+        System.out.println(end.toString());
+        
+        while (!start.equals(end)) {
+            System.out.println(start.toString());
+            System.out.println(after.toString());
+            System.out.println(start.equals(end));
+            AreaActivityExample example = new AreaActivityExample();
+            example.createCriteria().andStartTimeBetween(start.toDate(), after.toDate());
+            List<AreaActivity> list = areaActivityMapper.selectByExample(example);
+            
+            logger.info("area statistic job list size: " + list.size());
+            int counter = 0;
+            
+            for (AreaActivity act : list) {
+                AreaActivityDataExample dataExample = new AreaActivityDataExample();
+                dataExample.createCriteria().andActivityIdEqualTo(act.getId());
+                dataExample.setOrderByClause("created_at asc");
+                List<AreaActivityData> areaActivityDataList = areaActivityDataMapper.selectByExample(dataExample);
+                if (areaActivityDataList.size() > 0) {
+                    int locationAgainst = 0;
+                    AreaActivityDataStatistic areaActivityDataStatistic = new AreaActivityDataStatistic();
 
-        System.out.println("area statistic job list size: " + list.size());
-
-        for (AreaActivity act : list) {
-            AreaActivityDataExample dataExample = new AreaActivityDataExample();
-            dataExample.createCriteria().andActivityIdEqualTo(act.getId());
-            dataExample.setOrderByClause("created_at asc");
-            List<AreaActivityData> areaActivityDataList = areaActivityDataMapper.selectByExample(dataExample);
-            if (areaActivityDataList.size() > 0) {
-                int locationAgainst = 0;
-                AreaActivityDataStatistic areaActivityDataStatistic = new AreaActivityDataStatistic();
-
-                for (AreaActivityData data : areaActivityDataList) {
-                    // 违背了区域范围的规则
-                    if (!data.getIsNormal()) {
-                        locationAgainst++;
+                    for (AreaActivityData data : areaActivityDataList) {
+                        // 违背了区域范围的规则
+                        if (!data.getIsNormal()) {
+                            locationAgainst++;
+                        }
+                    }
+//                    logger.info("locationAgainst: " + locationAgainst);
+                    areaActivityDataStatistic.setStudentId(act.getStudentId());
+                    areaActivityDataStatistic.setActivityId(act.getId());
+                    areaActivityDataStatistic.setLocationTotalCount(areaActivityDataList.size());
+                    areaActivityDataStatistic.setLocationAgainst(locationAgainst);
+                    try {
+                        counter++;
+                        logger.info("counter: " + counter);
+                        areaActivityDataStatisticMapper.insertSelective(areaActivityDataStatistic);
+                        
+                    } catch (Exception e) {
+                        logger.error(e);
                     }
                 }
-                System.out.println("locationAgainst: " + locationAgainst);
-                areaActivityDataStatistic.setStudentId(act.getStudentId());
-                areaActivityDataStatistic.setActivityId(act.getId());
-                areaActivityDataStatistic.setLocationTotalCount(areaActivityDataList.size());
-                areaActivityDataStatistic.setLocationAgainst(locationAgainst);
-                try {
-                    areaActivityDataStatisticMapper.insertSelective(areaActivityDataStatistic);
-                } catch (Exception e) {
-                    logger.error(e);
-                }
             }
+            start = after;
+            after = after.plusDays(1);
         }
     }
 

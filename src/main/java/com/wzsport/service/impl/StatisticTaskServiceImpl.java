@@ -76,10 +76,13 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         int stepCount = 0;
         int costTime = 0;
 
+        logger.info("startDate: " + startDate);
+        logger.info("endDate: " + endDate);
         logger.info("running job list size: " + list.size());
         int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (RunningActivity act : list) {
+            // 如果没有结束，才进行结束并将其插入到statistic表中，即已经结束了的，就不能插入到statistic表中。
             if (act.getEndedAt() == null) {
                 distance = 0;
                 stepCount = 0;
@@ -146,6 +149,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                         runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
                     } catch (Exception e) {
                         logger.error(e);
+                        logger.error("跑步统计data数据点时发生错误 runningActivityDataStatistic ：" + runningActivityDataStatistic.toString());
                     }
 
                     distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
@@ -166,8 +170,10 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 // 未完成运动结束运动
                 try {
                     act = runningActivityService.endRunningActivity(runningActivity);
+                    logger.error(counter + 1 + ": 此次结束运动记录了； activityId: " + act.getId());
                 } catch (Exception e) {
                     logger.error(e);
+                    logger.error("跑步结束运动时发生 act ：" + act.toString());
                 }
             }
 
@@ -179,6 +185,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 runningActivityMapper.updateByPrimaryKey(act);
             } catch (Exception e) {
                 logger.error(e);
+                logger.error("跑步审核更新时发生错误 act :" + act.toString());
             }
 
         }
@@ -202,7 +209,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         List<RunningActivity> list = runningActivityMapper.selectByExample(example);
         int targetFinishedTime = 0;
 
-        logger.info("job list size: " + list.size());
+        logger.info("runningActivityDataStatisticTask job list size: " + list.size());
         int counter = 0;
         // 根据活动数据表最后一条记录来进行统计，把结果写入活动表
         for (RunningActivity act : list) {
@@ -259,7 +266,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                         logger.error(e);
                     }
                 }
-                logger.info("speedAgainst: " + speedAgainst);
+//                logger.info("speedAgainst: " + speedAgainst);
                 runningActivityDataStatistic.setStudentId(act.getStudentId());
                 runningActivityDataStatistic.setActivityId(act.getId());
                 runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
@@ -267,7 +274,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
                 try {
                     counter++;
-                    logger.info("counter: " + counter);
+                    logger.info("runningActivityDataStatisticTask counter: " + counter);
                     runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
                 } catch (Exception e) {
                     logger.error(e);
@@ -309,6 +316,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                     act = areaActivityService.endAreaActivity(areaActivity);
                 } catch (Exception e) {
                     logger.error(e);
+                    logger.error("区域结束运动时发生 act ：" + act.toString());
                 }
             }
 
@@ -320,6 +328,7 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 areaActivityMapper.updateByPrimaryKey(act);
             } catch (Exception e) {
                 logger.error(e);
+                logger.error("区域审核更新时发生错误 act :" + act.toString());
             }
         }
     }

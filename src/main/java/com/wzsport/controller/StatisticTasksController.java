@@ -1,11 +1,7 @@
 package com.wzsport.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysql.cj.api.xdevapi.Collection;
 import com.wzsport.mapper.SignInAnotherMapper;
 import com.wzsport.mapper.SignInCopyMapper;
 import com.wzsport.mapper.SignInMapper;
 import com.wzsport.model.SignIn;
-import com.wzsport.model.SignInAnother;
 import com.wzsport.model.SignInCopy;
-import com.wzsport.model.SignInExample;
 import com.wzsport.service.StatisticTaskService;
 
 import io.swagger.annotations.Api;

@@ -223,7 +223,7 @@
       <ignoreColumn column="updated_at"/>
     </table>
 
-    <table schema="wzpsort" tableName="wzsport_student_sport_consume_statistic_new" domainObjectName ="StudentSportConsumeStatistic" >
+    <table schema="wzpsort" tableName="wzsport_student_sport_consume_statistic" domainObjectName ="StudentSportConsumeStatistic" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="grade" javaType="java.lang.Integer"/>
       <ignoreColumn column="created_at"/> 

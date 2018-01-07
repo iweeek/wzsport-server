@@ -2,6 +2,7 @@ package com.wzsport.controller;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,11 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wzsport.mapper.ClassMapper;
+import com.wzsport.mapper.CollegeMapper;
+import com.wzsport.mapper.MajorMapper;
 import com.wzsport.mapper.SignInAnotherMapper;
 import com.wzsport.mapper.SignInCopyMapper;
 import com.wzsport.mapper.SignInMapper;
+import com.wzsport.mapper.StudentSportConsumeStatisticMapper;
+import com.wzsport.model.Class;
+import com.wzsport.model.College;
+import com.wzsport.model.Major;
 import com.wzsport.model.SignIn;
 import com.wzsport.model.SignInCopy;
+import com.wzsport.model.StudentSportConsumeStatistic;
 import com.wzsport.service.StatisticTaskService;
 
 import io.swagger.annotations.Api;
@@ -43,6 +52,18 @@ public class StatisticTasksController {
     
     @Autowired
     SignInAnotherMapper signInAnotherMapper;
+    
+    @Autowired
+    private StudentSportConsumeStatisticMapper studentSportConsumeStatisticMapper;
+    
+    @Autowired
+    private CollegeMapper collegeMappper;
+    
+    @Autowired
+    private ClassMapper classMappper;
+    
+    @Autowired
+    private MajorMapper majorMapper;
 	   
 	private static final Logger logger = LogManager.getLogger(StatisticTaskService.class);
 
@@ -268,4 +289,105 @@ public class StatisticTasksController {
         }
     }
 	
+	
+	// 热量统计
+    @RequestMapping(value="/consume", method = RequestMethod.POST)
+    public ResponseEntity<?> consume(@ApiParam("活动开始时间") @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd")  Date startDate,
+            @ApiParam("活动结束时间") @RequestParam  @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, @RequestParam Boolean isTest) {
+        try {
+//	          taskService.signInTask();
+            createConsume(startDate, endDate, isTest);
+//	          createSignIns(startDate, endDate);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    private boolean createConsume(Date startDate, Date endDate, Boolean isTest) {
+        logger.info("startDate: " + startDate);
+        logger.info("endDate: " + endDate);
+        logger.info("consume statistic is starting......");
+        
+        List<Class> classes = classMappper.selectByExample(null);
+        List<Major> majors = majorMapper.selectByExample(null);
+        List<College> colleges = collegeMappper.selectByExample(null);
+        Class classInfo = null;
+        Major majorInfo = null;
+        College collegeInfo = null;
+        Set<StudentSportConsumeStatistic> list = studentSportConsumeStatisticMapper.getStudentSportConsumeStatisticListAll(startDate, endDate);
+        Set<StudentSportConsumeStatistic> allSignInList = studentSportConsumeStatisticMapper.getAllDataList(startDate, endDate);
+        
+        logger.info("before: " + list.size() + "-" + allSignInList.size());
+        boolean b = list.removeAll(allSignInList);
+        logger.info("after: " + list.size());
+      
+          int count = 0;
+          logger.info("consume statistic job list size: " + list.size());
+          for (StudentSportConsumeStatistic studentSportConsumeStatistic : list) {
+              
+              try {
+    //                  for (Class c : classes) {
+    //                      if (c.getId() == studentSportConsumeStatistic.getClassId()) {
+    //                          classInfo = c;
+    //                          break;
+    //                      }
+    //                  }
+    //                  Class classInfo = classMappper.selectByPrimaryKey(studentSportConsumeStatistic.getClassId());
+    //                  studentSportConsumeStatistic.setGrade(classInfo.getGrade());
+    //                  studentSportConsumeStatistic.setMajorId(classInfo.getMajorId());
+    //                  studentSportConsumeStatistic.setMajorName(classInfo.getName());
+                  
+    //                  for (Major m : majors) {
+    //                      if (m.getId() == classInfo.getMajorId()) {
+    //                          majorInfo = m;
+    //                          break;
+    //                      }
+    //                  }
+    //                  Major majorInfo = majorMapper.selectByPrimaryKey(classInfo.getMajorId());
+    //                  for (College college : colleges) {
+    //                      if (college.getId() == majorInfo.getCollegeId()) {
+    //                          collegeInfo = college;
+    //                          break;
+    //                      }
+    //                  }
+    //                  College collegeInfo = collegeMappper.selectByPrimaryKey(majorInfo.getCollegeId());
+    //                  studentSportConsumeStatistic.setCollegeId(collegeInfo.getId());
+    //                  studentSportConsumeStatistic.setCollegeName(collegeInfo.getName());
+                  
+                  studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);
+                  
+                  logger.info("consume counter: " + ++count);
+              } catch (Exception e) {
+                  logger.error(e);
+              }
+          }
+        
+        return true;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(new DateTime("2017-12-21").toDate());
+        if (new DateTime("2017-12-21").toDate() == new DateTime("2017-12-21").toDate()) {
+            System.out.println(new DateTime("2017-12-21").toDate());
+        }
+        StudentSportConsumeStatistic s1 = new StudentSportConsumeStatistic();
+        s1.setStudentNo("123456");
+        s1.setSportDate(new DateTime("2017-12-21").toDate());
+        
+        StudentSportConsumeStatistic s2 = new StudentSportConsumeStatistic();
+        s2.setStudentNo("123456");
+        s2.setSportDate(new DateTime("2017-12-21").toDate());
+        
+        System.out.println(s1.hashCode());
+        System.out.println(s2.hashCode());
+//        if (s1 == s2) {
+//            System.out.println("haha");
+//        }
+        
+        if (s1.equals(s2)) {
+            System.out.println("haha");
+        }
+    }
 }

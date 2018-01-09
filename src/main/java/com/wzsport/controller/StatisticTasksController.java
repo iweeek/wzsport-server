@@ -328,33 +328,6 @@ public class StatisticTasksController {
           for (StudentSportConsumeStatistic studentSportConsumeStatistic : list) {
               
               try {
-    //                  for (Class c : classes) {
-    //                      if (c.getId() == studentSportConsumeStatistic.getClassId()) {
-    //                          classInfo = c;
-    //                          break;
-    //                      }
-    //                  }
-    //                  Class classInfo = classMappper.selectByPrimaryKey(studentSportConsumeStatistic.getClassId());
-    //                  studentSportConsumeStatistic.setGrade(classInfo.getGrade());
-    //                  studentSportConsumeStatistic.setMajorId(classInfo.getMajorId());
-    //                  studentSportConsumeStatistic.setMajorName(classInfo.getName());
-                  
-    //                  for (Major m : majors) {
-    //                      if (m.getId() == classInfo.getMajorId()) {
-    //                          majorInfo = m;
-    //                          break;
-    //                      }
-    //                  }
-    //                  Major majorInfo = majorMapper.selectByPrimaryKey(classInfo.getMajorId());
-    //                  for (College college : colleges) {
-    //                      if (college.getId() == majorInfo.getCollegeId()) {
-    //                          collegeInfo = college;
-    //                          break;
-    //                      }
-    //                  }
-    //                  College collegeInfo = collegeMappper.selectByPrimaryKey(majorInfo.getCollegeId());
-    //                  studentSportConsumeStatistic.setCollegeId(collegeInfo.getId());
-    //                  studentSportConsumeStatistic.setCollegeName(collegeInfo.getName());
                   
                   studentSportConsumeStatisticMapper.insert(studentSportConsumeStatistic);
                   

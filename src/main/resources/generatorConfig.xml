@@ -20,15 +20,19 @@
       <property name="forceBigDecimals" value="false" />
     </javaTypeResolver>
 
+    <!--生成Model类存放位置-->
     <javaModelGenerator targetPackage="com.wzsport.model" targetProject="wzsport-server">
     </javaModelGenerator>
 
+    <!--生成映射文件存放位置-->
     <sqlMapGenerator targetPackage="com.wzsport.mapper"  targetProject="wzsport-server">
     </sqlMapGenerator>
 
+    <!--生成Dao类存放位置-->
     <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.wzsport.mapper"  targetProject="wzsport-server">
     </javaClientGenerator>
 
+     <!--生成对应表及类名-->
     <table schema="wzpsort" tableName="wzsport_user" domainObjectName ="User" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
     </table>

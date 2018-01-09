@@ -10,7 +10,7 @@ public class StudentSportConsumeStatisticTask {
 	@Autowired
 	private StudentSportConsumeStatisticService studentSportConsumeStatisticService;
 
-	@Scheduled(cron = "0 40 1 * * ?")
+	@Scheduled(cron = "0 30 2 * * ?")
 //	@Scheduled(cron = "*/5 * * * * ?")
 
     public void job() {

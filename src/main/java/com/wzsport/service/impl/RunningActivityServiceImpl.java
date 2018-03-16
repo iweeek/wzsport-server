@@ -277,7 +277,7 @@ public class RunningActivityServiceImpl implements RunningActivityService {
 			RunningActivityExample runningActivityExample = new RunningActivityExample();
 			runningActivityExample.createCriteria().andStartTimeBetween(term.getStartDate(), term.getEndDate())
 					.andStudentIdEqualTo(studentId);
-
+			long countByExample = runningActivityMapper.countByExample(runningActivityExample);
 			return (int) runningActivityMapper.countByExample(runningActivityExample);
 //			return (int) runningActivityMapper.currentTermActivityCount(studentId, term.getStartDate(), term.getEndDate());
 		}

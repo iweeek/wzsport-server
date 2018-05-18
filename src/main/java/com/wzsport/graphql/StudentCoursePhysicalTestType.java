@@ -85,6 +85,7 @@ public class StudentCoursePhysicalTestType {
 							if (students != null) {
 								StudentCoursePhysicalTestExample physicalTestExample = new StudentCoursePhysicalTestExample();
 								physicalTestExample.createCriteria().andStudentNoEqualTo(students.get(0).getStudentNo());
+								physicalTestExample.setOrderByClause(" year desc, term asc ");
 								List<StudentCoursePhysicalTest> physicalTests = studentCoursePhysicalTestMapper.selectByExample(physicalTestExample);
 								if (physicalTests != null) {
 									return physicalTests.get(0);

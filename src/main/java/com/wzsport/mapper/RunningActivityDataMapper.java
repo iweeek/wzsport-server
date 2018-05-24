@@ -105,6 +105,9 @@ public interface RunningActivityDataMapper {
 	int updateByPrimaryKey(RunningActivityData record);
 	
 	
+	/**
+	 * 筛选步幅和步频的标准差在一定范围内出现的
+	 */
 	@Select({ "SELECT * from wzsport_student_statistic_view  as c \n" + 
 			"join (select AVG(longitude) as longitude, AVG(latitude) as latitude, \n" + 
 			"		b.activity_id, b.acquisition_time, a.student_id, b.id\n" + 

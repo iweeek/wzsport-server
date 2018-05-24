@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wzsport.mapper.DeviceMapper;
 import com.wzsport.mapper.RunningActivityDataMapper;
+import com.wzsport.mapper.StudentMapper;
 import com.wzsport.mapper.UserMapper;
+import com.wzsport.model.Device;
+import com.wzsport.model.DeviceExample;
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
+import com.wzsport.model.Student;
+import com.wzsport.model.StudentExample;
 import com.wzsport.service.ExportService;
 
 import io.swagger.annotations.Api;
@@ -28,7 +34,7 @@ import io.swagger.annotations.ApiParam;
  */
 @Api(tags = "Token相关接口")
 @RestController
-@RequestMapping(produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/screen", produces = "application/json;charset=UTF-8")
 public class ScreeningController {
 	
 
@@ -40,6 +46,12 @@ public class ScreeningController {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private StudentMapper studentMapper;
+	
+	@Autowired
+	private DeviceMapper deviceMapper;
 	
 	
 	/**
@@ -97,12 +109,34 @@ public class ScreeningController {
 //						27.181938, 28.695103, 121.204485, 119.495619);
 //				if (!inArea) {
 //					System.out.println(" inArea : " + data.getId());
-//					studentIds.add(Long.valueOf(data.getStudentId()));
-					runningActivityDatas.add(data);
+					studentIds.add(Long.valueOf(data.getStudentId()));
+//					runningActivityDatas.add(data);
 					
 //				}
 				System.out.println("count: " + count++);
 			}
+		}
+		
+		StudentExample studentExample = new StudentExample();
+		studentExample.createCriteria().andIdIn(studentIds);
+		List<Student> students = studentMapper.selectByExample(studentExample);
+		
+		DeviceExample deviceExample = new DeviceExample();
+		List<Device> devices = null;
+		for (Student student : students) {
+			deviceExample.createCriteria().andUserIdEqualTo(student.getUserId());
+			devices = deviceMapper.selectByExample(deviceExample);
+			if (devices.size() > 1) {
+				String deviceId = devices.get(devices.size() - 1).getDeviceId();
+				String deviceId2 = devices.get(0).getDeviceId();
+				System.out.println("deviceId："+ deviceId);
+				System.out.println("deviceId2："+ deviceId2);
+				if (!devices.get(devices.size() - 1).getDeviceId().equals(devices.get(0).getDeviceId())) {
+					System.out.println("device user : " + student.getId());
+					System.out.println("---------------------------------------");
+				}
+			}
+			deviceExample.clear();
 		}
 		
 		if (runningActivityDatas.size() != 0) {

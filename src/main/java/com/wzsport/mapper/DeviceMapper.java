@@ -86,4 +86,7 @@ public interface DeviceMapper {
 	@Update({ "update wzsport_device", "set device_id = #{deviceId,jdbcType=VARCHAR},",
 			"user_id = #{userId,jdbcType=BIGINT}", "where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(Device record);
+	
+	
+
 }

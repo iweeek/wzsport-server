@@ -7,7 +7,7 @@
 
   <!-- 根据本地环境填写JDBC驱动包的路径 -->
   <!-- <classPathEntry location="/Users/chaiyu/mysql-connector-java-5.1.43/mysql-connector-java-5.1.43-bin.jar" /> -->
-  <classPathEntry location="/Users/nimon/Important/java/mysql-connector/mysql-connector-java-5.1.44-bin.jar" />
+  <classPathEntry location="/Users/nijun/Develop/Important/java/mysql-connector/mysql-connector-java-5.1.44-bin.jar" />
 
   <context id="wzsport" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
@@ -35,46 +35,66 @@
      <!--生成对应表及类名-->
     <table schema="wzpsort" tableName="wzsport_user" domainObjectName ="User" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_role" domainObjectName ="Role" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
 	<table schema="wzpsort" tableName="wzsport_university" domainObjectName ="University" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_college" domainObjectName ="College" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_major" domainObjectName ="Major" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_class" domainObjectName ="Class" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="grade" javaType="java.lang.Integer"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_student" domainObjectName ="Student" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_man" property="man" javaType="java.lang.Boolean"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_teacher" domainObjectName ="Teacher" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="is_man" property="man" javaType="java.lang.Boolean"/>
+	  <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>      
     </table>
 
     <table schema="wzpsort" tableName="wzsport_term" domainObjectName ="Term" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_term_sports_task" domainObjectName ="TermSportsTask" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
       <columnOverride column="target_sports_times" javaType="java.lang.Integer"/>
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
     </table>
 
     <table schema="wzpsort" tableName="wzsport_running_activity" domainObjectName ="RunningActivity" >
@@ -253,6 +273,27 @@
     </table>
     <table schema="wzpsort" tableName="wzsport_activity_data_collection" domainObjectName ="ActivityDataCollection" >
       <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <ignoreColumn column="created_at"/>
+      <ignoreColumn column="updated_at"/>
+    </table>
+    
+    <table schema="wzsport" tableName="wzsport_student_sports_course_physical_test_view" domainObjectName ="StudentCoursePhysicalTest" >
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+      <columnOverride column="is_man" property="isMan" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_tested" property="isTested" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_free_test" property="isFreeTest" javaType="java.lang.Boolean"/>
+      <columnOverride column="is_pass" property="isPass" javaType="java.lang.Boolean"/>
+      <columnOverride column="height" property="height" javaType="java.lang.Double"/>
+      <columnOverride column="weight" property="weight" javaType="java.lang.Double"/>
+      <columnOverride column="fifty_run_time" property="fiftyRunTime" javaType="java.lang.Double"/>
+      <columnOverride column="sit_and_reach" property="sitAndReach" javaType="java.lang.Double"/>
+      <columnOverride column="eight_hundred_run_time" property="eightHundredRunTime" javaType="java.lang.Double"/>
+      <columnOverride column="one_thousand_run_time" property="oneThousandRunTime" javaType="java.lang.Double"/>
+      <columnOverride column="one_minute_sit_up" property="oneMinuteSitUp" javaType="java.lang.Integer"/>
+      <columnOverride column="pull_up" 
+      property="pullUp" javaType="java.lang.Integer"/>
+      <columnOverride column="total_score" property="totalScore" javaType="java.lang.Double"/>
+      <columnOverride column="term" property="term" javaType="java.lang.Integer"/>
       <ignoreColumn column="created_at"/>
       <ignoreColumn column="updated_at"/>
     </table>

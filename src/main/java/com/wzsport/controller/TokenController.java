@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wzsport.mapper.StudentMapper;
+import com.wzsport.mapper.UserMapper;
+import com.wzsport.model.Student;
+import com.wzsport.model.User;
 import com.wzsport.service.TokenService;
 import com.wzsport.util.ResponseBody;
 
@@ -30,6 +34,12 @@ public class TokenController {
 
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private UserMapper userMapper;
+	
+	@Autowired
+	private StudentMapper studentMapper;
 	
 	/**
 	* 验证username和password，创建token
@@ -60,5 +70,42 @@ public class TokenController {
 		int status = tokenService.create(universityId, username, password, expiredHour, deviceId, userAgent, resBody);
 		
 		return ResponseEntity.status(status).body(resBody);
+	}
+	
+	@ApiOperation(value = "创建token", notes = "验证用户名与密码，为用户创建一个用于鉴权的Token")
+	@RequestMapping(value="/doSomething", method = RequestMethod.POST)
+	public ResponseEntity<?> doSomething(
+								) {
+		
+		System.out.println("begin");
+//		for (int i = 1; i <= 50; i++) {
+//			User user = new User();
+//			user.setUsername("test" + i);
+//			user.setPassword("e10adc3949ba59abbe56e057f20f883e");
+//			user.setUniversityId(1l);
+//			user.setUserType((byte)1);
+//			user.setLatestToken("");
+//			user.setAvatarUrl("");
+//			user.setOpenId("");
+//			userMapper.insert(user);
+//			System.out.println("count: " + i);
+//		}
+		int j = 1;
+		for (int i = 37183; i < 37233; i++) {
+			Student student = new Student();
+			student.setUserId(Long.valueOf(i));
+			student.setClassId(0l);
+			student.setUniversityId(1l);
+			student.setStudentNo("test" + j);
+			student.setMan(true);
+			student.setName("test" + j);
+			
+			studentMapper.insert(student);
+			System.out.println("count: " + j);
+			j++;
+		}
+		System.out.println("end");
+		
+		return ResponseEntity.status(1).body(null);
 	}
 }

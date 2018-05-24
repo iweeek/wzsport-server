@@ -2,6 +2,8 @@ package com.wzsport.mapper;
 
 import com.wzsport.model.RunningActivityData;
 import com.wzsport.model.RunningActivityDataExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -101,4 +103,25 @@ public interface RunningActivityDataMapper {
 			"latitude = #{latitude,jdbcType=DECIMAL},", "location_type = #{locationType,jdbcType=TINYINT},",
 			"is_normal = #{isNormal,jdbcType=BIT}", "where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(RunningActivityData record);
+	
+	
+	@Select({ "SELECT * from wzsport_student_statistic_view  as c \n" + 
+			"join (select AVG(longitude) as longitude, AVG(latitude) as latitude, \n" + 
+			"		b.activity_id, b.acquisition_time, a.student_id, b.id\n" + 
+			"		from \n" + 
+			"			wzsport_running_activity as a \n" + 
+			"			join wzsport_running_activity_data as b\n" + 
+			"			on a.id = b.activity_id\n" + 
+			"		where\n" + 
+			"		b.created_at BETWEEN #{start} AND #{end} \n" + 
+			"		and a.qualified = 1 and a.is_valid = 1 and a.is_verified = 1 \n" +
+			"		group by activity_id\n" + 
+			"		HAVING STDDEV(b.distance_per_step) > 0.1402747724144255 and STDDEV(b.distance_per_step) < 0.1492747724144255\n" + 
+			"		and STDDEV(b.step_per_second) > 0.2700768588928806 and STDDEV(b.step_per_second) < 0.2830768588928806\n" + 
+			"		) as d \n" +
+			"		on c.student_id = d.student_id \n" +
+			"where c.university_id = 1" })
+	@ResultMap("com.wzsport.mapper.RunningActivityDataMapper.BaseResultMap")
+	List<RunningActivityData> selectByAVGPosition(@Param("start")  Date start,@Param("end")  Date end);
+	
 }

@@ -280,4 +280,61 @@ public class RunningActivityData {
 	public void setIsNormal(Boolean isNormal) {
 		this.isNormal = isNormal;
 	}
+	
+	private String studentId;
+	private String studentName;
+	private String studentNo;
+	private boolean isMan;
+	private String className;
+	private String universityId;
+
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+	public String getStudentNo() {
+		return studentNo;
+	}
+
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
+	}
+
+	public boolean getIsMan() {
+		return isMan;
+	}
+
+	public void setIsMan(boolean isMan) {
+		this.isMan = isMan;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getUniversityId() {
+		return universityId;
+	}
+
+	public void setUniversityId(String universityId) {
+		this.universityId = universityId;
+	}
+	
+
 }

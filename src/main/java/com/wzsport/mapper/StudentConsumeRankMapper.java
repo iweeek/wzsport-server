@@ -1,5 +1,7 @@
 package com.wzsport.mapper;
 
+import com.wzsport.dto.StudentKcalConsumptionDTO;
+import com.wzsport.dto.StudentTimeCostedDTO;
 import com.wzsport.model.StudentConsumeRank;
 import com.wzsport.model.StudentConsumeRankExample;
 import java.util.List;
@@ -92,4 +94,11 @@ public interface StudentConsumeRankMapper {
 			"kcal_consumed = #{kcalConsumed,jdbcType=BIGINT},", "university_id = #{universityId,jdbcType=BIGINT}",
 			"where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(StudentConsumeRank record);
+	
+	
+    @Select("SELECT student_id, student_name,avatar_url, kcal_consumed AS kcal_consumption, university_id\n" +
+            "FROM wzsport_student_consume_rank\n" +
+            "WHERE university_id =  #{universityId}\n")
+    List<StudentKcalConsumptionDTO> getKcalCostedRanking(@Param("universityId") long universityId);
+
 }

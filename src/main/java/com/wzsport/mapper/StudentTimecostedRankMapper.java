@@ -1,5 +1,6 @@
 package com.wzsport.mapper;
 
+import com.wzsport.dto.StudentTimeCostedDTO;
 import com.wzsport.model.StudentTimecostedRank;
 import com.wzsport.model.StudentTimecostedRankExample;
 import java.util.List;
@@ -92,4 +93,11 @@ public interface StudentTimecostedRankMapper {
 			"cost_time = #{costTime,jdbcType=BIGINT},", "university_id = #{universityId,jdbcType=BIGINT}",
 			"where id = #{id,jdbcType=BIGINT}" })
 	int updateByPrimaryKey(StudentTimecostedRank record);
+
+//	List<StudentTimecostedRank> getTimeCostedRanking(StudentTimecostedRankExample example);
+	
+	@Select("SELECT student_id, student_name,avatar_url, cost_time AS time_costed, university_id\n" +
+			"FROM wzsport_student_timecosted_rank\n" +
+			"WHERE university_id = #{universityId}\n" )
+	List<StudentTimeCostedDTO> getTimeCostedRanking(@Param("universityId") long universityId);
 }

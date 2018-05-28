@@ -4,8 +4,9 @@ public class StudentTimeCostedDTO {
 
 	private Long studentId;
 	private String studentName;
-	private Integer timeCosted;
+	private Long timeCosted;
 	private String avatarUrl;
+	private Long universityId;
 
 	public Long getStudentId() {
 		return studentId;
@@ -19,10 +20,10 @@ public class StudentTimeCostedDTO {
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
-	public Integer getTimeCosted() {
+	public Long getTimeCosted() {
 		return timeCosted;
 	}
-	public void setTimeCosted(Integer timeCosted) {
+	public void setTimeCosted(Long timeCosted) {
 		this.timeCosted = timeCosted;
 	}
 	public String getAvatarUrl() {
@@ -31,5 +32,10 @@ public class StudentTimeCostedDTO {
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
 	}
-
+	public Long getUniversityId() {
+		return universityId;
+	}
+	public void setUniversityId(Long universityId) {
+		this.universityId = universityId;
+	}
 }

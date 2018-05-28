@@ -31,6 +31,7 @@ import com.wzsport.model.RunningActivityDataExample;
 import com.wzsport.model.RunningActivityDataStatistic;
 import com.wzsport.model.RunningActivityExample;
 import com.wzsport.service.AreaActivityService;
+import com.wzsport.service.ConsumeRankService;
 import com.wzsport.service.RunningActivityService;
 import com.wzsport.service.SignInService;
 import com.wzsport.service.StudentSportConsumeStatisticService;
@@ -51,6 +52,8 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     private StudentSportConsumeStatisticService studentSportConsumeStatisticService;
     @Autowired
     private SignInService signInService;
+    @Autowired
+    private ConsumeRankService consumeRankService;
     @Autowired
     private AreaActivityDataMapper areaActivityDataMapper;
     @Autowired
@@ -199,6 +202,11 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     @Override
     public void signInTask() {
         signInService.create();
+    }
+    
+    @Override
+    public void consumeRankTask(long universityID) {
+    		consumeRankService.create(universityID);
     }
 
     @Override

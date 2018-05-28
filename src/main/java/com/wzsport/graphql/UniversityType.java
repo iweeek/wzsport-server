@@ -1,5 +1,8 @@
 package com.wzsport.graphql;
 
+import static org.hamcrest.CoreMatchers.not;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,13 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.mysql.cj.api.x.io.MessageWriter;
+import com.wzsport.dto.StudentKcalConsumptionDTO;
+import com.wzsport.dto.StudentTimeCostedDTO;
 import com.wzsport.mapper.CollegeMapper;
+import com.wzsport.mapper.StudentConsumeRankMapper;
+import com.wzsport.mapper.StudentTimecostedRankMapper;
 import com.wzsport.mapper.TeacherMapper;
 import com.wzsport.mapper.UniversityMapper;
 import com.wzsport.model.College;
 import com.wzsport.model.CollegeExample;
 import com.wzsport.model.Student;
+import com.wzsport.model.StudentConsumeRank;
+import com.wzsport.model.StudentConsumeRankExample;
 import com.wzsport.model.StudentExample;
+import com.wzsport.model.StudentTimecostedRank;
+import com.wzsport.model.StudentTimecostedRankExample;
 import com.wzsport.model.TeacherExample;
 import com.wzsport.model.Term;
 import com.wzsport.model.University;
@@ -37,6 +50,8 @@ import graphql.schema.GraphQLObjectType;
 public class UniversityType {
 
 	private static UniversityMapper universityMapper;
+	private static StudentConsumeRankMapper studentConsumeRankMapper;
+	private static StudentTimecostedRankMapper studentTimecostedRankMapper;
 	private static CollegeMapper collegeMapper;
 	private static TeacherMapper teacherMapper;
 	private static TermService termService;
@@ -120,8 +135,14 @@ public class UniversityType {
                                     .build())
                             .dataFetcher(environment ->  {
                                 University university = environment.getSource();
+                                StudentConsumeRankExample example = new StudentConsumeRankExample();
+                                example.createCriteria().andUniversityIdEqualTo(university.getId());
+                                
                                 PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-                                return universityMapper.getKcalCostedRanking(university.getId());
+                                List<StudentKcalConsumptionDTO> list = studentConsumeRankMapper.getKcalCostedRanking(university.getId());
+                                
+                                return list;
+//                                return universityMapper.getKcalCostedRanking(university.getId());
                             } )
                             .build())
 //					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -199,7 +220,11 @@ public class UniversityType {
 							.dataFetcher(environment ->  {
 								University university = environment.getSource();
 								PageHelper.startPage(environment.getArgument("pageNumber"), environment.getArgument("pageSize"));
-			                	return universityMapper.getTimeCostedRanking(university.getId());
+                                	List<StudentTimeCostedDTO> list = 
+                                			studentTimecostedRankMapper.getTimeCostedRanking(university.getId());
+                                
+                                return list;
+//			                	return universityMapper.getTimeCostedRanking(university.getId());
 							} )
 							.build())
 					.field(GraphQLFieldDefinition.newFieldDefinition()
@@ -266,5 +291,15 @@ public class UniversityType {
 	@Autowired(required = true)
 	public void setTermService(TermService termService) {
 		UniversityType.termService = termService;
+	}
+	
+	@Autowired(required = true)
+	public void setStudentConsumeRankMapper(StudentConsumeRankMapper studentConsumeRankMapper) {
+		UniversityType.studentConsumeRankMapper = studentConsumeRankMapper;
+	}
+	
+	@Autowired(required = true)
+	public void setStudentTimecostedRankMapper(StudentTimecostedRankMapper studentTimecostedRankMapper) {
+		UniversityType.studentTimecostedRankMapper = studentTimecostedRankMapper;
 	}
 }

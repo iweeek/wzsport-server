@@ -16,4 +16,6 @@ public interface StatisticTaskService {
     void areaActivityDataStatisticTask(Date startDate, Date endDate);
 
     void runningActivityDataCollectionTask(Date startDate, Date endDate);
+
+	void consumeRankTask(long universityID);
 }

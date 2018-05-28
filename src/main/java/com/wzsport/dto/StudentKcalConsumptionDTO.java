@@ -4,9 +4,10 @@ public class StudentKcalConsumptionDTO {
 
 	private Long studentId;
 	private String studentName;
-	private Integer kcalConsumption;
+	private Long kcalConsumption;
 	private String avatarUrl;
 	private String collegeName;
+	private Long universityId;
 	
 	public String getCollegeName() {
         return collegeName;
@@ -26,10 +27,10 @@ public class StudentKcalConsumptionDTO {
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
-	public Integer getKcalConsumption() {
+	public Long getKcalConsumption() {
 		return kcalConsumption;
 	}
-	public void setKcalConsumption(Integer kcalConsumption) {
+	public void setKcalConsumption(Long kcalConsumption) {
 		this.kcalConsumption = kcalConsumption;
 	}
 	public String getAvatarUrl() {
@@ -37,5 +38,11 @@ public class StudentKcalConsumptionDTO {
 	}
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+	public Long getUniversityId() {
+		return universityId;
+	}
+	public void setUniversityId(Long universityId) {
+		this.universityId = universityId;
 	}
 }

@@ -340,6 +340,23 @@ public class StatisticTasksController {
         return true;
     }
     
+	// 热量排行统计
+    @RequestMapping(value="/consumeRank", method = RequestMethod.POST)
+    public ResponseEntity<?> consumeRank(
+//    			@ApiParam("活动开始时间") @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd")  Date startDate,
+//            @ApiParam("活动结束时间") @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, 
+            @ApiParam("大学ID") @RequestParam Long universityID, 
+            @RequestParam Boolean isTest) {
+        try {
+	        taskService.consumeRankTask(universityID);
+//            createConsume(startDate, endDate, isTest);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
     public static void main(String[] args) {
         System.out.println(new DateTime("2017-12-21").toDate());
         if (new DateTime("2017-12-21").toDate() == new DateTime("2017-12-21").toDate()) {

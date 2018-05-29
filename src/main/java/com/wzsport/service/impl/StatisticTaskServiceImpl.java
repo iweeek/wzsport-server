@@ -68,9 +68,11 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
     
     private static final Logger logger = LogManager.getLogger(StatisticTaskService.class);
 
+    /**
+     * 找到昨天所有没有正常结束的活动，并将 is_verified 标记为 1。
+     */
     @Override
     public void runningActivityTask(Date startDate, Date endDate) {
-        // 找到昨天所有没有正常结束的活动
         RunningActivityExample example = new RunningActivityExample();
         example.createCriteria().andStartTimeBetween(startDate, endDate);
         List<RunningActivity> list = runningActivityMapper.selectByExample(example);
@@ -99,61 +101,62 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                         .selectByExample(dataExample);
                 if (runningActivityDataList.size() > 0) {
 
-                    RunningActivityDataStatistic runningActivityDataStatistic = new RunningActivityDataStatistic();
-                    int distancePerStepAgainst = 0;
-                    int speedAgainst = 0;
+// 注释：统计任务放在 runningActivityDataStatisticTask 里，目前没有 runningActivityStatisticTask 任务。
+//                    RunningActivityDataStatistic runningActivityDataStatistic = new RunningActivityDataStatistic();
+//                    int distancePerStepAgainst = 0;
+//                    int speedAgainst = 0;
 
-                    Integer lastDistance = null;
-                    RunningActivityData lastRunningActivityData = null;
-                    DateTime acquisitionTime = null;
-                    DateTime lastAcquisitionTime = null;
-
-                    for (RunningActivityData data : runningActivityDataList) {
-                        try {
-                            if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
-                                targetFinishedTime = (int) ((data.getAcquisitionTime().getTime()
-                                        - act.getStartTime().getTime()) / 1000);
-                            }
-
-                            // 违背了速度的规则
-                            if (lastDistance != null) {
-                                int distanceInterval = data.getDistance().intValue() - lastDistance.intValue();
-                                acquisitionTime = new DateTime(data.getAcquisitionTime());
-                                lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
-                                Long interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration()
-                                        .getMillis();
-                                if (interval / 1000 <= 0) {
-
-                                } else {
-                                    if (distanceInterval / (interval / 1000) > 10) {
-                                        speedAgainst++;
-                                    }
-                                }
-                            }
-                            lastDistance = data.getDistance();
-                            lastRunningActivityData = data;
-
-                            // 违背了步幅的规则
-                            BigDecimal distancePerStep = new BigDecimal(data.getDistancePerStep());
-                            if (distancePerStep.compareTo(new BigDecimal(2)) > 0) {
-                                distancePerStepAgainst++;
-                            }
-                        } catch (Exception e) {
-                            logger.error(e);
-                        }
-                    }
-                    System.out.println("speedAgainst: " + speedAgainst);
-                    runningActivityDataStatistic.setStudentId(act.getStudentId());
-                    runningActivityDataStatistic.setActivityId(act.getId());
-                    runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
-                    runningActivityDataStatistic.setLocationTotalCount(runningActivityDataList.size());
-                    runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
-                    try {
-                        runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
-                    } catch (Exception e) {
-                        logger.error(e);
-                        logger.error("跑步统计data数据点时发生错误 runningActivityDataStatistic ：" + runningActivityDataStatistic.toString());
-                    }
+//                    Integer lastDistance = null;
+//                    RunningActivityData lastRunningActivityData = null;
+//                    DateTime acquisitionTime = null;
+//                    DateTime lastAcquisitionTime = null;
+//
+//                    for (RunningActivityData data : runningActivityDataList) {
+//                        try {
+//                            if (data.getDistance() > act.getQualifiedDistance() && targetFinishedTime == 0) {
+//                                targetFinishedTime = (int) ((data.getAcquisitionTime().getTime()
+//                                        - act.getStartTime().getTime()) / 1000);
+//                            }
+//
+//                            // 违背了速度的规则
+//                            if (lastDistance != null) {
+//                                int distanceInterval = data.getDistance().intValue() - lastDistance.intValue();
+//                                acquisitionTime = new DateTime(data.getAcquisitionTime());
+//                                lastAcquisitionTime = new DateTime(lastRunningActivityData.getAcquisitionTime());
+//                                Long interval = new Interval(lastAcquisitionTime, acquisitionTime).toDuration()
+//                                        .getMillis();
+//                                if (interval / 1000 <= 0) {
+//
+//                                } else {
+//                                    if (distanceInterval / (interval / 1000) > 10) {
+//                                        speedAgainst++;
+//                                    }
+//                                }
+//                            }
+//                            lastDistance = data.getDistance();
+//                            lastRunningActivityData = data;
+//
+//                            // 违背了步幅的规则
+//                            BigDecimal distancePerStep = new BigDecimal(data.getDistancePerStep());
+//                            if (distancePerStep.compareTo(new BigDecimal(2)) > 0) {
+//                                distancePerStepAgainst++;
+//                            }
+//                        } catch (Exception e) {
+//                            logger.error(e);
+//                        }
+//                    }
+//                    System.out.println("speedAgainst: " + speedAgainst);
+//                    runningActivityDataStatistic.setStudentId(act.getStudentId());
+//                    runningActivityDataStatistic.setActivityId(act.getId());
+//                    runningActivityDataStatistic.setDistancePerStepAgainst(distancePerStepAgainst);
+//                    runningActivityDataStatistic.setLocationTotalCount(runningActivityDataList.size());
+//                    runningActivityDataStatistic.setSpeedAgainst(speedAgainst);
+//                    try {
+//                        runningActivityDataStatisticMapper.insertSelective(runningActivityDataStatistic);
+//                    } catch (Exception e) {
+//                        logger.error(e);
+//                        logger.error("跑步统计data数据点时发生错误 runningActivityDataStatistic ：" + runningActivityDataStatistic.toString());
+//                    }
 
                     distance = runningActivityDataList.get(runningActivityDataList.size() - 1).getDistance();
                     stepCount = runningActivityDataList.get(runningActivityDataList.size() - 1).getStepCount();
@@ -190,28 +193,39 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
                 logger.error(e);
                 logger.error("跑步审核更新时发生错误 act :" + act.toString());
             }
-
         }
     }
 
+    /**
+     * 统计跑步运动和区域运动的信息，插入到 student_sport_consume_statistic 表里
+     */
     @Override
     public void sportConsumeStatisticTask() {
         studentSportConsumeStatisticService.create();
     }
 
+    /**
+     * 打卡统计
+     */
     @Override
     public void signInTask() {
         signInService.create();
     }
     
+    
+    /**
+     * 每日统计排行榜信息
+     */
     @Override
     public void consumeRankTask(long universityID) {
     		consumeRankService.create(universityID);
     }
 
+    /**
+     * 统计跑步运动数据，违背步幅和违背速度的记录
+     */
     @Override
     public void runningActivityDataStatisticTask(Date startDate, Date endDate) {
-        // 找到昨天所有没有正常结束的活动
         RunningActivityExample example = new RunningActivityExample();
         example.createCriteria().andStartTimeBetween(startDate, endDate);
         List<RunningActivity> list = runningActivityMapper.selectByExample(example);
@@ -291,6 +305,9 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         }
     }
 
+    /**
+     * 区域运动统计，暂时没有用到
+     */
     @Override
     public void areaActivityTask(Date startDate, Date endDate) {
         AreaActivityExample example = new AreaActivityExample();
@@ -341,6 +358,9 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         }
     }
 
+    /**
+     * 区域运动，暂时没有用到
+     */
     @Override
     public void areaActivityDataStatisticTask(Date startDate, Date endDate) {
         DateTime start = new DateTime(startDate);
@@ -394,6 +414,9 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
         }
     }
 
+    /**
+     * 跑步运动数据压缩，目前为测试状态
+     */
     @Override
     public void runningActivityDataCollectionTask(Date startDate, Date endDate) {
 
@@ -517,4 +540,18 @@ public class StatisticTaskServiceImpl implements StatisticTaskService {
 
     }
 
+    
+    public void finishLongTimeRunningActivityTask() {
+    		List<RunningActivity> longTimeRunningActivitys = runningActivityMapper.getLongTimeRunningActivitys();
+    		int count = 0;
+    		
+    		logger.info("longTimeRunningActivitys job list size: " + longTimeRunningActivitys.size());
+    		for (RunningActivity runningActivity : longTimeRunningActivitys) {
+    			runningActivity.setEndedBy(true);
+    			runningActivityService.endRunningActivity(runningActivity);	
+    			count++;
+    			System.out.println("count: " + count);
+		}
+    		
+    }
 }

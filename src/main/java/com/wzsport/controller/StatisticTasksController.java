@@ -357,6 +357,20 @@ public class StatisticTasksController {
         }
     }
     
+	
+    @RequestMapping(value="/finishLongTimeRunningActivityTask", method = RequestMethod.POST)
+    public ResponseEntity<?> finishLongTimeRunningActivityTask(
+            @RequestParam Boolean isTest) {
+        try {
+	        taskService.finishLongTimeRunningActivityTask();
+//            createConsume(startDate, endDate, isTest);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
     public static void main(String[] args) {
         System.out.println(new DateTime("2017-12-21").toDate());
         if (new DateTime("2017-12-21").toDate() == new DateTime("2017-12-21").toDate()) {

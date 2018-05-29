@@ -15,7 +15,7 @@ public class RunningActivityTask {
 	@Autowired
 	private StatisticTaskService taskService;
 
-	@Scheduled(cron = "0 30 2 * * ?")
+	@Scheduled(cron = "0 30 1 * * ?")
     public void job() {
         DateTime yesterday = new DateTime().withMillisOfDay(0).minusDays(1);
         Date startDate = yesterday.toDate();
@@ -25,5 +25,12 @@ public class RunningActivityTask {
 	    
 		taskService.runningActivityTask(startDate, endDate);
 		taskService.runningActivityDataStatisticTask(startDate, endDate);
+    }
+	
+	
+	@Scheduled(cron = "0 0/60 * * * ?")
+    public void finishLongTimeRunningActivityTask() {
+		System.out.println("finishLongTimeRunningActivityTask every 60 minutes.");
+		taskService.finishLongTimeRunningActivityTask();
     }
 }

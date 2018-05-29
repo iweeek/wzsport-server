@@ -143,4 +143,11 @@ public interface RunningActivityMapper {
 			+ "GROUP BY date_format(created_at,'%y-%m-%d') "
 			+ ") act")
 	Integer currentTermQualifiedActivityCount(@Param("studentId") long studentId,@Param("start")  Date start,@Param("end")  Date end);
+	
+	
+	@Select("select * from wzsport_running_activity \n" + 
+			"where (SELECT TIMESTAMPDIFF(HOUR, start_time, NOW())) > 0 \n" + 
+			"and (SELECT TIMESTAMPDIFF(HOUR, start_time, NOW()) < 3) \n" + 
+			"and ended_at is null\n")
+	List<RunningActivity> getLongTimeRunningActivitys();
 }

@@ -18,4 +18,6 @@ public interface StatisticTaskService {
     void runningActivityDataCollectionTask(Date startDate, Date endDate);
 
 	void consumeRankTask(long universityID);
+
+	void finishLongTimeRunningActivityTask();
 }
